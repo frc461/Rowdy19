@@ -9,7 +9,8 @@
 #include "ctre/Phoenix.h"
 #include <WPILib.h>
 
-	DriveTrain::DriveTrain(int rightDrive1CAN, int rightDrive2CAN, int rightDrive3CAN, int leftDrive1CAN, int leftDrive2CAN, int leftDrive3CAN, int strafe1CAN, int strafe2CAN){
+	DriveTrain::DriveTrain(int rightDrive1CAN, int rightDrive2CAN, int rightDrive3CAN, int leftDrive1CAN,
+		int leftDrive2CAN, int leftDrive3CAN, int strafe1CAN, int strafe2CAN){
 		rightDrive1 = new WPI_TalonSRX(rightDrive1CAN);
 		rightDrive2 = new WPI_VictorSPX(rightDrive2CAN);
 		rightDrive3 = new WPI_VictorSPX(rightDrive3CAN);
@@ -26,8 +27,13 @@
 	}
 
 	void DriveTrain::ArcadeDrive(double forward, double rotate, double strafe){
-		driveTrain->ArcadeDrive(forward, rotate);
-		strafe1->Set(strafe);
+		driveTrain->ArcadeDrive(forward * DRIVE_SPEED, rotate * TURN_SPEED);
+		strafe1->Set(strafe * STRAFE_SPEED);
+	}
+
+	void DriveTrain::TankDrive(double left, double right, double strafe){
+		driveTrain->TankDrive(left * DRIVE_SPEED, right * DRIVE_SPEED);
+		strafe1->Set(strafe * STRAFE_SPEED);
 	}
 
 	DriveTrain::~DriveTrain() {

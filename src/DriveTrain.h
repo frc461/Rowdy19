@@ -16,9 +16,14 @@ public:
 
 	DriveTrain(int, int, int, int, int, int, int, int);
 	void ArcadeDrive(double, double, double);
+	void TankDrive(double, double, double);
 	virtual ~DriveTrain();
 
 private:
+	const double DRIVE_SPEED  = 0.8;
+	const double TURN_SPEED   = 0.8;
+	const double STRAFE_SPEED = 0.8;
+
 	DifferentialDrive *driveTrain;
 	WPI_TalonSRX *rightDrive1;
 	WPI_VictorSPX *rightDrive2;

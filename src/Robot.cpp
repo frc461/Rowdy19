@@ -53,8 +53,6 @@ public:
 
 
 	//Constants
-	const double DRIVE_SPEED = 0.8;
-	const double TURN_SPEED  = 0.8;
 
 
 
