@@ -45,16 +45,9 @@ public:
 	Encoder *leftDriveEncoder;
 	Encoder *rightDriveEncoder;
 
-
-
 	//Custom variables
 	int ourSwitch, autoState, initialDist, lTurn1, lTurn2, lDrive3, lDrive2, rTurn1, rTurn2, rDrive3, rDrive2;
 	double autoDriveSpeed, autoTurnSpeed;
-
-
-	//Constants
-
-
 
 	void RobotInit() {
 
@@ -96,68 +89,68 @@ public:
 		double gyroAngle = navxBoard->GetYaw();
 		AutoShuffleboardGet();
 
-//		switch (autoState) {
-//			case (InitialStart):
-//				if (leftEncDist > initialDist) {
-//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-//					break;
-//				} else {
-//					navxBoard->Reset();
-//					autoState = TurnDownMiddle;
-//					break;
-//				}
-//			case (TurnDownMiddle):
-//				if (ourSwitch == LeftSwitch && gyroAngle > lTurn1) {
-//					driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
-//					break;
-//				} else if (ourSwitch == RightSwitch && gyroAngle < rTurn1) {
-//					driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
-//					break;
-//				} else {
-//					EncoderReset();
-//					autoState = DriveDiagonal;
-//					break;
-//				}
-//			case (DriveDiagonal):
-//				if (ourSwitch == RightSwitch && leftEncDist > rDrive2) {
-//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-//					break;
-//				} else if (ourSwitch == LeftSwitch && leftEncDist > lDrive2) {
-//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-//					break;
-//				}
-//				else {
-//					navxBoard->Reset();
-//					autoState = FaceSwitch;
-//					break;
-//				}
-//			case (FaceSwitch):
-//				if (ourSwitch == LeftSwitch && gyroAngle < lTurn2) {
-//					driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
-//					break;
-//				} else if (ourSwitch == RightSwitch && gyroAngle > rTurn2) {
-//					driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
-//					break;
-//				} else {
-//					EncoderReset();
-//					autoState = DriveSideSwitch;
-//					break;
-//				}
-//			case (DriveSideSwitch):
-//				if (ourSwitch == RightSwitch && leftEncDist > rDrive3) {
-//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-//					break;
-//				} else if ( ourSwitch == LeftSwitch && leftEncDist > lDrive3){
-//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-//					break;
-//				}
-//				else {
-//					autoState = DeployBlock;
-//					break;
-//				}
-//			case (DeployBlock):
-//				break;
-//		}
+    	switch (autoState) {
+    		case (InitialStart):
+    			if (leftEncDist > initialDist) {
+    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+    				break;
+    			} else {
+    				navxBoard->Reset();
+    				autoState = TurnDownMiddle;
+    				break;
+    			}
+    		case (TurnDownMiddle):
+    			if (ourSwitch == LeftSwitch && gyroAngle > lTurn1) {
+    				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
+    				break;
+    			} else if (ourSwitch == RightSwitch && gyroAngle < rTurn1) {
+    				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
+    				break;
+    			} else {
+    				EncoderReset();
+    				autoState = DriveDiagonal;
+    				break;
+    			}
+    		case (DriveDiagonal):
+    			if (ourSwitch == RightSwitch && leftEncDist > rDrive2) {
+    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+    				break;
+    			} else if (ourSwitch == LeftSwitch && leftEncDist > lDrive2) {
+    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+    				break;
+    			}
+    			else {
+    				navxBoard->Reset();
+    				autoState = FaceSwitch;
+    				break;
+    			}
+    		case (FaceSwitch):
+    			if (ourSwitch == LeftSwitch && gyroAngle < lTurn2) {
+    				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
+    				break;
+    			} else if (ourSwitch == RightSwitch && gyroAngle > rTurn2) {
+    				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
+    				break;
+    			} else {
+    				EncoderReset();
+    				autoState = DriveSideSwitch;
+    				break;
+    			}
+    		case (DriveSideSwitch):
+    			if (ourSwitch == RightSwitch && leftEncDist > rDrive3) {
+    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+    				break;
+    			} else if ( ourSwitch == LeftSwitch && leftEncDist > lDrive3){
+    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+    				break;
+    			}
+    			else {
+    				autoState = DeployBlock;
+    				break;
+    			}
+    		case (DeployBlock):
+    			break;
+    	}
 	}
 
 	void TeleopInit() {}
