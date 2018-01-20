@@ -39,5 +39,3 @@
 	DriveTrain::~DriveTrain() {
 		// TODO Auto-generated destructor stub
 	}
-
-
