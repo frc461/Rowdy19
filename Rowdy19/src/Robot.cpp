@@ -3,6 +3,8 @@
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
+/* Author:Hank Krutulis                                                       */
+/* Created: Jan 13, 2017                                                      */
 /*----------------------------------------------------------------------------*/
 
 #include <iostream>
@@ -16,6 +18,7 @@
 //Include custom headers
 #include "THRSTMSTRmap.h"
 #include "Robot.h"
+#include "DriveTrain.h"
 
 class Robot : public frc::IterativeRobot {
 public:
@@ -26,16 +29,7 @@ public:
 
 	//Robot parts
 	PowerDistributionPanel *pdp;
-	DifferentialDrive *driveTrain;
-	WPI_TalonSRX *rightDrive1;
-	WPI_VictorSPX *rightDrive2;
-	WPI_VictorSPX *rightDrive3;
-	WPI_VictorSPX *leftDrive1;
-	WPI_VictorSPX *leftDrive2;
-	WPI_VictorSPX *leftDrive3;
-	WPI_TalonSRX *strafe1;
-	WPI_TalonSRX *strafe2;
-
+	DriveTrain *driveTrain;
 //	WPI_TalonSRX *leftOutIntake;
 //	WPI_TalonSRX *rightOutIntake;
 //	WPI_TalonSRX *leftInIntake;
@@ -70,15 +64,8 @@ public:
 		rightJoystick = new Joystick(1);
 
 		pdp = new PowerDistributionPanel(0);
-		rightDrive1 = new WPI_TalonSRX(RightDrive1CAN);
-		rightDrive2 = new WPI_VictorSPX(RightDrive2CAN);
-		rightDrive3 = new WPI_VictorSPX(RightDrive3CAN);
-		leftDrive1  = new WPI_VictorSPX(LeftDrive1CAN);
-		leftDrive2  = new WPI_VictorSPX(LeftDrive2CAN);
-		leftDrive3  = new WPI_VictorSPX(LeftDrive3CAN);
-		strafe1     = new WPI_TalonSRX(Strafe1CAN);
-		strafe2     = new WPI_TalonSRX(Strafe2CAN);
 
+		driveTrain = new DriveTrain(RightDrive1CAN, RightDrive2CAN, RightDrive3CAN, LeftDrive1CAN, LeftDrive2CAN, LeftDrive3CAN, Strafe1CAN, Strafe2CAN);
 
 //		leftOutIntake  = new WPI_TalonSRX(LeftOutIntakeCAN);
 //		rightOutIntake = new WPI_TalonSRX(RightOutIntakeCAN);
@@ -89,12 +76,6 @@ public:
 //		elevator2 = new WPI_TalonSRX(Elevator2CAN);
 //		elevator3 = new WPI_TalonSRX(Elevator3CAN);
 //		navxBoard = new AHRS(SerialPort::kMXP);
-
-		SpeedControllerGroup *left  = new SpeedControllerGroup(*leftDrive1,  *leftDrive2,  *leftDrive3);
-		SpeedControllerGroup *right = new SpeedControllerGroup(*rightDrive1, *rightDrive2, *rightDrive3);
-		driveTrain = new DifferentialDrive(*left, *right);
-
-		strafe2->Follow(*strafe1);
 	}
 
 	void AutonomousInit() override {
@@ -117,78 +98,78 @@ public:
 		double gyroAngle = navxBoard->GetYaw();
 		AutoShuffleboardGet();
 
-		switch (autoState) {
-			case (InitialStart):
-				if (leftEncDist > initialDist) {
-					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-					break;
-				} else {
-					navxBoard->Reset();
-					autoState = TurnDownMiddle;
-					break;
-				}
-			case (TurnDownMiddle):
-				if (ourSwitch == LeftSwitch && gyroAngle > lTurn1) {
-					driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
-					break;
-				} else if (ourSwitch == RightSwitch && gyroAngle < rTurn1) {
-					driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
-					break;
-				} else {
-					EncoderReset();
-					autoState = DriveDiagonal;
-					break;
-				}
-			case (DriveDiagonal):
-				if (ourSwitch == RightSwitch && leftEncDist > rDrive2) {
-					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-					break;
-				} else if (ourSwitch == LeftSwitch && leftEncDist > lDrive2) {
-					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-					break;
-				}
-				else {
-					navxBoard->Reset();
-					autoState = FaceSwitch;
-					break;
-				}
-			case (FaceSwitch):
-				if (ourSwitch == LeftSwitch && gyroAngle < lTurn2) {
-					driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
-					break;
-				} else if (ourSwitch == RightSwitch && gyroAngle > rTurn2) {
-					driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
-					break;
-				} else {
-					EncoderReset();
-					autoState = DriveSideSwitch;
-					break;
-				}
-			case (DriveSideSwitch):
-				if (ourSwitch == RightSwitch && leftEncDist > rDrive3) {
-					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-					break;
-				} else if ( ourSwitch == LeftSwitch && leftEncDist > lDrive3){
-					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-					break;
-				}
-				else {
-					autoState = DeployBlock;
-					break;
-				}
-			case (DeployBlock):
-				break;
-		}
+//		switch (autoState) {
+//			case (InitialStart):
+//				if (leftEncDist > initialDist) {
+//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+//					break;
+//				} else {
+//					navxBoard->Reset();
+//					autoState = TurnDownMiddle;
+//					break;
+//				}
+//			case (TurnDownMiddle):
+//				if (ourSwitch == LeftSwitch && gyroAngle > lTurn1) {
+//					driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
+//					break;
+//				} else if (ourSwitch == RightSwitch && gyroAngle < rTurn1) {
+//					driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
+//					break;
+//				} else {
+//					EncoderReset();
+//					autoState = DriveDiagonal;
+//					break;
+//				}
+//			case (DriveDiagonal):
+//				if (ourSwitch == RightSwitch && leftEncDist > rDrive2) {
+//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+//					break;
+//				} else if (ourSwitch == LeftSwitch && leftEncDist > lDrive2) {
+//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+//					break;
+//				}
+//				else {
+//					navxBoard->Reset();
+//					autoState = FaceSwitch;
+//					break;
+//				}
+//			case (FaceSwitch):
+//				if (ourSwitch == LeftSwitch && gyroAngle < lTurn2) {
+//					driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
+//					break;
+//				} else if (ourSwitch == RightSwitch && gyroAngle > rTurn2) {
+//					driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
+//					break;
+//				} else {
+//					EncoderReset();
+//					autoState = DriveSideSwitch;
+//					break;
+//				}
+//			case (DriveSideSwitch):
+//				if (ourSwitch == RightSwitch && leftEncDist > rDrive3) {
+//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+//					break;
+//				} else if ( ourSwitch == LeftSwitch && leftEncDist > lDrive3){
+//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+//					break;
+//				}
+//				else {
+//					autoState = DeployBlock;
+//					break;
+//				}
+//			case (DeployBlock):
+//				break;
+//		}
 	}
 
 	void TeleopInit() {}
 
 	void TeleopPeriodic() {
-		double forward = -rightJoystick->GetRawAxis(yAxisJS);
-		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
+		double forward = leftJoystick->GetRawAxis(xAxisJS);
+		double rotate  = rightJoystick->GetRawAxis(yAxisJS);
+		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
 
-		driveTrain->ArcadeDrive(forward * DRIVE_SPEED, rotate * TURN_SPEED);
-		strafe1->Set(rightJoystick->GetRawAxis(xAxisJS));
+		driveTrain->ArcadeDrive(forward, rotate, strafe);
 	}
 
 	void TestPeriodic() {}
