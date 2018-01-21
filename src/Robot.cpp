@@ -77,9 +77,9 @@ public:
 
 		std::string gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
 		if (gameData[0] == 'L') {
-			ourSwitch = LeftSwitch;
+			ourSwitch = LeftSide;
 		} else {
-			ourSwitch = RightSwitch;
+			ourSwitch = RightSide;
 		}
 
 	}
@@ -100,10 +100,10 @@ public:
     				break;
     			}
     		case (TurnDownMiddle):
-    			if (ourSwitch == LeftSwitch && gyroAngle > lTurn1) {
+    			if (ourSwitch == LeftSide && gyroAngle > lTurn1) {
     				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
     				break;
-    			} else if (ourSwitch == RightSwitch && gyroAngle < rTurn1) {
+    			} else if (ourSwitch == RightSide && gyroAngle < rTurn1) {
     				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
     				break;
     			} else {
@@ -112,10 +112,10 @@ public:
     				break;
     			}
     		case (DriveDiagonal):
-    			if (ourSwitch == RightSwitch && leftEncDist > rDrive2) {
+    			if (ourSwitch == RightSide && leftEncDist > rDrive2) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
     				break;
-    			} else if (ourSwitch == LeftSwitch && leftEncDist > lDrive2) {
+    			} else if (ourSwitch == LeftSide && leftEncDist > lDrive2) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
     				break;
     			}
@@ -125,10 +125,10 @@ public:
     				break;
     			}
     		case (FaceSwitch):
-    			if (ourSwitch == LeftSwitch && gyroAngle < lTurn2) {
+    			if (ourSwitch == LeftSide && gyroAngle < lTurn2) {
     				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
     				break;
-    			} else if (ourSwitch == RightSwitch && gyroAngle > rTurn2) {
+    			} else if (ourSwitch == RightSide && gyroAngle > rTurn2) {
     				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
     				break;
     			} else {
@@ -137,10 +137,10 @@ public:
     				break;
     			}
     		case (DriveSideSwitch):
-    			if (ourSwitch == RightSwitch && leftEncDist > rDrive3) {
+    			if (ourSwitch == RightSide && leftEncDist > rDrive3) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
     				break;
-    			} else if ( ourSwitch == LeftSwitch && leftEncDist > lDrive3){
+    			} else if ( ourSwitch == LeftSide && leftEncDist > lDrive3){
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
     				break;
     			}

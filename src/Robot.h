@@ -35,14 +35,10 @@ enum CanChain {
 	Elevator3CAN
 };
 
-enum SwitchData {
+enum StructureData {
 	DataError = 0,
-	LeftSwitch,
-	RightSwitch
+	LeftSide,
+	RightSide
 };
-
-
-
-
 
 #endif /* SRC_ROBOT_H_ */
