@@ -1,2 +1,3 @@
 *.swp
-DriveTrain.o
+*.o
+/Debug/
