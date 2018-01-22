@@ -33,8 +33,8 @@ public:
 	WPI_VictorSPX *leftDrive1;
 	WPI_VictorSPX *leftDrive2;
 	WPI_VictorSPX *leftDrive3;
-	WPI_TalonSRX *strafe1;
-	WPI_TalonSRX *strafe2;
+//	WPI_TalonSRX *strafe1;
+//	WPI_TalonSRX *strafe2;
 
 //	WPI_TalonSRX *leftOutIntake;
 //	WPI_TalonSRX *rightOutIntake;
@@ -45,11 +45,11 @@ public:
 //	WPI_TalonSRX *elevator2;
 //	WPI_TalonSRX *elevator3;
 
-	Solenoid *intakeArms;
+//	Solenoid *intakeArms;
 
-	AHRS *navxBoard;
-	Encoder *leftDriveEncoder;
-	Encoder *rightDriveEncoder;
+//	AHRS *navxBoard;
+//	Encoder *leftDriveEncoder;
+//	Encoder *rightDriveEncoder;
 
 
 
@@ -76,8 +76,8 @@ public:
 		leftDrive1  = new WPI_VictorSPX(LeftDrive1CAN);
 		leftDrive2  = new WPI_VictorSPX(LeftDrive2CAN);
 		leftDrive3  = new WPI_VictorSPX(LeftDrive3CAN);
-		strafe1     = new WPI_TalonSRX(Strafe1CAN);
-		strafe2     = new WPI_TalonSRX(Strafe2CAN);
+//		strafe1     = new WPI_TalonSRX(Strafe1CAN);
+//		strafe2     = new WPI_TalonSRX(Strafe2CAN);
 
 
 //		leftOutIntake  = new WPI_TalonSRX(LeftOutIntakeCAN);
@@ -94,7 +94,7 @@ public:
 		SpeedControllerGroup *right = new SpeedControllerGroup(*rightDrive1, *rightDrive2, *rightDrive3);
 		driveTrain = new DifferentialDrive(*left, *right);
 
-		strafe2->Follow(*strafe1);
+//		strafe2->Follow(*strafe1);
 	}
 
 	void AutonomousInit() override {
