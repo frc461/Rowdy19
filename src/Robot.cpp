@@ -33,8 +33,8 @@ public:
 	WPI_VictorSPX *leftDrive1;
 	WPI_VictorSPX *leftDrive2;
 	WPI_VictorSPX *leftDrive3;
-//	WPI_TalonSRX *strafe1;
-//	WPI_TalonSRX *strafe2;
+	WPI_TalonSRX *strafe1;
+	WPI_TalonSRX *strafe2;
 
 //	WPI_TalonSRX *leftOutIntake;
 //	WPI_TalonSRX *rightOutIntake;
@@ -76,8 +76,8 @@ public:
 		leftDrive1  = new WPI_VictorSPX(LeftDrive1CAN);
 		leftDrive2  = new WPI_VictorSPX(LeftDrive2CAN);
 		leftDrive3  = new WPI_VictorSPX(LeftDrive3CAN);
-//		strafe1     = new WPI_TalonSRX(Strafe1CAN);
-//		strafe2     = new WPI_TalonSRX(Strafe2CAN);
+		strafe1     = new WPI_TalonSRX(Strafe1CAN);
+		strafe2     = new WPI_TalonSRX(Strafe2CAN);
 
 
 //		leftOutIntake  = new WPI_TalonSRX(LeftOutIntakeCAN);
@@ -113,72 +113,72 @@ public:
 	}
 
 	void AutonomousPeriodic() {
-		double leftEncDist = leftDriveEncoder->GetDistance();
-		double gyroAngle = navxBoard->GetYaw();
-		AutoShuffleboardGet();
-
-		switch (autoState) {
-			case (InitialStart):
-				if (leftEncDist > initialDist) {
-					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-					break;
-				} else {
-					navxBoard->Reset();
-					autoState = TurnDownMiddle;
-					break;
-				}
-			case (TurnDownMiddle):
-				if (ourSwitch == LeftSwitch && gyroAngle > lTurn1) {
-					driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
-					break;
-				} else if (ourSwitch == RightSwitch && gyroAngle < rTurn1) {
-					driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
-					break;
-				} else {
-					EncoderReset();
-					autoState = DriveDiagonal;
-					break;
-				}
-			case (DriveDiagonal):
-				if (ourSwitch == RightSwitch && leftEncDist > rDrive2) {
-					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-					break;
-				} else if (ourSwitch == LeftSwitch && leftEncDist > lDrive2) {
-					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-					break;
-				}
-				else {
-					navxBoard->Reset();
-					autoState = FaceSwitch;
-					break;
-				}
-			case (FaceSwitch):
-				if (ourSwitch == LeftSwitch && gyroAngle < lTurn2) {
-					driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
-					break;
-				} else if (ourSwitch == RightSwitch && gyroAngle > rTurn2) {
-					driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
-					break;
-				} else {
-					EncoderReset();
-					autoState = DriveSideSwitch;
-					break;
-				}
-			case (DriveSideSwitch):
-				if (ourSwitch == RightSwitch && leftEncDist > rDrive3) {
-					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-					break;
-				} else if ( ourSwitch == LeftSwitch && leftEncDist > lDrive3){
-					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
-					break;
-				}
-				else {
-					autoState = DeployBlock;
-					break;
-				}
-			case (DeployBlock):
-				break;
-		}
+//		double leftEncDist = leftDriveEncoder->GetDistance();
+//		double gyroAngle = navxBoard->GetYaw();
+//		AutoShuffleboardGet();
+//
+//		switch (autoState) {
+//			case (InitialStart):
+//				if (leftEncDist > initialDist) {
+//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+//					break;
+//				} else {
+//					navxBoard->Reset();
+//					autoState = TurnDownMiddle;
+//					break;
+//				}
+//			case (TurnDownMiddle):
+//				if (ourSwitch == LeftSwitch && gyroAngle > lTurn1) {
+//					driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
+//					break;
+//				} else if (ourSwitch == RightSwitch && gyroAngle < rTurn1) {
+//					driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
+//					break;
+//				} else {
+//					EncoderReset();
+//					autoState = DriveDiagonal;
+//					break;
+//				}
+//			case (DriveDiagonal):
+//				if (ourSwitch == RightSwitch && leftEncDist > rDrive2) {
+//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+//					break;
+//				} else if (ourSwitch == LeftSwitch && leftEncDist > lDrive2) {
+//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+//					break;
+//				}
+//				else {
+//					navxBoard->Reset();
+//					autoState = FaceSwitch;
+//					break;
+//				}
+//			case (FaceSwitch):
+//				if (ourSwitch == LeftSwitch && gyroAngle < lTurn2) {
+//					driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
+//					break;
+//				} else if (ourSwitch == RightSwitch && gyroAngle > rTurn2) {
+//					driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
+//					break;
+//				} else {
+//					EncoderReset();
+//					autoState = DriveSideSwitch;
+//					break;
+//				}
+//			case (DriveSideSwitch):
+//				if (ourSwitch == RightSwitch && leftEncDist > rDrive3) {
+//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+//					break;
+//				} else if ( ourSwitch == LeftSwitch && leftEncDist > lDrive3){
+//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+//					break;
+//				}
+//				else {
+//					autoState = DeployBlock;
+//					break;
+//				}
+//			case (DeployBlock):
+//				break;
+//		}
 	}
 
 	void TeleopInit() {}
@@ -187,15 +187,23 @@ public:
 		double forward = -rightJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 
+		if(leftJoystick->GetRawButton(trigger)){
+			rightDrive1->Set(1.0);
+			strafe1->Set
+		} else {
+			rightDrive1->Set(0.0);
+		}
+
+
 		driveTrain->ArcadeDrive(forward * DRIVE_SPEED, rotate * TURN_SPEED);
-		strafe1->Set(rightJoystick->GetRawAxis(xAxisJS));
+//		strafe1->Set(rightJoystick->GetRawAxis(xAxisJS));
 	}
 
 	void TestPeriodic() {}
 
 	void EncoderReset() {
-		leftDriveEncoder->Reset();
-		rightDriveEncoder->Reset();
+//		leftDriveEncoder->Reset();
+//		rightDriveEncoder->Reset();
 	}
 
 	void AutoShuffleboardGet() {
