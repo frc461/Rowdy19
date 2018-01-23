@@ -35,6 +35,13 @@ enum CanChain {
 	Elevator3CAN
 };
 
+enum DIOPorts {
+	LeftEncoderDIO1 = 0,
+	LeftEncoderDIO2,
+	RightEncoderDIO1,
+	RightEncoderDIO2
+};
+
 enum StructureData {
 	DataError = 0,
 	LeftSide,
@@ -42,4 +49,5 @@ enum StructureData {
 };
 
 int initialDist, lTurn1, lTurn2, lDrive3, lDrive2, rTurn1, rTurn2, rDrive3, rDrive2;
+double autoDriveSpeed, autoTurnSpeed;
 #endif /* SRC_ROBOT_H_ */

@@ -23,7 +23,7 @@ private:
 	std::string gameData;
 	Encoder *leftDriveEncoder;
 	Encoder *rightDriveEncoder;
-	AHRS *navxBoard;
+	ADXRS450_Gyro *gyro;
 };
 
 #endif /* SRC_SHUFFLEBOARDPOSTER_H_ */

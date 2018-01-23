@@ -47,13 +47,12 @@ public:
 	Encoder *rightDriveEncoder;
 
 	//Custom variables
-	int ourSwitch, autoState, initialDist, lTurn1, lTurn2, lDrive3, lDrive2, rTurn1, rTurn2, rDrive3, rDrive2;
 	double autoDriveSpeed, autoTurnSpeed;
+	int ourSwitch, autoState;
 
 	void RobotInit() {
 		leftJoystick = new Joystick(0);
 		rightJoystick = new Joystick(1);
-
 		pdp = new PowerDistributionPanel(0);
 
 		driveTrain = new DriveTrain(RightDrive1CAN, RightDrive2CAN, RightDrive3CAN, LeftDrive1CAN, LeftDrive2CAN, LeftDrive3CAN, Strafe1CAN, Strafe2CAN);
@@ -66,7 +65,8 @@ public:
 //		elevator1 = new WPI_TalonSRX(Elevator1CAN);
 //		elevator2 = new WPI_TalonSRX(Elevator2CAN);
 //		elevator3 = new WPI_TalonSRX(Elevator3CAN);
-//		navxBoard = new AHRS(SerialPort::kMXP);
+		leftDriveEncoder = new Encoder(LeftEncoderDIO1, LeftEncoderDIO2);
+		rightDriveEncoder = new Encoder(RightEncoderDIO1, RightEncoderDIO2);
 	}
 
 	void AutonomousInit() override {
