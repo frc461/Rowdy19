@@ -30,16 +30,16 @@ public:
 	//Robot parts
 	PowerDistributionPanel *pdp;
 	DriveTrain *driveTrain;
+	ShuffleboardPoster *boardHandler;
 //	WPI_TalonSRX *leftOutIntake;
 //	WPI_TalonSRX *rightOutIntake;
 //	WPI_TalonSRX *leftInIntake;
 //	WPI_TalonSRX *rightInIntake;
-//
 //	WPI_TalonSRX *elevator1;
 //	WPI_TalonSRX *elevator2;
 //	WPI_TalonSRX *elevator3;
 
-	Solenoid *intakeArms;
+//	Solenoid *intakeArms;
 
 	AHRS *navxBoard;
 	Encoder *leftDriveEncoder;
@@ -50,14 +50,13 @@ public:
 	double autoDriveSpeed, autoTurnSpeed;
 
 	void RobotInit() {
-
 		leftJoystick = new Joystick(0);
 		rightJoystick = new Joystick(1);
 
 		pdp = new PowerDistributionPanel(0);
 
 		driveTrain = new DriveTrain(RightDrive1CAN, RightDrive2CAN, RightDrive3CAN, LeftDrive1CAN, LeftDrive2CAN, LeftDrive3CAN, Strafe1CAN, Strafe2CAN);
-
+		boardHandler = new ShuffleboardPoster(*leftDriveEncoder, *rightDriveEncoder, *navxBoard);
 //		leftOutIntake  = new WPI_TalonSRX(LeftOutIntakeCAN);
 //		rightOutIntake = new WPI_TalonSRX(RightOutIntakeCAN);
 //		leftInIntake   = new WPI_TalonSRX(LeftInIntakeCAN);
@@ -70,24 +69,18 @@ public:
 	}
 
 	void AutonomousInit() override {
-		ShuffleboardPeriodic();
+		boardHandler->ShufflePeriodic();
 		EncoderReset();
 
 		autoState = InitialStart;
-
-		std::string gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
-		if (gameData[0] == 'L') {
-			ourSwitch = LeftSide;
-		} else {
-			ourSwitch = RightSide;
-		}
-
+		ourSwitch = boardHandler->GetOurSwitch();
 	}
 
 	void AutonomousPeriodic() {
 		double leftEncDist = leftDriveEncoder->GetDistance();
 		double gyroAngle = navxBoard->GetYaw();
-		AutoShuffleboardGet();
+		boardPoster->AutonGet();
+		boardPoster->ShufflePeriodic();
 
     	switch (autoState) {
     		case (InitialStart):
@@ -168,24 +161,6 @@ public:
 	void EncoderReset() {
 		leftDriveEncoder->Reset();
 		rightDriveEncoder->Reset();
-	}
-
-	void AutoShuffleboardGet() {
-		initialDist    = SmartDashboard::GetNumber("Auton/initDist", -420);
-		lTurn1         = SmartDashboard::GetNumber("Auton/lTurn1", -35);
-		lTurn2         = SmartDashboard::GetNumber("Auton/lTurn2", 45);
-		lDrive2        = SmartDashboard::GetNumber("Auton/lDrive2", -1530);
-		lDrive3        = SmartDashboard::GetNumber("Auton/lDrive3", -500);
-		rTurn1         = SmartDashboard::GetNumber("Auton/rTurn1", 55);
-		rTurn2         = SmartDashboard::GetNumber("Auton/rTurn2", -45);
-		rDrive2        = SmartDashboard::GetNumber("Auton/rDrive2", -1200);
-		rDrive3        = SmartDashboard::GetNumber("Auton/rDrive3", -790);
-		autoDriveSpeed = SmartDashboard::GetNumber("Auton/autoDriveSpeed", 0.8);
-		autoTurnSpeed  = SmartDashboard::GetNumber("Auton/autoTurnSpeed", 0.65);
-	}
-
-	void ShuffleboardPeriodic(){
-		//SmartDashboard::PutData("navxBoard", navxBoard);
 	}
 
 private:

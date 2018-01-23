@@ -41,4 +41,5 @@ enum StructureData {
 	RightSide
 };
 
+int initialDist, lTurn1, lTurn2, lDrive3, lDrive2, rTurn1, rTurn2, rDrive3, rDrive2;
 #endif /* SRC_ROBOT_H_ */

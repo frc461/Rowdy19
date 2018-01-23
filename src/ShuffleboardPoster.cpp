@@ -8,17 +8,14 @@
 #include <ShuffleboardPoster.h>
 #include <Robot.h>
 
-ShuffleboardPoster::ShuffleboardPoster() {
+ShuffleboardPoster::ShuffleboardPoster(Encoder* leftDriveEncoder, Encoder* right, AHRS* navxBoard) {
 	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+    ShuffleboardPoster::leftDriveEncoder = leftDriveEncoder;
+	ShuffleboardPoster::rightDriveEncoder = rightDriveEncoder;
+	ShuffleboardPoster::navxBoard = navxBoard;
 }
 
-ShuffleboardPoster::~ShuffleboardPoster() {
-	// TODO Auto-generated destructor stub
-}
-
-void AutonGet(){
-	initialDist    = SmartDashboard::GetNumber("Auton/initDist", -420);
-	lTurn1         = SmartDashboard::GetNumber("Auton/lTurn1", -35);
+ShuffleboardPoster::~ShuffleboardPoster() {} void AutonGet(){
 	lTurn2         = SmartDashboard::GetNumber("Auton/lTurn2", 45);
 	lDrive2        = SmartDashboard::GetNumber("Auton/lDrive2", -1530);
 	lDrive3        = SmartDashboard::GetNumber("Auton/lDrive3", -500);
@@ -36,6 +33,10 @@ void TeleopGet(){
 
 void ShufflePeriodic(){
 	SmartDashboard::PutData("navxBoard", navxBoard);
+	SmartDashboard::PutData("LeftEncoder", leftDriveEncoder);
+	SmartDashboard::PutData("RightEncoder", rightDriveEncoder);
+	SmartDashvoard::PutData("PDP", pdp);
+
 }
 
 void GetOurSwitch(){
