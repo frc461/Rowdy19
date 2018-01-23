@@ -4,15 +4,12 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../src/DriveTrain.cpp \
 ../src/Robot.cpp 
 
 OBJS += \
-./src/DriveTrain.o \
 ./src/Robot.o 
 
 CPP_DEPS += \
-./src/DriveTrain.d \
 ./src/Robot.d 
 
 
