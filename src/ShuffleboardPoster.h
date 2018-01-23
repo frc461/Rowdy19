@@ -15,16 +15,15 @@ public:
 	void AutonGet();
 	void TeleopGet();
 	void ShufflePeriodic();
-	void GetOurSwitch();
-	void GetOurScale();
-	void GetTheirSwitch();
+	int GetOurSwitch();
+	int GetOurScale();
+	int GetTheirSwitch();
 
-	int initialDist, lTurn1, lTurn2, lDrive3, lDrive2, rTurn1, rTurn2, rDrive3, rDrive2;
 private:
 	std::string gameData;
 	Encoder *leftDriveEncoder;
 	Encoder *rightDriveEncoder;
-	AHRS *navxBoard
+	AHRS *navxBoard;
 };
 
 #endif /* SRC_SHUFFLEBOARDPOSTER_H_ */

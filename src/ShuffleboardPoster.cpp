@@ -7,6 +7,7 @@
 
 #include <ShuffleboardPoster.h>
 #include <Robot.h>
+#include <WPILib.h>
 
 ShuffleboardPoster::ShuffleboardPoster(Encoder* leftDriveEncoder, Encoder* right, AHRS* navxBoard) {
 	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
@@ -23,8 +24,6 @@ ShuffleboardPoster::~ShuffleboardPoster() {} void AutonGet(){
 	rTurn2         = SmartDashboard::GetNumber("Auton/rTurn2", -45);
 	rDrive2        = SmartDashboard::GetNumber("Auton/rDrive2", -1200);
 	rDrive3        = SmartDashboard::GetNumber("Auton/rDrive3", -790);
-	autoDriveSpeed = SmartDashboard::GetNumber("Auton/autoDriveSpeed", 0.8);
-	autoTurnSpeed  = SmartDashboard::GetNumber("Auton/autoTurnSpeed", 0.65);
 }
 
 void TeleopGet(){
@@ -32,14 +31,14 @@ void TeleopGet(){
 }
 
 void ShufflePeriodic(){
-	SmartDashboard::PutData("navxBoard", navxBoard);
-	SmartDashboard::PutData("LeftEncoder", leftDriveEncoder);
-	SmartDashboard::PutData("RightEncoder", rightDriveEncoder);
+	SmartDashboard::PutData("navxBoard", ShuffleboardPoster::navxBoard);
+	SmartDashboard::PutData("LeftEncoder", ShuffleboardPoster::leftDriveEncoder);
+	SmartDashboard::PutData("RightEncoder", ShuffleboardPoster::rightDriveEncoder);
 	SmartDashvoard::PutData("PDP", pdp);
 
 }
 
-void GetOurSwitch(){
+int GetOurSwitch(){
 	if(gameData[0] == 'L'){
 		return LeftSide;
 	} else if(gameData[0] == 'R'){
@@ -50,7 +49,7 @@ void GetOurSwitch(){
 }
 
 
-void GetOurScale(){
+int GetOurScale(){
 	if(gameData[1] == 'L'){
 		return LeftSide;
 	} else if(gameData[1] == 'R'){
@@ -60,7 +59,7 @@ void GetOurScale(){
 	}
 }
 
-void GetTheirScale(){
+int GetTheirScale(){
 	if(gameData[2] == 'L'){
 		return LeftSide;
 	} else if(gameData[2] == 'R'){

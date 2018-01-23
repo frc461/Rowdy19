@@ -19,6 +19,7 @@
 #include "THRSTMSTRmap.h"
 #include "Robot.h"
 #include "DriveTrain.h"
+#include "ShuffleboardPoster.h"
 
 class Robot : public frc::IterativeRobot {
 public:
@@ -56,7 +57,7 @@ public:
 		pdp = new PowerDistributionPanel(0);
 
 		driveTrain = new DriveTrain(RightDrive1CAN, RightDrive2CAN, RightDrive3CAN, LeftDrive1CAN, LeftDrive2CAN, LeftDrive3CAN, Strafe1CAN, Strafe2CAN);
-		boardHandler = new ShuffleboardPoster(*leftDriveEncoder, *rightDriveEncoder, *navxBoard);
+		boardHandler = new ShuffleboardPoster(leftDriveEncoder, rightDriveEncoder, navxBoard);
 //		leftOutIntake  = new WPI_TalonSRX(LeftOutIntakeCAN);
 //		rightOutIntake = new WPI_TalonSRX(RightOutIntakeCAN);
 //		leftInIntake   = new WPI_TalonSRX(LeftInIntakeCAN);
@@ -79,13 +80,13 @@ public:
 	void AutonomousPeriodic() {
 		double leftEncDist = leftDriveEncoder->GetDistance();
 		double gyroAngle = navxBoard->GetYaw();
-		boardPoster->AutonGet();
-		boardPoster->ShufflePeriodic();
+		boardHandler->AutonGet();
+		boardHandler->ShufflePeriodic();
 
     	switch (autoState) {
     		case (InitialStart):
     			if (leftEncDist > initialDist) {
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     				break;
     			} else {
     				navxBoard->Reset();
@@ -94,10 +95,10 @@ public:
     			}
     		case (TurnDownMiddle):
     			if (ourSwitch == LeftSide && gyroAngle > lTurn1) {
-    				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
+    				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
     				break;
     			} else if (ourSwitch == RightSide && gyroAngle < rTurn1) {
-    				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
+    				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
     				break;
     			} else {
     				EncoderReset();
@@ -106,10 +107,10 @@ public:
     			}
     		case (DriveDiagonal):
     			if (ourSwitch == RightSide && leftEncDist > rDrive2) {
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     				break;
     			} else if (ourSwitch == LeftSide && leftEncDist > lDrive2) {
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     				break;
     			}
     			else {
@@ -119,10 +120,10 @@ public:
     			}
     		case (FaceSwitch):
     			if (ourSwitch == LeftSide && gyroAngle < lTurn2) {
-    				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed);
+    				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
     				break;
     			} else if (ourSwitch == RightSide && gyroAngle > rTurn2) {
-    				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed);
+    				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
     				break;
     			} else {
     				EncoderReset();
@@ -131,10 +132,10 @@ public:
     			}
     		case (DriveSideSwitch):
     			if (ourSwitch == RightSide && leftEncDist > rDrive3) {
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     				break;
     			} else if ( ourSwitch == LeftSide && leftEncDist > lDrive3){
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed);
+    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     				break;
     			}
     			else {

@@ -244,7 +244,7 @@ src/Robot.o: ../src/Robot.cpp \
  /Users/hank/wpilib/user/cpp/include/AHRSProtocol.h \
  /Users/hank/wpilib/user/cpp/include/IMUProtocol.h \
  /Users/hank/wpilib/user/cpp/include/IMURegisters.h ../src/THRSTMSTRmap.h \
- ../src/Robot.h ../src/DriveTrain.h
+ ../src/Robot.h ../src/DriveTrain.h ../src/ShuffleboardPoster.h
 
 /Users/hank/wpilib/cpp/current/include/WPILib.h:
 
@@ -741,3 +741,5 @@ src/Robot.o: ../src/Robot.cpp \
 ../src/Robot.h:
 
 ../src/DriveTrain.h:
+
+../src/ShuffleboardPoster.h:
