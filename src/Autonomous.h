@@ -9,11 +9,11 @@
 #define AUTONOMOUS_H_
 #include "DriveTrain.h"
 #include "Robot.h"
-
+#include "Sensors.h"
 
 class Autonomous {
 public:
-	Autonomous(DriveTrain&, Encoder&, ADXRS450_Gyro&);
+	Autonomous(DriveTrain&, Sensors&);
 	void GetShuffleboardValues();
 	void SwitchRightAuto();
 	void SwitchLeftAuto();
@@ -25,8 +25,7 @@ private:
 	double autoDriveSpeed, autoTurnSpeed;
 
 	DriveTrain* driveTrain;
-	ADXRS450_Gyro* gyro;
-	Encoder* driveEnc;
+	Sensors* sensors;
 };
 
 #endif /* AUTONOMOUS_H_ */

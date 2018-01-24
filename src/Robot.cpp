@@ -48,6 +48,7 @@ public:
 	Encoder *leftDriveEncoder;
 	Encoder *rightDriveEncoder;
 	Autonomous *auton;
+	Sensors *sensors;	
 
 	//Custom variables
 	double autoDriveSpeed, autoTurnSpeed;
@@ -56,8 +57,6 @@ public:
 	void RobotInit() {
 		leftJoystick = new Joystick(0);
 		rightJoystick = new Joystick(1);
-		pdp = new PowerDistributionPanel(0);
-
 
 //		leftOutIntake  = new WPI_TalonSRX(LeftOutIntakeCAN);
 //		rightOutIntake = new WPI_TalonSRX(RightOutIntakeCAN);
@@ -67,13 +66,12 @@ public:
 //		elevator1 = new WPI_TalonSRX(Elevator1CAN);
 //		elevator2 = new WPI_TalonSRX(Elevator2CAN);
 //		elevator3 = new WPI_TalonSRX(Elevator3CAN);
-		leftDriveEncoder = new Encoder(LeftEncoderDIO1, LeftEncoderDIO2);
-		rightDriveEncoder = new Encoder(RightEncoderDIO1, RightEncoderDIO2);
-		gyro = new ADXRS450_Gyro();
 
-		driveTrain = new DriveTrain(RightDrive1CAN, RightDrive2CAN, RightDrive3CAN, LeftDrive1CAN, LeftDrive2CAN, LeftDrive3CAN, Strafe1CAN, Strafe2CAN);
-		boardHandler = new ShuffleboardPoster(*leftDriveEncoder, *rightDriveEncoder, *gyro);
-		auton = new Autonomous(*driveTrain, *leftDriveEncoder, *gyro);
+		sensors = new Sensors();
+
+		driveTrain = new DriveTrain();
+		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
+		auton = new Autonomous(*driveTrain, *sensors);
 	}
 
 	void AutonomousInit() override {

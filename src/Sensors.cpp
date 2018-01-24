@@ -12,7 +12,7 @@
 Sensors::Sensors() {
 	gyro = new ADXRS450_Gyro();
 	leftDriveEncoder = new Encoder(LeftEncoderDIO1, LeftEncoderDIO2);
-	rightDriveEncoder = new Encoer(RightEncoderDIO1, RightEncoderDIO2);
+	rightDriveEncoder = new Encoder(RightEncoderDIO1, RightEncoderDIO2);
 }
 
 int Sensors::GetLeftEncoderDistance(){
@@ -27,4 +27,13 @@ int Sensors::GetGyroAngle(){
 	return gyro->GetAngle();
 }
 
-int Sensors::GetElevatorEncoders(){}
+int Sensors::GetElevatorEncoders(){return 0;}
+
+void Sensors::ResetGyro(){
+	gyro->Reset();
+}
+
+void Sensors::ResetEncoders(){
+	leftDriveEncoder->Reset();
+	rightDriveEncoder->Reset();
+}

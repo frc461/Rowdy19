@@ -13,16 +13,16 @@
 
 class DriveTrain {
 public:
-	DriveTrain(int, int, int, int, int, int, int, int);
+	DriveTrain();
 	void ArcadeDrive(double, double, double);
 	void TankDrive(double, double, double);
-	virtual ~DriveTrain();
-
+//	PowerDistributionPanel GetPDP();
 private:
 	const double DRIVE_SPEED  = 0.8;
 	const double TURN_SPEED   = 0.8;
 	const double STRAFE_SPEED = 0.8;
 
+	PowerDistributionPanel *pdp;
 	DifferentialDrive *driveTrain;
 	WPI_TalonSRX *rightDrive1;
 	WPI_VictorSPX *rightDrive2;

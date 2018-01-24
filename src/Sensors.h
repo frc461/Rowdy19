@@ -10,6 +10,7 @@
 #include <WPILib.h>
 #include "Robot.h"
 
+
 class Sensors {
 public:
 	Sensors();
@@ -17,6 +18,8 @@ public:
 	int GetRightEncoderDistance();
 	int GetGyroAngle();
 	int GetElevatorEncoders();
+	void ResetGyro();
+	void ResetEncoders();
 
 private:
 ADXRS450_Gyro *gyro;

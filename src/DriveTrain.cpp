@@ -15,16 +15,18 @@ double const DRIVE_SPEED = 0.8;
 double const TURN_SPEED = 0.6;
 double const STRAFE_SPEED = 0.4;
 
-	DriveTrain::DriveTrain(int rightDrive1CAN, int rightDrive2CAN, int rightDrive3CAN, int leftDrive1CAN,
-		int leftDrive2CAN, int leftDrive3CAN, int strafe1CAN, int strafe2CAN){
-		rightDrive1 = new WPI_TalonSRX(rightDrive1CAN);
-		rightDrive2 = new WPI_VictorSPX(rightDrive2CAN);
-		rightDrive3 = new WPI_VictorSPX(rightDrive3CAN);
-		leftDrive1  = new WPI_VictorSPX(leftDrive1CAN);
-		leftDrive2  = new WPI_VictorSPX(leftDrive2CAN);
-		leftDrive3  = new WPI_VictorSPX(leftDrive3CAN);
-		strafe1     = new WPI_TalonSRX(strafe1CAN);
-		strafe2     = new WPI_TalonSRX(strafe2CAN);
+	DriveTrain::DriveTrain(){
+
+		pdp = new PowerDistributionPanel(0);
+
+		rightDrive1 = new WPI_TalonSRX(RightDrive1CAN);
+		rightDrive2 = new WPI_VictorSPX(RightDrive2CAN);
+		rightDrive3 = new WPI_VictorSPX(RightDrive3CAN);
+		leftDrive1  = new WPI_VictorSPX(LeftDrive1CAN);
+		leftDrive2  = new WPI_VictorSPX(LeftDrive2CAN);
+		leftDrive3  = new WPI_VictorSPX(LeftDrive3CAN);
+		strafe1     = new WPI_TalonSRX(Strafe1CAN);
+		strafe2     = new WPI_TalonSRX(Strafe2CAN);
 
 		SpeedControllerGroup *left  = new SpeedControllerGroup(*leftDrive1,  *leftDrive2,  *leftDrive3);
 		SpeedControllerGroup *right = new SpeedControllerGroup(*rightDrive1, *rightDrive2, *rightDrive3);
@@ -41,7 +43,7 @@ double const STRAFE_SPEED = 0.4;
 		driveTrain->TankDrive(left * DRIVE_SPEED, right * DRIVE_SPEED);
 		strafe1->Set(strafe * STRAFE_SPEED);
 	}
-
-	DriveTrain::~DriveTrain() {
-		// TODO Auto-generated destructor stub
-	}
+	
+//	PowerDistributionPanel DriveTrain::GetPDP(){
+//		return pdp;
+//	}

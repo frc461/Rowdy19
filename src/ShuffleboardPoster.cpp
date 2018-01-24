@@ -8,12 +8,12 @@
 #include "ShuffleboardPoster.h"
 #include <Robot.h>
 #include <WPILib.h>
+#include "Sensors.h"
 
-ShuffleboardPoster::ShuffleboardPoster(Encoder& passLeft, Encoder& passRight, ADXRS450_Gyro& passGyro) {
+ShuffleboardPoster::ShuffleboardPoster(DriveTrain& dt, Sensors& srs) {
 	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
-    leftDriveEncoder = &passLeft;
-	rightDriveEncoder = &passRight;
-	gyro = &passGyro;
+	driveTrain = &dt;
+	sensors = &srs;
 }
 
 void ShuffleboardPoster::TeleopGet(){
@@ -21,10 +21,10 @@ void ShuffleboardPoster::TeleopGet(){
 }
 
 void ShuffleboardPoster::ShufflePeriodic(){
-	SmartDashboard::PutData("navxBoard", ShuffleboardPoster::gyro);
-	SmartDashboard::PutData("LeftEncoder", ShuffleboardPoster::leftDriveEncoder);
-	SmartDashboard::PutData("RightEncoder", ShuffleboardPoster::rightDriveEncoder);
-//	SmartDashvoard::PutData("PDP", pdp);
+	SmartDashboard::PutNumber("gyro", sensors->GetGyroAngle());
+	SmartDashboard::PutNumber("LeftEncoderDist", sensors->GetLeftEncoderDistance());
+	SmartDashboard::PutNumber("RightEncoderDist", sensors->GetRightEncoderDistance());
+//	SmartDashboard::PutData("PDP", driveTrain->GetPDP());
 
 }
 

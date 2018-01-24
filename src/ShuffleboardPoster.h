@@ -8,10 +8,12 @@
 #ifndef SRC_SHUFFLEBOARDPOSTER_H_
 #define SRC_SHUFFLEBOARDPOSTER_H_
 #include <WPILib.h>
+#include "Sensors.h"
+#include "DriveTrain.h"
 
 class ShuffleboardPoster {
 public:
-	ShuffleboardPoster(Encoder&, Encoder&, ADXRS450_Gyro&);
+	ShuffleboardPoster(DriveTrain&, Sensors&);
 	void TeleopGet();
 	void ShufflePeriodic();
 	int GetOurSwitch();
@@ -20,9 +22,8 @@ public:
 
 private:
 	std::string gameData;
-	Encoder *leftDriveEncoder;
-	Encoder *rightDriveEncoder;
-	ADXRS450_Gyro *gyro;
+	DriveTrain* driveTrain;
+	Sensors* sensors;	
 };
 
 #endif /* SRC_SHUFFLEBOARDPOSTER_H_ */
