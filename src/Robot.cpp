@@ -24,7 +24,7 @@ public:
 	Joystick *leftJoystick;
 	Joystick *rightJoystick;
 
-	//Robot parts
+	//Robot partsShuffleboardPoster::
 	PowerDistributionPanel *pdp;
 	DifferentialDrive *driveTrain;
 	WPI_TalonSRX *rightDrive1;
