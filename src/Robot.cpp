@@ -43,9 +43,10 @@ public:
 
 //	Solenoid *intakeArms;
 
-	AHRS *navxBoard;
+	ADXRS450_Gyro *gyro;
 	Encoder *leftDriveEncoder;
 	Encoder *rightDriveEncoder;
+	Autonomous auton;
 
 	//Custom variables
 	double autoDriveSpeed, autoTurnSpeed;
@@ -58,6 +59,7 @@ public:
 
 		driveTrain = new DriveTrain(RightDrive1CAN, RightDrive2CAN, RightDrive3CAN, LeftDrive1CAN, LeftDrive2CAN, LeftDrive3CAN, Strafe1CAN, Strafe2CAN);
 		boardHandler = new ShuffleboardPoster(leftDriveEncoder, rightDriveEncoder, navxBoard);
+		auton = new Autonomous();
 //		leftOutIntake  = new WPI_TalonSRX(LeftOutIntakeCAN);
 //		rightOutIntake = new WPI_TalonSRX(RightOutIntakeCAN);
 //		leftInIntake   = new WPI_TalonSRX(LeftInIntakeCAN);
@@ -84,68 +86,6 @@ public:
 		boardHandler->AutonGet();
 		boardHandler->ShufflePeriodic();
 
-    	switch (autoState) {
-    		case (InitialStart):
-    			if (leftEncDist > initialDist) {
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    				break;
-    			} else {
-    				navxBoard->Reset();
-    				autoState = TurnDownMiddle;
-    				break;
-    			}
-    		case (TurnDownMiddle):
-    			if (ourSwitch == LeftSide && gyroAngle > lTurn1) {
-    				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
-    				break;
-    			} else if (ourSwitch == RightSide && gyroAngle < rTurn1) {
-    				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
-    				break;
-    			} else {
-    				EncoderReset();
-    				autoState = DriveDiagonal;
-    				break;
-    			}
-    		case (DriveDiagonal):
-    			if (ourSwitch == RightSide && leftEncDist > rDrive2) {
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    				break;
-    			} else if (ourSwitch == LeftSide && leftEncDist > lDrive2) {
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    				break;
-    			}
-    			else {
-    				navxBoard->Reset();
-    				autoState = FaceSwitch;
-    				break;
-    			}
-    		case (FaceSwitch):
-    			if (ourSwitch == LeftSide && gyroAngle < lTurn2) {
-    				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
-    				break;
-    			} else if (ourSwitch == RightSide && gyroAngle > rTurn2) {
-    				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
-    				break;
-    			} else {
-    				EncoderReset();
-    				autoState = DriveSideSwitch;
-    				break;
-    			}
-    		case (DriveSideSwitch):
-    			if (ourSwitch == RightSide && leftEncDist > rDrive3) {
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    				break;
-    			} else if ( ourSwitch == LeftSide && leftEncDist > lDrive3){
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    				break;
-    			}
-    			else {
-    				autoState = DeployBlock;
-    				break;
-    			}
-    		case (DeployBlock):
-    			break;
-    	}
 	}
 
 	void TeleopInit() {}

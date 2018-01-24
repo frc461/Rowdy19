@@ -8,6 +8,7 @@
 #include "DriveTrain.h"
 #include "ctre/Phoenix.h"
 #include <WPILib.h>
+#include "Robot.h"
 
 	DriveTrain::DriveTrain(int rightDrive1CAN, int rightDrive2CAN, int rightDrive3CAN, int leftDrive1CAN,
 		int leftDrive2CAN, int leftDrive3CAN, int strafe1CAN, int strafe2CAN){
