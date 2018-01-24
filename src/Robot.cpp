@@ -11,7 +11,7 @@
 //Include WPILib and 3rd party libraries
 #include "WPILib.h"
 #include "ctre/Phoenix.h"
-#include "AHRS.h"
+// #include "AHRS.h"
 
 //Include custom headers
 #include "THRSTMSTRmap.h"
@@ -94,7 +94,7 @@ public:
 		SpeedControllerGroup *right = new SpeedControllerGroup(*rightDrive1, *rightDrive2, *rightDrive3);
 		driveTrain = new DifferentialDrive(*left, *right);
 
-//		strafe2->Follow(*strafe1);
+		strafe2->Follow(*strafe1);
 	}
 
 	void AutonomousInit() override {
@@ -186,17 +186,19 @@ public:
 	void TeleopPeriodic() {
 		double forward = -rightJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
+		double strafe = rightJoystick->GetRawAxis(xAxisJS);
 
 		if(leftJoystick->GetRawButton(trigger)){
 			rightDrive1->Set(1.0);
-			strafe1->Set
+//			strafe1->Set
 		} else {
 			rightDrive1->Set(0.0);
 		}
 
 
 		driveTrain->ArcadeDrive(forward * DRIVE_SPEED, rotate * TURN_SPEED);
-//		strafe1->Set(rightJoystick->GetRawAxis(xAxisJS));
+		strafe1->Set(strafe);
+
 	}
 
 	void TestPeriodic() {}
