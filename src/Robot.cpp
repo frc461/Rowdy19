@@ -21,6 +21,7 @@
 #include "Robot.h"
 #include "DriveTrain.h"
 #include "ShuffleboardPoster.h"
+#include "Autonomous.h"
 
 class Robot : public frc::IterativeRobot {
 public:
@@ -46,7 +47,7 @@ public:
 	ADXRS450_Gyro *gyro;
 	Encoder *leftDriveEncoder;
 	Encoder *rightDriveEncoder;
-	Autonomous auton;
+	Autonomous *auton;
 
 	//Custom variables
 	double autoDriveSpeed, autoTurnSpeed;
@@ -57,9 +58,7 @@ public:
 		rightJoystick = new Joystick(1);
 		pdp = new PowerDistributionPanel(0);
 
-		driveTrain = new DriveTrain(RightDrive1CAN, RightDrive2CAN, RightDrive3CAN, LeftDrive1CAN, LeftDrive2CAN, LeftDrive3CAN, Strafe1CAN, Strafe2CAN);
-		boardHandler = new ShuffleboardPoster(leftDriveEncoder, rightDriveEncoder, navxBoard);
-		auton = new Autonomous();
+
 //		leftOutIntake  = new WPI_TalonSRX(LeftOutIntakeCAN);
 //		rightOutIntake = new WPI_TalonSRX(RightOutIntakeCAN);
 //		leftInIntake   = new WPI_TalonSRX(LeftInIntakeCAN);
@@ -70,6 +69,11 @@ public:
 //		elevator3 = new WPI_TalonSRX(Elevator3CAN);
 		leftDriveEncoder = new Encoder(LeftEncoderDIO1, LeftEncoderDIO2);
 		rightDriveEncoder = new Encoder(RightEncoderDIO1, RightEncoderDIO2);
+		gyro = new ADXRS450_Gyro();
+
+		driveTrain = new DriveTrain(RightDrive1CAN, RightDrive2CAN, RightDrive3CAN, LeftDrive1CAN, LeftDrive2CAN, LeftDrive3CAN, Strafe1CAN, Strafe2CAN);
+		boardHandler = new ShuffleboardPoster(*leftDriveEncoder, *rightDriveEncoder, *gyro);
+		auton = new Autonomous(*driveTrain, *leftDriveEncoder, *gyro);
 	}
 
 	void AutonomousInit() override {
@@ -81,11 +85,15 @@ public:
 	}
 
 	void AutonomousPeriodic() {
-		double leftEncDist = leftDriveEncoder->GetDistance();
-		double gyroAngle = navxBoard->GetYaw();
-		boardHandler->AutonGet();
 		boardHandler->ShufflePeriodic();
 
+		if (boardHandler->GetOurSwitch() == RightSide) {
+			auton->SwitchRightAuto();
+		} else if (boardHandler->GetOurSwitch() == LeftSide)  {
+			auton->SwitchLeftAuto();
+		} else {
+			auton->DefaultCross();
+	    }	
 	}
 
 	void TeleopInit() {}

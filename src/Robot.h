@@ -48,5 +48,4 @@ enum StructureData {
 	RightSide
 };
 
-double autoDriveSpeed, autoTurnSpeed;
 #endif /* SRC_ROBOT_H_ */

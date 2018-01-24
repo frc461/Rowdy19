@@ -9,11 +9,10 @@
 #define DRIVETRAIN_H_
 #include <WPILib.h>
 #include "ctre/Phoenix.h"
-
+#include "Robot.h"
 
 class DriveTrain {
 public:
-
 	DriveTrain(int, int, int, int, int, int, int, int);
 	void ArcadeDrive(double, double, double);
 	void TankDrive(double, double, double);

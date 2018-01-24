@@ -7,17 +7,16 @@
 
 #ifndef SRC_SHUFFLEBOARDPOSTER_H_
 #define SRC_SHUFFLEBOARDPOSTER_H_
+#include <WPILib.h>
 
 class ShuffleboardPoster {
 public:
-	ShuffleboardPoster(Encoder*, Encoder*, AHRS*);
-	virtual ~ShuffleboardPoster();
-	void AutonGet();
+	ShuffleboardPoster(Encoder&, Encoder&, ADXRS450_Gyro&);
 	void TeleopGet();
 	void ShufflePeriodic();
 	int GetOurSwitch();
 	int GetOurScale();
-	int GetTheirSwitch();
+	int GetTheirSideSwitch();
 
 private:
 	std::string gameData;
