@@ -33,8 +33,8 @@ public:
 	WPI_VictorSPX *leftDrive1;
 	WPI_VictorSPX *leftDrive2;
 	WPI_VictorSPX *leftDrive3;
-	WPI_TalonSRX *strafe1;
-	WPI_TalonSRX *strafe2;
+	TalonSRX *strafe1;
+	TalonSRX *strafe2;
 
 //	WPI_TalonSRX *leftOutIntake;
 //	WPI_TalonSRX *rightOutIntake;
@@ -76,8 +76,8 @@ public:
 		leftDrive1  = new WPI_VictorSPX(LeftDrive1CAN);
 		leftDrive2  = new WPI_VictorSPX(LeftDrive2CAN);
 		leftDrive3  = new WPI_VictorSPX(LeftDrive3CAN);
-		strafe1     = new WPI_TalonSRX(Strafe1CAN);
-		strafe2     = new WPI_TalonSRX(Strafe2CAN);
+		strafe1     = new TalonSRX(Strafe1CAN);
+		strafe2     = new TalonSRX(Strafe2CAN);
 
 
 //		leftOutIntake  = new WPI_TalonSRX(LeftOutIntakeCAN);
@@ -98,17 +98,17 @@ public:
 	}
 
 	void AutonomousInit() override {
-		ShuffleboardPeriodic();
-		EncoderReset();
-
-		autoState = InitialStart;
-
-		std::string gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
-		if (gameData[0] == 'L') {
-			ourSwitch = LeftSwitch;
-		} else {
-			ourSwitch = RightSwitch;
-		}
+//		ShuffleboardPeriodic();
+//		EncoderReset();
+//
+//		autoState = InitialStart;
+//
+//		std::string gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
+//		if (gameData[0] == 'L') {
+//			ourSwitch = LeftSwitch;
+//		} else {
+//			ourSwitch = RightSwitch;
+//		}
 
 	}
 
@@ -188,7 +188,7 @@ public:
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 
 		driveTrain->ArcadeDrive(forward * DRIVE_SPEED, rotate * TURN_SPEED);
-		strafe1->Set(rightJoystick->GetRawAxis(xAxisJS));
+		strafe1->Set(ControlMode::PercentOutput, leftJoystick->GetRawAxis(xAxisJS));
 	}
 
 	void TestPeriodic() {}

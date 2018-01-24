@@ -4,13 +4,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../src/Robot.cpp 
+../src/DriveTrain.cpp \
+../src/Robot.cpp \
+../src/ShuffleboardPoster.cpp 
 
 OBJS += \
-./src/Robot.o 
+./src/DriveTrain.o \
+./src/Robot.o \
+./src/ShuffleboardPoster.o 
 
 CPP_DEPS += \
-./src/Robot.d 
+./src/DriveTrain.d \
+./src/Robot.d \
+./src/ShuffleboardPoster.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
