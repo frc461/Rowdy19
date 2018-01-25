@@ -186,7 +186,6 @@ public:
 	void TeleopPeriodic() {
 		double forward = -rightJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
-		double strafe = rightJoystick->GetRawAxis(xAxisJS);
 
 		driveTrain->ArcadeDrive(forward * DRIVE_SPEED, rotate * TURN_SPEED);
 		strafe1->Set(ControlMode::PercentOutput, leftJoystick->GetRawAxis(xAxisJS));
