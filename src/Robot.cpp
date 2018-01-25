@@ -97,11 +97,15 @@ public:
 	void TeleopInit() {}
 
 	void TeleopPeriodic() {
-		double forward = rightJoystick->GetRawAxis(xAxisJS);
+		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(yAxisJS);
 		double strafe  = leftJoystick->GetRawAxis(xAxisJS);
 
-		driveTrain->ArcadeDrive(forward, rotate, strafe);
+		if (rightJoystick->GetRawButton(trigger)){
+			driveTrain->TankDrive(forwardR, rotate, strafe);
+		} else {
+			driveTrain->ArcadeDrive(forwardR, rotate, strafe);
+		 }
 	}
 
 	void TestPeriodic() {}

@@ -16,6 +16,9 @@ public:
 	ShuffleboardPoster(DriveTrain&, Sensors&);
 	void TeleopGet();
 	void ShufflePeriodic();
+	double GetTeleopDriveSpeedLimit();
+	double GetTeleopRotateSpeedLimit();
+	double GetTeleopStrafeSpeedLimit();
 	int GetOurSwitch();
 	int GetOurScale();
 	int GetTheirSideSwitch();

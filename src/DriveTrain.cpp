@@ -10,11 +10,6 @@
 #include <WPILib.h>
 #include "Robot.h"
 
-
-double const DRIVE_SPEED = 0.8;
-double const TURN_SPEED = 0.6;
-double const STRAFE_SPEED = 0.4;
-
 	DriveTrain::DriveTrain(){
 
 		pdp = new PowerDistributionPanel(0);
@@ -32,16 +27,32 @@ double const STRAFE_SPEED = 0.4;
 		SpeedControllerGroup *right = new SpeedControllerGroup(*rightDrive1, *rightDrive2, *rightDrive3);
 		driveTrain = new DifferentialDrive(*left, *right);
 		strafe2->Follow(*strafe1);
+		PutSpeedValues();
+		GetSpeedValues();
+	}
+
+	void DriveTrain::PutSpeedValues(){
+		SmartDashboard::PutNumber("strafeSpeed", 0.8);
+		SmartDashboard::PutNumber("driveSpeed", 0.8);
+		SmartDashboard::PutNumber("turnSpeed", 0.6);
+	}
+
+	void DriveTrain::GetSpeedValues(){
+		strafeSpeed = SmartDashboard::GetNumber("strafeSpeed", 0.8);
+		driveSpeed = SmartDashboard::GetNumber("driveSpeed", 0.8);
+		turnSpeed = SmartDashboard::GetNumber("turnSpeed", 0.6);
 	}
 
 	void DriveTrain::ArcadeDrive(double forward, double rotate, double strafe){
-		driveTrain->ArcadeDrive(forward * DRIVE_SPEED, rotate * TURN_SPEED);
-		strafe1->Set(strafe * STRAFE_SPEED);
+		GetSpeedValues();
+		driveTrain->ArcadeDrive(forward * driveSpeed, rotate * turnSpeed);
+		strafe1->Set(ControlMode::PercentOutput, strafe * strafeSpeed);
 	}
 
 	void DriveTrain::TankDrive(double left, double right, double strafe){
-		driveTrain->TankDrive(left * DRIVE_SPEED, right * DRIVE_SPEED);
-		strafe1->Set(strafe * STRAFE_SPEED);
+		GetSpeedValues();
+		driveTrain->TankDrive(left * driveSpeed, right * driveSpeed);
+		strafe1->Set(ControlMode::PercentOutput, strafe * strafeSpeed);
 	}
 	
 //	PowerDistributionPanel DriveTrain::GetPDP(){

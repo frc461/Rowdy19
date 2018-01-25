@@ -16,11 +16,11 @@ public:
 	DriveTrain();
 	void ArcadeDrive(double, double, double);
 	void TankDrive(double, double, double);
+	void PutSpeedValues();
+	void GetSpeedValues();
 //	PowerDistributionPanel GetPDP();
 private:
-	const double DRIVE_SPEED  = 0.8;
-	const double TURN_SPEED   = 0.8;
-	const double STRAFE_SPEED = 0.8;
+	double driveSpeed, turnSpeed, strafeSpeed;
 
 	PowerDistributionPanel *pdp;
 	DifferentialDrive *driveTrain;
@@ -30,8 +30,8 @@ private:
 	WPI_VictorSPX *leftDrive1;
 	WPI_VictorSPX *leftDrive2;
 	WPI_VictorSPX *leftDrive3;
-	WPI_TalonSRX *strafe1;
-	WPI_TalonSRX *strafe2;
+	TalonSRX *strafe1;
+	TalonSRX *strafe2;
 };
 
 #endif /* DRIVETRAIN_H_ */
