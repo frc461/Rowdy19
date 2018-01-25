@@ -11,7 +11,7 @@
 //Include WPILib and 3rd party libraries
 #include "WPILib.h"
 #include "ctre/Phoenix.h"
-#include "AHRS.h"
+// #include "AHRS.h"
 
 //Include custom headers
 #include "THRSTMSTRmap.h"
@@ -186,9 +186,24 @@ public:
 	void TeleopPeriodic() {
 		double forward = -rightJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
+		double strafe = rightJoystick->GetRawAxis(xAxisJS);
 
+<<<<<<< HEAD
 		driveTrain->ArcadeDrive(forward * DRIVE_SPEED, rotate * TURN_SPEED);
 		strafe1->Set(ControlMode::PercentOutput, leftJoystick->GetRawAxis(xAxisJS));
+=======
+		if(leftJoystick->GetRawButton(trigger)){
+			rightDrive1->Set(1.0);
+//			strafe1->Set
+		} else {
+			rightDrive1->Set(0.0);
+		}
+
+
+		driveTrain->ArcadeDrive(forward * DRIVE_SPEED, rotate * TURN_SPEED);
+		strafe1->Set(strafe);
+
+>>>>>>> 0c1253d73a25dfc8ca7d2618ff854d9ec4202291
 	}
 
 	void TestPeriodic() {}
