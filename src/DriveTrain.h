@@ -18,6 +18,7 @@ public:
 	void TankDrive(double, double, double);
 	void PutSpeedValues();
 	void GetSpeedValues();
+	void StrafeStraight(double);
 //	PowerDistributionPanel GetPDP();
 private:
 	double driveSpeed, turnSpeed, strafeSpeed;

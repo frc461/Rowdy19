@@ -22,8 +22,8 @@ void ShuffleboardPoster::TeleopGet(){
 
 void ShuffleboardPoster::ShufflePeriodic(){
 	SmartDashboard::PutNumber("gyro", sensors->GetGyroAngle());
-	SmartDashboard::PutNumber("LeftEncoderDist", sensors->GetLeftEncoderDistance());
-	SmartDashboard::PutNumber("RightEncoderDist", sensors->GetRightEncoderDistance());
+//	SmartDashboard::PutNumber("LeftEncoderDist", sensors->GetLeftEncoderDistance());
+//	SmartDashboard::PutNumber("RightEncoderDist", sensors->GetRightEncoderDistance());
 //	SmartDashboard::PutData("PDP", driveTrain->GetPDP());
 
 }

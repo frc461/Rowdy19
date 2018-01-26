@@ -45,16 +45,19 @@
 
 	void DriveTrain::ArcadeDrive(double forward, double rotate, double strafe){
 		GetSpeedValues();
-		driveTrain->ArcadeDrive(forward * driveSpeed, rotate * turnSpeed);
-		strafe1->Set(ControlMode::PercentOutput, strafe * strafeSpeed);
+		driveTrain->ArcadeDrive(-forward * driveSpeed, rotate * turnSpeed);
+		strafe1->Set(ControlMode::PercentOutput, strafe * -strafeSpeed);
 	}
 
 	void DriveTrain::TankDrive(double left, double right, double strafe){
 		GetSpeedValues();
-		driveTrain->TankDrive(left * driveSpeed, right * driveSpeed);
-		strafe1->Set(ControlMode::PercentOutput, strafe * strafeSpeed);
+		driveTrain->TankDrive(-left * driveSpeed, -right * driveSpeed);
+		strafe1->Set(ControlMode::PercentOutput, strafe * -strafeSpeed);
 	}
-	
+
+	void StrafeStraight(double strafe){
+	}
+
 //	PowerDistributionPanel DriveTrain::GetPDP(){
 //		return pdp;
 //	}

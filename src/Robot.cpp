@@ -44,9 +44,6 @@ public:
 
 //	Solenoid *intakeArms;
 
-	ADXRS450_Gyro *gyro;
-	Encoder *leftDriveEncoder;
-	Encoder *rightDriveEncoder;
 	Autonomous *auton;
 	Sensors *sensors;	
 
@@ -76,7 +73,6 @@ public:
 
 	void AutonomousInit() override {
 		boardHandler->ShufflePeriodic();
-		EncoderReset();
 
 		autoState = InitialStart;
 		ourSwitch = boardHandler->GetOurSwitch();
@@ -97,12 +93,14 @@ public:
 	void TeleopInit() {}
 
 	void TeleopPeriodic() {
+		boardHandler->ShufflePeriodic();
 		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
-		double rotate  = leftJoystick->GetRawAxis(yAxisJS);
-		double strafe  = leftJoystick->GetRawAxis(xAxisJS);
+		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
+		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
+		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
 
 		if (rightJoystick->GetRawButton(trigger)){
-			driveTrain->TankDrive(forwardR, rotate, strafe);
+			driveTrain->TankDrive(forwardL, forwardR, strafe);
 		} else {
 			driveTrain->ArcadeDrive(forwardR, rotate, strafe);
 		 }
@@ -110,10 +108,6 @@ public:
 
 	void TestPeriodic() {}
 
-	void EncoderReset() {
-		leftDriveEncoder->Reset();
-		rightDriveEncoder->Reset();
-	}
 
 private:
 
