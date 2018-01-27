@@ -7,6 +7,7 @@ CPP_SRCS += \
 ../src/Autonomous.cpp \
 ../src/DriveTrain.cpp \
 ../src/Elevator.cpp \
+../src/Intake.cpp \
 ../src/Robot.cpp \
 ../src/Sensors.cpp \
 ../src/SettablePIDOut.cpp \
@@ -16,6 +17,7 @@ OBJS += \
 ./src/Autonomous.o \
 ./src/DriveTrain.o \
 ./src/Elevator.o \
+./src/Intake.o \
 ./src/Robot.o \
 ./src/Sensors.o \
 ./src/SettablePIDOut.o \
@@ -25,6 +27,7 @@ CPP_DEPS += \
 ./src/Autonomous.d \
 ./src/DriveTrain.d \
 ./src/Elevator.d \
+./src/Intake.d \
 ./src/Robot.d \
 ./src/Sensors.d \
 ./src/SettablePIDOut.d \
