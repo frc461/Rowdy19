@@ -8,7 +8,7 @@ CPP_SRCS += \
 ../src/DriveTrain.cpp \
 ../src/Robot.cpp \
 ../src/Sensors.cpp \
-../src/SetablePIDOut.cpp \
+../src/SettablePIDOut.cpp \
 ../src/ShuffleboardPoster.cpp 
 
 OBJS += \
@@ -16,7 +16,7 @@ OBJS += \
 ./src/DriveTrain.o \
 ./src/Robot.o \
 ./src/Sensors.o \
-./src/SetablePIDOut.o \
+./src/SettablePIDOut.o \
 ./src/ShuffleboardPoster.o 
 
 CPP_DEPS += \
@@ -24,7 +24,7 @@ CPP_DEPS += \
 ./src/DriveTrain.d \
 ./src/Robot.d \
 ./src/Sensors.d \
-./src/SetablePIDOut.d \
+./src/SettablePIDOut.d \
 ./src/ShuffleboardPoster.d 
 
 

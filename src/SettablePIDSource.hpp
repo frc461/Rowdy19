@@ -1,5 +1,5 @@
 /*
- * SetablePIDSource.hpp
+ * SettablePIDSource.hpp
  *
  *  Created on: Nov 13, 2017
  *      Author: hank

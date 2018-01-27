@@ -34,6 +34,7 @@ public:
 	PowerDistributionPanel *pdp;
 	DriveTrain *driveTrain;
 	ShuffleboardPoster *boardHandler;
+
 //	WPI_TalonSRX *leftOutIntake;
 //	WPI_TalonSRX *rightOutIntake;
 //	WPI_TalonSRX *leftInIntake;
@@ -66,7 +67,7 @@ public:
 
 		sensors = new Sensors();
 
-		driveTrain = new DriveTrain();
+		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
 		auton = new Autonomous(*driveTrain, *sensors);
 	}
