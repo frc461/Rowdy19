@@ -11,7 +11,7 @@
 
 Sensors::Sensors() {
 	gyro = new ADXRS450_Gyro();
-//	leftDriveEncoder = new Encoder(LeftEncoderDIO1, LeftEncoderDIO2);
+	leftDriveEncoder = new Encoder(LeftEncoderDIO1, LeftEncoderDIO2);
 	rightDriveEncoder = new Encoder(RightEncoderDIO1, RightEncoderDIO2);
 }
 
@@ -34,6 +34,6 @@ void Sensors::ResetGyro(){
 }
 
 void Sensors::ResetEncoders(){
-	leftDriveEncoder->Reset();
-	rightDriveEncoder->Reset();
+//	leftDriveEncoder->Reset();
+//	rightDriveEncoder->Reset();
 }

@@ -25,7 +25,7 @@ public:
 	void InitPID();
 //	PowerDistributionPanel GetPDP();
 private:
-	double driveSpeed, turnSpeed, strafeSpeed, strafeDifference, strafeTolerance, strafeAngle;
+	double driveSpeed, turnSpeed, strafeSpeed, strafeDifference, strafeSpeedTolerance, strafeAngleTolerance, strafeAngle;
 	bool isStrafing;
 	double p, i, d, pidoutput, pidAdd, pidMax;
 	PIDController* pid;

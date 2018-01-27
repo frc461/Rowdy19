@@ -39,7 +39,12 @@ enum DIOPorts {
 	LeftEncoderDIO1 = 0,
 	LeftEncoderDIO2,
 	RightEncoderDIO1,
-	RightEncoderDIO2
+	RightEncoderDIO2,
+	Elevator1DIO1,
+	Elevator1DIO2,
+	Elevator2DIO1,
+	Elevator3DIO1,
+	Elevator3DIO2
 };
 
 enum StructureData {
