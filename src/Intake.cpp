@@ -15,14 +15,28 @@ Intake::Intake() {
 	intakeInRight = new VictorSPX(RightInIntakeCAN);
 	intakeOutLeft = new VictorSPX(LeftOutIntakeCAN);
 	intakeOutRight = new VictorSPX(RightOutIntakeCAN);
+
+	intakeInRight->Follow(*intakeInLeft);
+	intakeInRight->SetInverted(true);
+
+	intakeOutRight->Follow(*intakeOutLeft);
+	intakeOutRight->SetInverted(true);
 }
 
-void Intake::takeInOuter(){}
-void Intake::takeInInner(){}
+void Intake::takeInOuter(){
+
+}
+
+void Intake::takeInInner(){
+
+}
+
 void Intake::takeInAll(){}
 
 void Intake::outputOuter(){}
+
 void Intake::outputInner(){}
+
 void Intake::outputAll(){}
 
 void Intake::allOff(){}

@@ -23,6 +23,9 @@ public:
 	void GetValues();
 	void CalculateStrafeRotate(double);
 	void InitPID();
+	int GetEncoderVal(int);
+	void ResetEncoders();
+
 //	PowerDistributionPanel GetPDP();
 private:
 	double driveSpeed, turnSpeed, strafeSpeed, strafeDifference, strafeSpeedTolerance, strafeAngleTolerance, strafeAngle;
@@ -31,7 +34,6 @@ private:
 	PIDController* pid;
 	SettablePIDOut* pidout;
 	SettablePIDSource* pidsrc;
-
 	Sensors* sensors;
 	PowerDistributionPanel *pdp;
 	DifferentialDrive *driveTrain;
@@ -41,8 +43,8 @@ private:
 	WPI_TalonSRX *leftDrive1;
 	WPI_VictorSPX *leftDrive2;
 	WPI_VictorSPX *leftDrive3;
-	VictorSPX *strafe1;
-	TalonSRX *strafe2;
+	VictorSPX *strafe2;
+	TalonSRX *strafe1;
 };
 
 #endif /* DRIVETRAIN_H_ */

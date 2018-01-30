@@ -32,7 +32,7 @@ void Autonomous::GetShuffleboardValues(){
 }
 
 void Autonomous::SwitchRightAuto(){
-	int leftEncDist = sensors->GetLeftEncoderDistance();
+	int leftEncDist = driveTrain->GetEncoderVal(LeftSide);
 	int gyroAngle = sensors->GetGyroAngle();
     	switch (autoState) {
     		case (InitialStart):
@@ -49,7 +49,7 @@ void Autonomous::SwitchRightAuto(){
     				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
     				break;
     			} else {
-    				sensors->ResetEncoders();
+    				driveTrain->ResetEncoders();
     				autoState = DriveDiagonal;
     				break;
     			}
@@ -58,7 +58,7 @@ void Autonomous::SwitchRightAuto(){
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     				break;
     			} else {
-    				sensors->ResetEncoders();
+    				driveTrain->ResetEncoders();
     				autoState = FaceSwitch;
     				break;
     			}
@@ -67,7 +67,7 @@ void Autonomous::SwitchRightAuto(){
     				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
     				break;
     			} else {
-    				sensors->ResetEncoders();
+    				driveTrain->ResetEncoders();
     				autoState = DriveSideSwitch;
     				break;
     			}
@@ -103,7 +103,7 @@ void Autonomous::SwitchLeftAuto(){
     				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
     				break;
     			} else {
-    				sensors->ResetEncoders();
+    				driveTrain->ResetEncoders();
     				autoState = DriveDiagonal;
     				break;
     			}
@@ -122,7 +122,7 @@ void Autonomous::SwitchLeftAuto(){
     				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
     				break;
     			} else {
-				sensors->ResetEncoders();
+				driveTrain->ResetEncoders();
     				autoState = DriveSideSwitch;
     				break;
     			}

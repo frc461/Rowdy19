@@ -18,14 +18,14 @@ enum AutonomousStates {
 };
 
 enum CanChain {
-	LeftDrive1CAN = 0,
-	Strafe2CAN,
-	RightDrive1CAN,
-	Strafe1CAN,
-	LeftDrive2CAN,
-	LeftDrive3CAN,
+	RightDrive1CAN = 0,
 	RightDrive2CAN,
 	RightDrive3CAN,
+	LeftDrive1CAN,
+	LeftDrive2CAN,
+	LeftDrive3CAN,
+	Strafe1CAN,
+	Strafe2CAN,
 	LeftOutIntakeCAN,
 	RightOutIntakeCAN,
 	LeftInIntakeCAN,
