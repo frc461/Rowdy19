@@ -12,31 +12,53 @@
 #include "Sensors.h"
 
 Autonomous::Autonomous(DriveTrain& dt, Sensors& srs) {
+	PutShuffleboardValues();
 	GetShuffleboardValues();
 	autoState = InitialStart;
 	driveTrain = &dt;
 	sensors = &srs;
 }
 
+void Autonomous::SetAutoState(int pAutoState){
+	autoState = pAutoState;
+}
+
+void Autonomous::PutShuffleboardValues(){
+	SmartDashboard::PutNumber("Auton/initDist",3000);
+	SmartDashboard::PutNumber("Auton/lTurn2",45);
+	SmartDashboard::PutNumber("Auton/lDrive2",5000);
+	SmartDashboard::PutNumber("Auton/lDrive3",-500);
+	SmartDashboard::PutNumber("Auton/rTurn1",55);
+	SmartDashboard::PutNumber("Auton/rTurn2",-45);
+	SmartDashboard::PutNumber("Auton/rDrive2",5000);
+	SmartDashboard::PutNumber("Auton/rDrive3",-790);
+	SmartDashboard::PutNumber("Auton/defaultDist", 2500);
+	SmartDashboard::PutNumber("Auton/autoDriveSpeed", -0.75);
+	SmartDashboard::PutNumber("Auton/autoTurnSpeed", -0.6);
+}
+
 void Autonomous::GetShuffleboardValues(){
-	initDist = SmartDashboard::GetNumber("Auton/initDist",420);
+	initDist = SmartDashboard::GetNumber("Auton/initDist",3000);
 	lTurn2 =  SmartDashboard::GetNumber("Auton/lTurn2",45);
 	lDrive2 = SmartDashboard::GetNumber("Auton/lDrive2",-1530);
 	lDrive3 = SmartDashboard::GetNumber("Auton/lDrive3",-500);
 	rTurn1 = SmartDashboard::GetNumber("Auton/rTurn1",55);
 	rTurn2 = SmartDashboard::GetNumber("Auton/rTurn2",-45);
-	rDrive3 = SmartDashboard::GetNumber("Auton/rDrive3",-790);
+	rDrive2 = SmartDashboard::GetNumber("Auton/rDrive2", 5000);
+	rDrive3 = SmartDashboard::GetNumber("Auton/rDrive3",2500);
 	defaultDist = SmartDashboard::GetNumber("Auton/defaultDist", 2500);
-	autoDriveSpeed = SmartDashboard::GetNumber("Auton/autoDriveSpeed", 0.75);
-	autoTurnSpeed = SmartDashboard::GetNumber("Auton/autoTurnSpeed", 0.6);
+	autoDriveSpeed = SmartDashboard::GetNumber("Auton/autoDriveSpeed", -0.75);
+	autoTurnSpeed = SmartDashboard::GetNumber("Auton/autoTurnSpeed", -0.6);
+	SmartDashboard::PutNumber("Auton/autoState", autoState);
+
 }
 
 void Autonomous::SwitchRightAuto(){
-	int leftEncDist = driveTrain->GetEncoderVal(LeftSide);
+	int rightEncDist = driveTrain->GetEncoderVal(RightSide);
 	int gyroAngle = sensors->GetGyroAngle();
     	switch (autoState) {
     		case (InitialStart):
-    			if (leftEncDist > initDist) {
+    			if (rightEncDist < initDist) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     				break;
     			} else {
@@ -54,11 +76,11 @@ void Autonomous::SwitchRightAuto(){
     				break;
     			}
     		case (DriveDiagonal):
-    			if (leftEncDist > rDrive2) {
+    			if (rightEncDist < rDrive2) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     				break;
     			} else {
-    				driveTrain->ResetEncoders();
+    				sensors->ResetGyro();
     				autoState = FaceSwitch;
     				break;
     			}
@@ -72,7 +94,7 @@ void Autonomous::SwitchRightAuto(){
     				break;
     			}
     		case (DriveSideSwitch):
-    			if (leftEncDist > rDrive3) {
+    			if (rightEncDist < rDrive3) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     				break;
     			} else {
@@ -86,11 +108,11 @@ void Autonomous::SwitchRightAuto(){
 }
 
 void Autonomous::SwitchLeftAuto(){
-	int leftEncDist = sensors->GetLeftEncoderDistance();
+	int rightEncDist = driveTrain->GetEncoderVal(RightSide);
 	int gyroAngle = sensors->GetGyroAngle();
     	switch (autoState) {
     		case (InitialStart):
-    			if (leftEncDist > initDist) {
+    			if (rightEncDist < initDist) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     				break;
     			} else {
@@ -108,7 +130,7 @@ void Autonomous::SwitchLeftAuto(){
     				break;
     			}
     		case (DriveDiagonal):
-    			if (leftEncDist > lDrive2) {
+    			if (rightEncDist < lDrive2) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     				break;
     			}
@@ -127,7 +149,7 @@ void Autonomous::SwitchLeftAuto(){
     				break;
     			}
     		case (DriveSideSwitch):
-    			if (leftEncDist > lDrive3){
+    			if (rightEncDist < lDrive3){
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     				break;
     			}
@@ -141,8 +163,8 @@ void Autonomous::SwitchLeftAuto(){
 }
 
 void Autonomous::DefaultCross(){
-	int leftEncDist = sensors->GetLeftEncoderDistance();
-	if(leftEncDist < defaultDist){
+	int rightEncDist = sensors->GetLeftEncoderDistance();
+	if(rightEncDist < defaultDist){
 		driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
 	}
 };

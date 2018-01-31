@@ -35,38 +35,16 @@ public:
 	DriveTrain *driveTrain;
 	ShuffleboardPoster *boardHandler;
 
-//	WPI_TalonSRX *leftOutIntake;
-//	WPI_TalonSRX *rightOutIntake;
-//	WPI_TalonSRX *leftInIntake;
-//	WPI_TalonSRX *rightInIntake;
-//	WPI_TalonSRX *elevator1;
-//	WPI_TalonSRX *elevator2;
-//	WPI_TalonSRX *elevator3;
-
-//	Solenoid *intakeArms;
-
 	Autonomous *auton;
 	Sensors *sensors;	
 
 	//Custom variables
-	double autoDriveSpeed, autoTurnSpeed;
 	int ourSwitch, autoState;
 
 	void RobotInit() {
 		leftJoystick = new Joystick(0);
 		rightJoystick = new Joystick(1);
-
-//		leftOutIntake  = new WPI_TalonSRX(LeftOutIntakeCAN);
-//		rightOutIntake = new WPI_TalonSRX(RightOutIntakeCAN);
-//		leftInIntake   = new WPI_TalonSRX(LeftInIntakeCAN);
-//		rightInIntake  = new WPI_TalonSRX(RightInIntakeCAN);
-//		intakeArms     = new Solenoid(0);
-//		elevator1 = new WPI_TalonSRX(Elevator1CAN);
-//		elevator2 = new WPI_TalonSRX(Elevator2CAN);
-//		elevator3 = new WPI_TalonSRX(Elevator3CAN);
-
 		sensors = new Sensors();
-
 		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
 		auton = new Autonomous(*driveTrain, *sensors);
@@ -74,24 +52,26 @@ public:
 
 	void AutonomousInit() override {
 		boardHandler->ShufflePeriodic();
-
-		autoState = InitialStart;
+		driveTrain->ResetEncoders();
+		auton->SetAutoState(InitialStart);
 		ourSwitch = boardHandler->GetOurSwitch();
 	}
 
 	void AutonomousPeriodic() {
 		boardHandler->ShufflePeriodic();
 
-		if (boardHandler->GetOurSwitch() == RightSide) {
+		if (ourSwitch == RightSide) {
 			auton->SwitchRightAuto();
-		} else if (boardHandler->GetOurSwitch() == LeftSide)  {
+		} else if (ourSwitch == LeftSide)  {
 			auton->SwitchLeftAuto();
 		} else {
 			auton->DefaultCross();
 	    }	
 	}
 
-	void TeleopInit() {}
+	void TeleopInit() {
+		driveTrain->ResetEncoders();
+	}
 
 	void TeleopPeriodic() {
 		boardHandler->ShufflePeriodic();

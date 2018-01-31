@@ -15,9 +15,11 @@ class Autonomous {
 public:
 	Autonomous(DriveTrain&, Sensors&);
 	void GetShuffleboardValues();
+	void PutShuffleboardValues();
 	void SwitchRightAuto();
 	void SwitchLeftAuto();
 	void DefaultCross();
+	void SetAutoState(int);
 
 private:
 	int initDist, lTurn1, lTurn2, lDrive3, lDrive2, rTurn1,

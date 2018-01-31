@@ -22,9 +22,13 @@ public:
 	void outputInner();
 	void outputAll();
 
+	void PostGetValues();
+
 	void allOff();
 
 private:
+	double intakeSpeed = 0.8;
+
 	DoubleSolenoid* intakeExtension;
 	VictorSPX* intakeInLeft;
 	VictorSPX* intakeInRight;

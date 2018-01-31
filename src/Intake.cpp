@@ -24,20 +24,38 @@ Intake::Intake() {
 }
 
 void Intake::takeInOuter(){
-
+	intakeOutLeft->Set(ControlMode::PercentOutput, intakeSpeed);
 }
 
 void Intake::takeInInner(){
-
+	intakeInLeft->Set(ControlMode::PercentOutput, intakeSpeed);
 }
 
-void Intake::takeInAll(){}
+void Intake::takeInAll(){
+	takeInOuter();
+	takeInInner();
+}
 
-void Intake::outputOuter(){}
+void Intake::outputOuter(){
+	intakeOutLeft->Set(ControlMode::PercentOutput, -intakeSpeed);
+}
 
-void Intake::outputInner(){}
+void Intake::outputInner(){
+	intakeInLeft->Set(ControlMode::PercentOutput, -intakeSpeed);
+}
 
-void Intake::outputAll(){}
+void Intake::outputAll(){
+	outputOuter();
+	outputInner();
+}
 
-void Intake::allOff(){}
+void Intake::allOff(){
+	intakeOutLeft->Set(ControlMode::PercentOutput, 0.0);
+	intakeInLeft->Set(ControlMode::PercentOutput, 0.0);
+}
 
+void Intake::PostGetValues(){
+	SmartDashboard::PutNumber("intakeSpeed", intakeSpeed);
+	SmartDashboard::GetNumber("intakeSpeed", 0.8);
+
+}
