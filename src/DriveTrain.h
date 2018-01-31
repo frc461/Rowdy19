@@ -43,6 +43,9 @@ private:
 	WPI_TalonSRX *leftDrive1;
 	WPI_VictorSPX *leftDrive2;
 	WPI_VictorSPX *leftDrive3;
+	SensorCollection *leftDriveEncoder;
+	SensorCollection *rightDriveEncoder;
+
 	VictorSPX *strafe2;
 	TalonSRX *strafe1;
 };

@@ -19,7 +19,9 @@
 		leftDrive3  = new WPI_VictorSPX(LeftDrive3CAN);
 		strafe1     = new TalonSRX(Strafe1CAN);
 		strafe2     = new VictorSPX(Strafe2CAN);
+
 		sensors = &sensorsPass;
+
 		isStrafing = false;
 		pidoutput = 0.0;
 		pidAdd = 0.0;
@@ -30,12 +32,16 @@
 		strafeSpeedTolerance = 0.2;
 		strafeAngleTolerance = 3;
 		strafeAngle = 0.0;
-		leftDrive1->ConfigSelectedFeedbackSensor(QuadEncoder, 0, 0);
+
+		leftDriveEncoder  = &leftDrive1->GetSensorCollection();
+		rightDriveEncoder = &rightDrive1->GetSensorCollection();
+
 
 		SpeedControllerGroup *left  = new SpeedControllerGroup(*leftDrive1,  *leftDrive2,  *leftDrive3);
 		SpeedControllerGroup *right = new SpeedControllerGroup(*rightDrive1, *rightDrive2, *rightDrive3);
 		driveTrain = new DifferentialDrive(*left, *right);
 		strafe2->Follow(*strafe1);
+
 		InitPID();
 		PutValues();
 		GetValues();
@@ -44,6 +50,7 @@
 	void DriveTrain::PutValues(){
 		SmartDashboard::PutBoolean("isStrafing", isStrafing);
 		SmartDashboard::PutNumber("LeftEncoderValue", GetEncoderVal(LeftSide));
+		SmartDashboard::PutNumber("RightEncoderValue", GetEncoderVal(RightSide));
 		SmartDashboard::PutNumber("LeftEncoderVelocity", leftDrive1->GetSelectedSensorVelocity(0));
 		SmartDashboard::PutNumber("strafeSpeed", 0.8);
 		SmartDashboard::PutNumber("driveSpeed", 0.8);
@@ -60,10 +67,10 @@
 	int DriveTrain::GetEncoderVal(int sideSelect){
 		switch(sideSelect){
 			case (LeftSide):
-					return leftDrive1->GetIntegralAccumulator(0);
+					return leftDriveEncoder->GetQuadraturePosition();
 					break;
 			case (RightSide):
-					return rightDrive1->GetSelectedSensorPosition(0);
+					return rightDriveEncoder->GetQuadraturePosition();
 					break;
 		}
 	}
@@ -90,6 +97,7 @@
 		GetValues();
 		PutValues();
 		SmartDashboard::PutNumber("Strafe", strafe);
+
 		strafeDifference = sensors->GetGyroAngle() - strafeAngle;
 		pidsrc->set(strafeDifference);
 		pid->SetOutputRange(-pidMax, pidMax);
