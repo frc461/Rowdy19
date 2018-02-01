@@ -51,7 +51,7 @@ void Autonomous::SwitchPeriodicValues(){
 	rTurn2 = SmartDashboard::GetNumber("Auton/Switch/rTurn2", rTurn2);
 	rDrive2 = SmartDashboard::GetNumber("Auton/Switch/rDrive2", rDrive2);
 	rDrive3 = SmartDashboard::GetNumber("Auton/Switch/rDrive3",rDrive3);
-	defaultDist = SmartDashboard::GetNumber("Auton/defaultDist", 2500);
+	defaultDist = SmartDashboard::GetNumber("Auton/defaultDist", defaultDist);
 	AutonPeriodicValues();
 }
 

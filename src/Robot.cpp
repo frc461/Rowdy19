@@ -22,6 +22,7 @@
 #include "DriveTrain.h"
 #include "ShuffleboardPoster.h"
 #include "Autonomous.h"
+#include "Intake.h"
 
 class Robot : public frc::IterativeRobot {
 public:
@@ -34,6 +35,7 @@ public:
 	PowerDistributionPanel *pdp;
 	DriveTrain *driveTrain;
 	ShuffleboardPoster *boardHandler;
+	Intake* intake;
 
 	Autonomous *auton;
 	Sensors *sensors;	
@@ -49,6 +51,7 @@ public:
 		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
 		auton = new Autonomous(*driveTrain, *sensors);
+		intake = new Intake();
 	}
 
 
@@ -82,6 +85,15 @@ public:
 		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
+
+		if(rightJoystick->GetRawButton(thumbSwitch)){
+			intake->takeInAll();
+		} else if (leftJoystick->GetRawButton(thumbSwitch)){
+			intake->outputAll();
+		} else {
+			intake->allOff();
+		}
+
 
 		if (rightJoystick->GetRawButton(trigger)){
 			driveTrain->TankDrive(forwardL, forwardR, strafe);
