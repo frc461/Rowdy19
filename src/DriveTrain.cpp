@@ -22,11 +22,12 @@
 
 		sensors = &sensorsPass;
 
+
 		isStrafing = false;
 		pidoutput = 0.0;
 		pidAdd = 0.0;
-		pidMax = 0.8;
-		p = 0.8;
+		pidMax = 0.6;
+		p = 0.6;
 		i = 0.0;
 		d = 0.1;
 		strafeSpeedTolerance = 0.2;
@@ -52,13 +53,10 @@
 	}
 
 	int DriveTrain::GetEncoderVal(int sideSelect){
-		switch(sideSelect){
-			case (LeftSide):
-					return leftDrive1->GetSelectedSensorPosition(0);
-					break;
-			case (RightSide):
-					return rightDrive1->GetSelectedSensorPosition(0);
-					break;
+		if (sideSelect == LeftSide){
+				return leftDrive1->GetSelectedSensorPosition(0);
+		} else {
+				return rightDrive1->GetSelectedSensorPosition(0);
 		}
 	}
 
@@ -75,7 +73,6 @@
 
 		SmartDashboard::PutData("StrafePID", pid);
 		SmartDashboard::PutNumber("PIDOutput", pidoutput);
-		SmartDashboard::PutNumber("PIDMax", pidMax);
 
 		SmartDashboard::PutNumber("strafeDiff", strafeDifference);
 		SmartDashboard::PutNumber("strafeAngleTolerance", strafeAngleTolerance);
@@ -85,7 +82,7 @@
 		strafeSpeed = SmartDashboard::GetNumber("strafeSpeed", 0.8);
 		driveSpeed = SmartDashboard::GetNumber("driveSpeed", 0.8);
 		turnSpeed = SmartDashboard::GetNumber("turnSpeed", 0.6);
-		pidMax = SmartDashboard::GetNumber("PIDMax", 0.5);
+		pidMax = SmartDashboard::GetNumber("PIDMax", 0.8);
 		p = SmartDashboard::GetNumber("StrafePID/p", 0.8);
 		i = SmartDashboard::GetNumber("StrafePID/i", 0.0);
 		d = SmartDashboard::GetNumber("StrafePID/d", 0.1);
@@ -97,7 +94,9 @@
 	void DriveTrain::ArcadeDrive(double forward, double rotate, double strafe){
 		GetValues();
 		SmartDashboard::PutNumber("Strafe", strafe);
-
+		if (rotate != 0){
+			strafeAngle = sensors->GetGyroAngle();
+		}
 		strafeDifference = sensors->GetGyroAngle() - strafeAngle;
 		pidsrc->set(strafeDifference);
 		pid->SetOutputRange(-pidMax, pidMax);
@@ -112,6 +111,7 @@
 		pidsrc = new SettablePIDSource();
 		pid = new PIDController(p, i, d, pidsrc, pidout);
 		pid->SetOutputRange(-pidMax, pidMax);
+		SmartDashboard::PutNumber("PIDMax", pidMax);
 	}	
 
 	void DriveTrain::TankDrive(double left, double right, double strafe){
@@ -130,6 +130,7 @@
 			strafeAngle = sensors->GetGyroAngle();
 			isStrafing = false;
 		}
+
 		if(isStrafing && (strafeDifference > strafeAngleTolerance || strafeDifference < -strafeAngleTolerance)){
 			pidoutput = pidout->output;
 		} else {

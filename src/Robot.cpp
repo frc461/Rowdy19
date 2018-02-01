@@ -35,7 +35,7 @@ public:
 	PowerDistributionPanel *pdp;
 	DriveTrain *driveTrain;
 	ShuffleboardPoster *boardHandler;
-	Intake* intake;
+//	Intake* intake;
 
 	Autonomous *auton;
 	Sensors *sensors;	
@@ -51,7 +51,7 @@ public:
 		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
 		auton = new Autonomous(*driveTrain, *sensors);
-		intake = new Intake();
+//		intake = new Intake();
 	}
 
 
@@ -86,13 +86,13 @@ public:
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
 
-		if(rightJoystick->GetRawButton(thumbSwitch)){
-			intake->takeInAll();
-		} else if (leftJoystick->GetRawButton(thumbSwitch)){
-			intake->outputAll();
-		} else {
-			intake->allOff();
-		}
+//		if(rightJoystick->GetRawButton(thumbSwitch)){
+//			intake->takeInAll();
+//		} else if (leftJoystick->GetRawButton(thumbSwitch)){
+//			intake->outputAll();
+//		} else {
+//			intake->allOff();
+//		}
 
 
 		if (rightJoystick->GetRawButton(trigger)){
