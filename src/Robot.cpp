@@ -39,7 +39,8 @@ public:
 	Sensors *sensors;	
 
 	//Custom variables
-	int ourSwitch, autoState;
+	int ourSwitch;
+
 
 	void RobotInit() {
 		leftJoystick = new Joystick(0);
@@ -50,12 +51,14 @@ public:
 		auton = new Autonomous(*driveTrain, *sensors);
 	}
 
+
 	void AutonomousInit() override {
 		boardHandler->ShufflePeriodic();
 		driveTrain->ResetEncoders();
 		auton->SetAutoState(InitialStart);
 		ourSwitch = boardHandler->GetOurSwitch();
 	}
+
 
 	void AutonomousPeriodic() {
 		boardHandler->ShufflePeriodic();

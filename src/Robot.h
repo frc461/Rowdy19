@@ -14,7 +14,10 @@ enum AutonomousStates {
 	DriveDiagonal,
 	FaceSwitch,
 	DriveSideSwitch,
-	DeployBlock
+	DeployBlock,
+	DrivePastSwitch,
+	TurnTowardsScale,
+	DriveTowardsScale
 };
 
 enum CanChain {

@@ -11,7 +11,6 @@
 #include "Sensors.h"
 
 ShuffleboardPoster::ShuffleboardPoster(DriveTrain& dt, Sensors& srs) {
-	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
 	driveTrain = &dt;
 	sensors = &srs;
 }
@@ -21,7 +20,7 @@ void ShuffleboardPoster::TeleopGet(){
 }
 
 void ShuffleboardPoster::ShufflePeriodic(){
-	SmartDashboard::PutNumber("gyro", sensors->GetGyroAngle());
+//	SmartDashboard::PutNumber("gyro", sensors->GetGyroAngle());
 //	SmartDashboard::PutNumber("LeftEncoderDist", sensors->GetLeftEncoderDistance());
 //	SmartDashboard::PutNumber("RightEncoderDist", sensors->GetRightEncoderDistance());
 //	SmartDashboard::PutData("PDP", driveTrain->GetPDP());
@@ -29,6 +28,7 @@ void ShuffleboardPoster::ShufflePeriodic(){
 }
 
 int ShuffleboardPoster::GetOurSwitch(){
+	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
 	if(gameData[0] == 'L'){
 		return LeftSide;
 	} else if(gameData[0] == 'R'){

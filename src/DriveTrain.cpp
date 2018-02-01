@@ -34,6 +34,7 @@
 		strafeAngle = 0.0;
 
 
+
 		SpeedControllerGroup *left  = new SpeedControllerGroup(*leftDrive1,  *leftDrive2,  *leftDrive3);
 		SpeedControllerGroup *right = new SpeedControllerGroup(*rightDrive1, *rightDrive2, *rightDrive3);
 		driveTrain = new DifferentialDrive(*left, *right);
@@ -45,21 +46,9 @@
 	}
 
 	void DriveTrain::PutValues(){
-		SmartDashboard::PutBoolean("isStrafing", isStrafing);
-		SmartDashboard::PutNumber("LeftEncoderValue", GetEncoderVal(LeftSide));
-		SmartDashboard::PutNumber("RightEncoderValue", GetEncoderVal(RightSide));
-
 		SmartDashboard::PutNumber("strafeSpeed", 0.8);
 		SmartDashboard::PutNumber("driveSpeed", 0.8);
-		SmartDashboard::PutNumber("turnSpeed", 0.6);
-		SmartDashboard::PutData("StrafePID", pid);
-		SmartDashboard::PutNumber("PIDOutput", pidoutput);
-		SmartDashboard::PutNumber("PIDMax", pidMax);
-
-		SmartDashboard::PutNumber("strafeDiff", strafeDifference);
-		SmartDashboard::PutNumber("strafeAngleTolerance", strafeAngleTolerance);
-		SmartDashboard::PutNumber("StrafeAngle", strafeAngle);
-		SmartDashboard::PutNumber("StrafeSpeedTolerance", strafeSpeedTolerance);
+		SmartDashboard::PutNumber("turnSpeed", 0.8);
 	}
 
 	int DriveTrain::GetEncoderVal(int sideSelect){
@@ -79,6 +68,20 @@
 	}
 
 	void DriveTrain::GetValues(){
+		SmartDashboard::PutBoolean("isStrafing", isStrafing);
+		SmartDashboard::PutNumber("LeftEncoderValue", GetEncoderVal(LeftSide));
+		SmartDashboard::PutNumber("RightEncoderValue", GetEncoderVal(RightSide));
+
+
+		SmartDashboard::PutData("StrafePID", pid);
+		SmartDashboard::PutNumber("PIDOutput", pidoutput);
+		SmartDashboard::PutNumber("PIDMax", pidMax);
+
+		SmartDashboard::PutNumber("strafeDiff", strafeDifference);
+		SmartDashboard::PutNumber("strafeAngleTolerance", strafeAngleTolerance);
+		SmartDashboard::PutNumber("StrafeAngle", strafeAngle);
+		SmartDashboard::PutNumber("StrafeSpeedTolerance", strafeSpeedTolerance);
+
 		strafeSpeed = SmartDashboard::GetNumber("strafeSpeed", 0.8);
 		driveSpeed = SmartDashboard::GetNumber("driveSpeed", 0.8);
 		turnSpeed = SmartDashboard::GetNumber("turnSpeed", 0.6);
@@ -93,7 +96,6 @@
 
 	void DriveTrain::ArcadeDrive(double forward, double rotate, double strafe){
 		GetValues();
-		PutValues();
 		SmartDashboard::PutNumber("Strafe", strafe);
 
 		strafeDifference = sensors->GetGyroAngle() - strafeAngle;

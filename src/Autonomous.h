@@ -14,16 +14,36 @@
 class Autonomous {
 public:
 	Autonomous(DriveTrain&, Sensors&);
-	void GetShuffleboardValues();
+	void AutonPostValues();
+	void AutonPeriodicValues();
+	void SwitchPeriodicValues();
+	void ScalePeriodicValues();
 	void PutShuffleboardValues();
 	void SwitchRightAuto();
 	void SwitchLeftAuto();
+	void ScaleRightAuto();
+	void ScaleLeftAuto();
+
 	void DefaultCross();
 	void SetAutoState(int);
 
 private:
-	int initDist, lTurn1, lTurn2, lDrive3, lDrive2, rTurn1,
-	rTurn2, rDrive3, rDrive2, defaultDist, autoState, ourSwitch;
+	int initDist = 2000,
+	lTurn1 = -55,
+	lTurn2 = 3000,
+	lDrive3 = 55,
+	lDrive2 = 2000,
+	rTurn1 = 55,
+	rTurn2 = -45,
+	rDrive2 = 4000,
+	rDrive3 = 2000,
+	defaultDist = 1750,
+	autoState = InitialStart;
+
+	int drivePastDist = 7000,
+	driveAwayDist = 15000;
+
+
 	double autoDriveSpeed, autoTurnSpeed;
 
 	DriveTrain* driveTrain;
