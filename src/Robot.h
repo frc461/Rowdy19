@@ -14,18 +14,22 @@ enum AutonomousStates {
 	DriveDiagonal,
 	FaceSwitch,
 	DriveSideSwitch,
-	DeployBlock
+	DeployBlock,
+	DrivePastSwitch,
+	TurnTowardsScale,
+	DriveTowardsScale,
+	FaceScale
 };
 
 enum CanChain {
-	Strafe1CAN = 0,
-	Strafe2CAN,
-	RightDrive1CAN,
+	RightDrive1CAN = 0,
+	RightDrive2CAN,
+	RightDrive3CAN,
 	LeftDrive1CAN,
 	LeftDrive2CAN,
 	LeftDrive3CAN,
-	RightDrive2CAN,
-	RightDrive3CAN,
+	Strafe1CAN,
+	Strafe2CAN,
 	LeftOutIntakeCAN,
 	RightOutIntakeCAN,
 	LeftInIntakeCAN,
@@ -35,14 +39,22 @@ enum CanChain {
 	Elevator3CAN
 };
 
-enum SwitchData {
-	DataError = 0,
-	LeftSwitch,
-	RightSwitch
+enum DIOPorts {
+	LeftEncoderDIO1 = 0,
+	LeftEncoderDIO2,
+	RightEncoderDIO1,
+	RightEncoderDIO2,
+	Elevator1DIO1,
+	Elevator1DIO2,
+	Elevator2DIO1,
+	Elevator3DIO1,
+	Elevator3DIO2
 };
 
-
-
-
+enum StructureData {
+	DataError = 0,
+	LeftSide,
+	RightSide
+};
 
 #endif /* SRC_ROBOT_H_ */
