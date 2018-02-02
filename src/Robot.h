@@ -17,7 +17,8 @@ enum AutonomousStates {
 	DeployBlock,
 	DrivePastSwitch,
 	TurnTowardsScale,
-	DriveTowardsScale
+	DriveTowardsScale,
+	FaceScale
 };
 
 enum CanChain {

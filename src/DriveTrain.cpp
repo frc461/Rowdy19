@@ -19,10 +19,7 @@
 		leftDrive3  = new WPI_VictorSPX(LeftDrive3CAN);
 		strafe1     = new TalonSRX(Strafe1CAN);
 		strafe2     = new VictorSPX(Strafe2CAN);
-
 		sensors = &sensorsPass;
-
-
 		isStrafing = false;
 		pidoutput = 0.0;
 		pidAdd = 0.0;
@@ -33,8 +30,6 @@
 		strafeSpeedTolerance = 0.2;
 		strafeAngleTolerance = 3;
 		strafeAngle = 0.0;
-
-
 
 		SpeedControllerGroup *left  = new SpeedControllerGroup(*leftDrive1,  *leftDrive2,  *leftDrive3);
 		SpeedControllerGroup *right = new SpeedControllerGroup(*rightDrive1, *rightDrive2, *rightDrive3);

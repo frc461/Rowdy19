@@ -71,11 +71,53 @@ void Autonomous::ScaleRightAuto(){
 }
 
 void Autonomous::ScaleLeftAuto(){
-
 	switch (autoState) {
 		case(InitialStart):
+			if(true){
+				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+			} else {
+				autoState = TurnDownMiddle;
+				sensors->ResetGyro();
+			}
 			break;
 		case(TurnDownMiddle):
+			if(true){
+				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
+			} else {
+				autoState = DrivePastSwitch;
+				driveTrain->ResetEncoders();
+			}
+			break;
+		case(DrivePastSwitch):
+			if(true){
+				driveTrain->TankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
+			} else {
+				autoState = TurnTowardsScale;
+				sensors->ResetGyro();
+			}
+			break;
+		case(TurnTowardsScale):
+				if(true){
+					driveTrain->TankDrive(autoDriveSpeed, -autoDriveSpeed, 0.0);
+				} else {
+					autoState = DriveTowardsScale;
+					driveTrain->ResetEncoders();
+				}
+			break;
+		case(DriveTowardsScale):
+				if(true){
+					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+				} else {
+					autoState = FaceScale;
+					sensors->ResetGyro();
+				}
+			break;
+		case(FaceScale):
+				if(true){
+					driveTrain->TankDrive(autoDriveSpeed, -autoDriveSpeed, 0.0);
+				} else {
+					driveTrain->TankDrive(0.0, 0.0, 0.0);
+				}
 			break;
 
 	}
@@ -91,48 +133,49 @@ void Autonomous::SwitchRightAuto(){
     		case (InitialStart):
     			if (rightEncDist < initDist) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    				break;
     			} else {
     				sensors->ResetGyro();
     				autoState = TurnDownMiddle;
-    				break;
     			}
+    			break;
+
     		case (TurnDownMiddle):
     			if (gyroAngle < rTurn1) {
     				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
-    				break;
     			} else {
     				driveTrain->ResetEncoders();
     				autoState = DriveDiagonal;
-    				break;
     			}
+    			break;
+
     		case (DriveDiagonal):
     			if (rightEncDist < rDrive2) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    				break;
     			} else {
     				sensors->ResetGyro();
     				driveTrain->ResetEncoders();
     				autoState = FaceSwitch;
-    				break;
     			}
+			break;
+
     		case (FaceSwitch):
     			if (gyroAngle > rTurn2) {
     				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
-    				break;
     			} else {
     				driveTrain->ResetEncoders();
     				autoState = DriveSideSwitch;
-    				break;
     			}
+			break;
+
     		case (DriveSideSwitch):
     			if (rightEncDist < rDrive3) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    				break;
     			} else {
+    				driveTrain->TankDrive(0.0, 0.0, 0.0);
     				autoState = DeployBlock;
-    				break;
     			}
+			break;
+
     		case (DeployBlock):
     			break;
     	}
@@ -148,50 +191,50 @@ void Autonomous::SwitchLeftAuto(){
     		case (InitialStart):
     			if (rightEncDist < initDist) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    				break;
     			} else {
     				sensors->ResetGyro();
     				autoState = TurnDownMiddle;
-    				break;
     			}
+			break;
+
     		case (TurnDownMiddle):
     			if (gyroAngle > lTurn1) {
     				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
-    				break;
     			} else {
     				driveTrain->ResetEncoders();
     				autoState = DriveDiagonal;
-    				break;
     			}
+			break;
+
     		case (DriveDiagonal):
     			if (rightEncDist < lDrive2) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    				break;
     			}
     			else {
     				driveTrain->ResetEncoders();
     				sensors->ResetGyro();
     				autoState = FaceSwitch;
-    				break;
     			}
+    			break;
+
     		case (FaceSwitch):
     			if (gyroAngle < lTurn2) {
     				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
-    				break;
     			} else {
     				driveTrain->ResetEncoders();
     				autoState = DriveSideSwitch;
-    				break;
     			}
+			break;
+
     		case (DriveSideSwitch):
     			if (rightEncDist < lDrive3){
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    				break;
     			}
     			else {
     				autoState = DeployBlock;
-    				break;
     			}
+    			break;
+
     		case (DeployBlock):
     			break;
     	}
