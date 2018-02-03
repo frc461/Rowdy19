@@ -44,7 +44,7 @@ all: FRCUserProgram
 FRCUserProgram: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross G++ Linker'
-	arm-frc-linux-gnueabi-g++ -L"/Users/hank/wpilib/common/current/lib/linux/athena/shared" -L"/Users/hank/wpilib/cpp/current/reflib/linux/athena/shared" -L"/Users/hank/wpilib/user/cpp/lib" -pthread -rdynamic -Wl,-rpath,/opt/GenICam_v3_0_NI/bin/Linux32_ARM,-rpath,/usr/local/frc/lib -o "FRCUserProgram" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-frc-linux-gnueabi-g++ -L"C:\Users\WBI/wpilib/common/current/lib/linux/athena/shared" -L"C:\Users\WBI/wpilib/cpp/current/reflib/linux/athena/shared" -L"C:\Users\WBI/wpilib/user/cpp/lib" -pthread -rdynamic -Wl,-rpath,/opt/GenICam_v3_0_NI/bin/Linux32_ARM,-rpath,/usr/local/frc/lib -o "FRCUserProgram" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

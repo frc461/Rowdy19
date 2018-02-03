@@ -11,7 +11,6 @@
 #include <iostream>
 #include <string>
 
-//Include WPILib and 3rd party libraries
 #include "WPILib.h"
 #include "ctre/Phoenix.h"
 #include "AHRS.h"
@@ -24,17 +23,22 @@
 #include "Autonomous.h"
 #include "Intake.h"
 
+using namespace frc;
+using namespace ctre::phoenix::motorcontrol;
+using namespace ctre::phoenix::motorcontrol::can;
+
 class Robot : public frc::IterativeRobot {
 public:
-
 	//Controls
 	Joystick *leftJoystick;
 	Joystick *rightJoystick;
-
+	Joystick *middleJoystick;
+	TalonSRX *talon;
+	VictorSPX *victor;
 	//Robot parts
-	PowerDistributionPanel *pdp;
 	DriveTrain *driveTrain;
 	ShuffleboardPoster *boardHandler;
+	int state = 0;
 //	Intake* intake;
 
 	Autonomous *auton;
@@ -42,8 +46,20 @@ public:
 
 	//Custom variables
 	int ourSwitch;
+	ADXRS450_Gyro *gyroscope;
 
-
+	//SmartDashboard Selector
+	enum side {
+		leftside = 0,
+		middleside,
+		rightside
+	};
+	SendableChooser<side> sides;
+	enum temporaryfeedback {
+		left = 0,
+		right
+	};
+	SendableChooser<temporaryfeedback> tempfeed;
 	void RobotInit() {
 		leftJoystick = new Joystick(0);
 		rightJoystick = new Joystick(1);
@@ -52,6 +68,14 @@ public:
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
 		auton = new Autonomous(*driveTrain, *sensors);
 //		intake = new Intake();
+		gyroscope = new ADXRS450_Gyro();
+		sides.AddDefault("Left",leftside);
+		sides.AddObject("Middle",middleside);
+		sides.AddObject("Right",rightside);
+		tempfeed.AddDefault("Left", left);
+		tempfeed.AddObject("Right", right);
+		SmartDashboard::PutData("sides", &sides);
+		SmartDashboard::PutData("Feedback", &tempfeed);
 	}
 
 
@@ -60,23 +84,134 @@ public:
 		driveTrain->ResetEncoders();
 		auton->SetAutoState(InitialStart);
 		ourSwitch = boardHandler->GetOurSwitch();
+		state=0;
 	}
 
 
 	void AutonomousPeriodic() {
 		boardHandler->ShufflePeriodic();
 
-		if (ourSwitch == RightSide) {
+/*		if (ourSwitch == RightSide) {
 			auton->SwitchRightAuto();
 		} else if (ourSwitch == LeftSide)  {
 			auton->SwitchLeftAuto();
 		} else {
 			auton->DefaultCross();
-	    }	
+		}
+*/
+		if (sides.GetSelected() == leftside) {
+			if (tempfeed.GetSelected() == left) {
+				if (state==0) {
+					if (driveTrain->GetEncoderVal(LeftSide) < [foward1]) {
+
+					} else {
+						driveTrain->ResetEncoders();
+						gyroscope->Reset();
+						state++;
+					}
+				}
+				if (state==1) {
+					if (gyroscope->GetAngle() < [turn1]) {
+
+					} else {
+						driveTrain->ResetEncoders();
+						gyroscope->Reset();
+						state++;
+					}
+				}
+				if (state==2) {
+					if (driveTrain->GetEncoderVal(LeftSide) < [foward2]) {
+
+					} else {
+						gyroscope->Reset();
+						driveTrain->ResetEncoders();
+						state++;
+					}
+				}
+				if (state==3) {
+					if (gyrosocpe->GetAngle() < [turn2]) {
+
+					} else {
+						gyroscope->Reset();
+						driveTrain->ResetEncoders();
+						state++;
+					}
+				}
+				if (state==4) {
+//					Put the elevator up here
+				} else {
+					gyroscope->Reset();
+					driveTrain->ResetEncoders();
+					state++;
+				}
+			}
+			if (tempfeed.GetSelected() == right) {
+
+			}
+		}
+		if (sides.GetSelected() == middleside) {
+			if (tempfeed.GetSelected() == left) {
+
+			}
+			if (tempfeed.GetSelected() == right) {
+
+			}
+		}
+		if (sides.GetSelected() == rightside) {
+			if (tempfeed.GetSelected() == left) {
+
+			}
+			if (tempfeed.GetSelected() == right) {
+				if (state==0) {
+					if (driveTrain->GetEncoderVal(LeftSide) < [foward1]) {
+
+					} else {
+						gyroscope->Reset();
+						driveTrain->ResetEncoders();
+						state++;
+					}
+				}
+				if (state==1) {
+					if (gyroscope->GetAngle() < [turn1]) {
+
+					} else {
+						gyroscope->Reset();
+						driveTrain->ResetEncoders();
+						state++;
+					}
+				}
+				if (state==2) {
+					if (driveTrain->GetEncoderVal(LeftSide) < [foward2]) {
+
+					} else {
+						gyroscope->Reset();
+						driveTrain->ResetEncoders();
+						state++;
+					}
+				}
+				if (state==3) {
+					if (gyrosocpe->GetAngle() < [turn2]) {
+
+					} else {
+						gyroscope->Reset();
+						driveTrain->ResetEncoders();
+						state++;
+					}
+				}
+				if (state==4) {
+//					Put the elevator up here
+				} else {
+					gyroscope->Reset();
+					driveTrain->ResetEncoders();
+					state++;
+				}
+			}
+		}
 	}
 
 	void TeleopInit() {
 		driveTrain->ResetEncoders();
+		int state = 0;
 	}
 
 	void TeleopPeriodic() {
@@ -94,6 +229,11 @@ public:
 //			intake->allOff();
 //		}
 
+		driveTrain->GetEncoderVal(LeftSide);
+		if (rightJoystick->GetRawButton(trigger) && rightJoystick->GetRawButton(thumbSwitch)) {
+			driveTrain->ResetEncoders();
+		}
+
 
 		if (rightJoystick->GetRawButton(trigger)){
 			driveTrain->TankDrive(forwardL, forwardR, strafe);
@@ -101,9 +241,8 @@ public:
 			driveTrain->ArcadeDrive(forwardR, rotate, strafe);
 		 }
 	}
-
+	void EncoderReset() {}
 	void TestPeriodic() {}
-
 
 private:
 
