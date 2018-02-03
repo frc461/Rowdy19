@@ -13,8 +13,6 @@
 
 #include "WPILib.h"
 #include "ctre/Phoenix.h"
-#include "AHRS.h"
-
 //Include custom headers
 #include "THRSTMSTRmap.h"
 #include "Robot.h"
@@ -46,7 +44,6 @@ public:
 
 	//Custom variables
 	int ourSwitch;
-	ADXRS450_Gyro *gyroscope;
 
 	//SmartDashboard Selector
 	enum side {
@@ -68,7 +65,6 @@ public:
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
 		auton = new Autonomous(*driveTrain, *sensors);
 //		intake = new Intake();
-		gyroscope = new ADXRS450_Gyro();
 		sides.AddDefault("Left",leftside);
 		sides.AddObject("Middle",middleside);
 		sides.AddObject("Right",rightside);
@@ -89,20 +85,20 @@ public:
 
 
 	void AutonomousPeriodic() {
-		boardHandler->ShufflePeriodic();
+/*		boardHandler->ShufflePeriodic();
 
-/*		if (ourSwitch == RightSide) {
+		if (ourSwitch == RightSide) {
 			auton->SwitchRightAuto();
 		} else if (ourSwitch == LeftSide)  {
 			auton->SwitchLeftAuto();
 		} else {
 			auton->DefaultCross();
 		}
-*/
+
 		if (sides.GetSelected() == leftside) {
 			if (tempfeed.GetSelected() == left) {
 				if (state==0) {
-					if (driveTrain->GetEncoderVal(LeftSide) < [foward1]) {
+					if (driveTrain->GetEncoderVal(RightSide) < 20500) {
 
 					} else {
 						driveTrain->ResetEncoders();
@@ -111,7 +107,7 @@ public:
 					}
 				}
 				if (state==1) {
-					if (gyroscope->GetAngle() < [turn1]) {
+					if (gyroscope->GetAngle() < 90) {
 
 					} else {
 						driveTrain->ResetEncoders();
@@ -120,7 +116,7 @@ public:
 					}
 				}
 				if (state==2) {
-					if (driveTrain->GetEncoderVal(LeftSide) < [foward2]) {
+					if (driveTrain->GetEncoderVal(RightSide) < 4500) {
 
 					} else {
 						gyroscope->Reset();
@@ -129,7 +125,7 @@ public:
 					}
 				}
 				if (state==3) {
-					if (gyrosocpe->GetAngle() < [turn2]) {
+					if (gyrosocpe->GetAngle() > -90) {
 
 					} else {
 						gyroscope->Reset();
@@ -146,7 +142,24 @@ public:
 				}
 			}
 			if (tempfeed.GetSelected() == right) {
+				if (state==0) {
+					if (driveTrain->GetEncoderVal(RightSide) < 18500) {
 
+					} else {
+						driveTrain->ResetEncoders();
+						gyroscope->Reset();
+						state++;
+					}
+				}
+				if (state==1) {
+					if (gyroscope->GetAngle() < 90) {
+
+					} else {
+						driveTrain->ResetEncoders();
+						gyroscope->Reset();
+						state++;
+					}
+				}
 			}
 		}
 		if (sides.GetSelected() == middleside) {
@@ -206,7 +219,7 @@ public:
 					state++;
 				}
 			}
-		}
+		}*/
 	}
 
 	void TeleopInit() {
