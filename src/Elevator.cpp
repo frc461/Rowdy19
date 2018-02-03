@@ -27,26 +27,42 @@ void Elevator::goDown(){
 }
 
 void Elevator::goToSwitchHeight(){
-	if(encoderVal < switchHeight){
+	if(encoderVal < switchHeight - heightTolerance){
 		goUp();
+	} else if(encoderVal > switchHeight + heightTolerance){
+		goDown();
+	} else {
+		haltMotion();
 	}
 }
 
 void Elevator::goToScaleHeight(){
-	if(elevator1->GetSelectedSensorPosition(0) < switchHeight){
-
+	if(encoderVal < scaleHeight - heightTolerance){
+		goUp();
+	} else if(encoderVal > scaleHeight + heightTolerance){
+		goDown();
+	} else {
+		haltMotion();
 	}
 }
 
 void Elevator::goToClimbHeight(){
-	if(elevator1->GetSelectedSensorPosition(0) < switchHeight){
-
+	if(encoderVal < climbHeight - heightTolerance){
+		goUp();
+	} else if(encoderVal > climbHeight + heightTolerance){
+		goDown();
+	} else {
+		haltMotion();
 	}
 }
 
 void Elevator::goToIntakeExchangeHeight(){
-	if(elevator1->GetSelectedSensorPosition(0) < switchHeight){
-
+	if(encoderVal < intakeExchangeHeight - heightTolerance){
+		goUp();
+	} else if(encoderVal > intakeExchangeHeight + heightTolerance){
+		goDown();
+	} else {
+		haltMotion();
 	}
 }
 
@@ -58,21 +74,22 @@ void Elevator::resetEncoder(){}
 
 void Elevator::postValues(){
 	SmartDashboard::PutNumber("Elevator/elevateSpeed", elevateSpeed);
+	SmartDashboard::PutNumber("Elevator/heightTolerance", heightTolerance);
 	SmartDashboard::PutNumber("Elevator/elevatorEncoder", encoderVal);
 
 	SmartDashboard::PutNumber("Elevator/intakeExchangeHeight", intakeExchangeHeight);
 	SmartDashboard::PutNumber("Elevator/switchHeight", switchHeight);
 	SmartDashboard::PutNumber("Elevator/scaleHeight", scaleHeight);
 	SmartDashboard::PutNumber("Elevatore/climbHeight", climbHeight);
-
 }
 
 void Elevator::periodicValues(){
 	encoderVal = elevator1->GetSelectedSensorPosition(0);
-	SmartDashboard::PutNumber("Elevator/elevateSpeed", elevateSpeed);
 	SmartDashboard::PutNumber("Elevator/elevatorEncoder", encoderVal);
 
+	heightTolerance = SmartDashboard::GetNumber("Elevator/heightTolerance", heightTolerance);
 	elevateSpeed = SmartDashboard::GetNumber("Elevator/elevateSpeed", elevateSpeed);
+
 	intakeExchangeHeight = SmartDashboard::GetNumber("Elevator/intakeExchangeHeight", intakeExchangeHeight);
 	switchHeight = SmartDashboard::GetNumber("Elevator/switchHeight", switchHeight);
 	scaleHeight = SmartDashboard::GetNumber("Elevator/scaleHeight", scaleHeight);

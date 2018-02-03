@@ -22,18 +22,21 @@ public:
 	void outputInner();
 	void outputAll();
 
+	void actuateIntake();
+
 	void PostGetValues();
 
 	void allOff();
 
 private:
 	double intakeSpeed = 0.8;
+	int solenoidStatus;
 
 	DoubleSolenoid* intakeExtension;
-	VictorSPX* intakeInLeft;
-	VictorSPX* intakeInRight;
-	VictorSPX* intakeOutLeft;
-	VictorSPX* intakeOutRight;
+	Spark* intakeInLeft;
+	Spark* intakeInRight;
+	Talon* intakeOutLeft;
+	Talon* intakeOutRight;
 };
 
 #endif /* SRC_INTAKE_H_ */

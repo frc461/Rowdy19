@@ -23,6 +23,7 @@
 #include "ShuffleboardPoster.h"
 #include "Autonomous.h"
 #include "Intake.h"
+#include "Elevator.h"
 
 class Robot : public frc::IterativeRobot {
 public:
@@ -36,6 +37,7 @@ public:
 	DriveTrain *driveTrain;
 	ShuffleboardPoster *boardHandler;
 //	Intake* intake;
+//	Elevator* elevator;
 
 	Autonomous *auton;
 	Sensors *sensors;	
@@ -52,6 +54,7 @@ public:
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
 		auton = new Autonomous(*driveTrain, *sensors);
 //		intake = new Intake();
+//		elevator = new Elevator();
 	}
 
 
@@ -94,6 +97,13 @@ public:
 //			intake->allOff();
 //		}
 
+//		if(rightJoystick->GetRawButton(leftButton)){
+//			elevator->goDown();
+//		} else if(rightJoystick->GetRawButton(rightButton)){
+//			elevator->goUp();
+//		} else {
+//			elevator->haltMotion();
+//		}
 
 		if (rightJoystick->GetRawButton(trigger)){
 			driveTrain->TankDrive(forwardL, forwardR, strafe);

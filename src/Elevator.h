@@ -31,6 +31,7 @@ private:
 
 	int encoderVal;
 	double elevateSpeed = 0.8;
+	double heightTolerance = 250;
 	double intakeExchangeHeight = 200;
 	double switchHeight = 1300;
 	double scaleHeight = 3500;

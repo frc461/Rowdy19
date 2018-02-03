@@ -62,7 +62,7 @@
 
 	void DriveTrain::GetValues(){
 		SmartDashboard::PutBoolean("isStrafing", isStrafing);
-		SmartDashboard::PutNumber("LeftEncoderValue", GetEncoderVal(LeftSide));
+		SmartDashboard::PutNumber("LeftEncoderValue", leftDrive1->GetSelectedSensorPosition(0));
 		SmartDashboard::PutNumber("RightEncoderValue", GetEncoderVal(RightSide));
 
 

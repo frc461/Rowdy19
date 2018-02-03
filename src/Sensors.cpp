@@ -11,8 +11,6 @@
 
 Sensors::Sensors() {
 	gyro = new ADXRS450_Gyro();
-	leftDriveEncoder = new Encoder(LeftEncoderDIO1, LeftEncoderDIO2);
-	rightDriveEncoder = new Encoder(RightEncoderDIO1, RightEncoderDIO2);
 }
 
 int Sensors::GetLeftEncoderDistance(){

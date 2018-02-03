@@ -10,25 +10,23 @@
 
 Intake::Intake() {
 	intakeExtension = new DoubleSolenoid(0,1);
+	solenoidStatus = Undetermined;
 
-	intakeInLeft = new VictorSPX(LeftInIntakeCAN);
-	intakeInRight = new VictorSPX(RightInIntakeCAN);
-	intakeOutLeft = new VictorSPX(LeftOutIntakeCAN);
-	intakeOutRight = new VictorSPX(RightOutIntakeCAN);
+	intakeInLeft = new Spark(LeftInIntakePWM);
+	intakeInRight = new Spark(RightInIntakePWM);
+	intakeOutLeft = new Talon(LeftOutIntakePWM);
+	intakeOutRight = new Talon(RightOutIntakePWM);
 
-	intakeInRight->Follow(*intakeInLeft);
-	intakeInRight->SetInverted(true);
-
-	intakeOutRight->Follow(*intakeOutLeft);
-	intakeOutRight->SetInverted(true);
 }
 
 void Intake::takeInOuter(){
-	intakeOutLeft->Set(ControlMode::PercentOutput, intakeSpeed);
+	intakeOutLeft->Set(intakeSpeed);
+	intakeOutRight->Set(-intakeSpeed);
 }
 
 void Intake::takeInInner(){
-	intakeInLeft->Set(ControlMode::PercentOutput, intakeSpeed);
+	intakeInLeft->Set(intakeSpeed);
+	intakeInRight->Set(-intakeSpeed);
 }
 
 void Intake::takeInAll(){
@@ -37,11 +35,13 @@ void Intake::takeInAll(){
 }
 
 void Intake::outputOuter(){
-	intakeOutLeft->Set(ControlMode::PercentOutput, -intakeSpeed);
+	intakeOutLeft->Set(-intakeSpeed);
+	intakeOutRight->Set(intakeSpeed);
 }
 
 void Intake::outputInner(){
-	intakeInLeft->Set(ControlMode::PercentOutput, -intakeSpeed);
+	intakeInLeft->Set(-intakeSpeed);
+	intakeInRight->Set(intakeSpeed);
 }
 
 void Intake::outputAll(){
@@ -49,13 +49,25 @@ void Intake::outputAll(){
 	outputInner();
 }
 
+void Intake::actuateIntake(){
+	if(solenoidStatus == Out){
+		intakeExtension->Set(DoubleSolenoid::kReverse);
+		solenoidStatus = In;
+	} else {
+		intakeExtension->Set(DoubleSolenoid::kForward);
+		solenoidStatus = Out;
+	}
+}
+
+
 void Intake::allOff(){
-	intakeOutLeft->Set(ControlMode::PercentOutput, 0.0);
-	intakeInLeft->Set(ControlMode::PercentOutput, 0.0);
+	intakeOutLeft->Set(0.0);
+	intakeOutRight->Set(0.0);
+	intakeInLeft->Set(0.0);
+	intakeInRight->Set(0.0);
 }
 
 void Intake::PostGetValues(){
 	SmartDashboard::PutNumber("intakeSpeed", intakeSpeed);
-	SmartDashboard::GetNumber("intakeSpeed", 0.8);
-
+	intakeSpeed = SmartDashboard::GetNumber("intakeSpeed", 0.8);
 }

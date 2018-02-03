@@ -21,6 +21,13 @@ enum AutonomousStates {
 	FaceScale
 };
 
+enum PWMChain{
+	LeftInIntakePWM,
+	RightInIntakePWM,
+	LeftOutIntakePWM,
+	RightOutIntakePWM
+};
+
 enum CanChain {
 	RightDrive1CAN = 0,
 	RightDrive2CAN,
@@ -30,25 +37,23 @@ enum CanChain {
 	LeftDrive3CAN,
 	Strafe1CAN,
 	Strafe2CAN,
-	LeftOutIntakeCAN,
-	RightOutIntakeCAN,
-	LeftInIntakeCAN,
-	RightInIntakeCAN,
 	Elevator1CAN,
 	Elevator2CAN,
 	Elevator3CAN
 };
 
 enum DIOPorts {
-	LeftEncoderDIO1 = 0,
-	LeftEncoderDIO2,
-	RightEncoderDIO1,
-	RightEncoderDIO2,
-	Elevator1DIO1,
+	Elevator1DIO1 = 0,
 	Elevator1DIO2,
 	Elevator2DIO1,
 	Elevator3DIO1,
 	Elevator3DIO2
+};
+
+enum actuationStatus{
+	Undetermined = 0,
+	Out,
+	In
 };
 
 enum StructureData {
