@@ -160,6 +160,7 @@ public:
 						state++;
 					}
 				}
+/////////////////////////////////
 			}
 		}
 		if (sides.GetSelected() == middleside) {
@@ -172,29 +173,26 @@ public:
 		}
 		if (sides.GetSelected() == rightside) {
 			if (tempfeed.GetSelected() == left) {
-
-			}
-			if (tempfeed.GetSelected() == right) {
 				if (state==0) {
-					if (driveTrain->GetEncoderVal(LeftSide) < [foward1]) {
+					if (driveTrain->GetEncoderVal(RightSide) < 18500) {
 
 					} else {
-						gyroscope->Reset();
 						driveTrain->ResetEncoders();
+						gyroscope->Reset();
 						state++;
 					}
 				}
 				if (state==1) {
-					if (gyroscope->GetAngle() < [turn1]) {
+					if (gyroscope->GetAngle() < -90) {
 
 					} else {
-						gyroscope->Reset();
 						driveTrain->ResetEncoders();
+						gyroscope->Reset();
 						state++;
 					}
 				}
 				if (state==2) {
-					if (driveTrain->GetEncoderVal(LeftSide) < [foward2]) {
+					if (driveTrain->GetEncoderVal(RightSide) < 4500) {
 
 					} else {
 						gyroscope->Reset();
@@ -203,7 +201,52 @@ public:
 					}
 				}
 				if (state==3) {
-					if (gyrosocpe->GetAngle() < [turn2]) {
+					if (gyrosocpe->GetAngle() > 90) {
+
+					} else {
+						gyroscope->Reset();
+						driveTrain->ResetEncoders();
+						state++;
+					}
+				}
+				if (state==4) {
+//					Put the elevator up here
+				} else {
+					gyroscope->Reset();
+					driveTrain->ResetEncoders();
+					state++;
+				}
+			}
+			if (tempfeed.GetSelected() == right) {
+				if (state==0) {
+					if (driveTrain->GetEncoderVal(RightSide) < 20500) {
+
+					} else {
+						driveTrain->ResetEncoders();
+						gyroscope->Reset();
+						state++;
+					}
+				}
+				if (state==1) {
+					if (gyroscope->GetAngle() < -90) {
+
+					} else {
+						driveTrain->ResetEncoders();
+						gyroscope->Reset();
+						state++;
+					}
+				}
+				if (state==2) {
+					if (driveTrain->GetEncoderVal(RightSide) < 4500) {
+
+					} else {
+						gyroscope->Reset();
+						driveTrain->ResetEncoders();
+						state++;
+					}
+				}
+				if (state==3) {
+					if (gyrosocpe->GetAngle() > 90) {
 
 					} else {
 						gyroscope->Reset();
