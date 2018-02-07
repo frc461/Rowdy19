@@ -241,8 +241,5 @@ void Autonomous::SwitchLeftAuto(){
 }
 
 void Autonomous::DefaultCross(){
-	int rightEncDist = sensors->GetLeftEncoderDistance();
-	if(rightEncDist < defaultDist){
-		driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-	}
+
 };

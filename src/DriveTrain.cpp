@@ -5,12 +5,11 @@
  *      Author: Hank Krutulis
  */
 
+#include <WPILib.h>
 #include "DriveTrain.h"
 #include "ctre/Phoenix.h"
-#include <WPILib.h>
 
 	DriveTrain::DriveTrain(Sensors& sensorsPass){
-
 		rightDrive1 = new WPI_TalonSRX(RightDrive1CAN);
 		rightDrive2 = new WPI_VictorSPX(RightDrive2CAN);
 		rightDrive3 = new WPI_VictorSPX(RightDrive3CAN);
@@ -27,6 +26,7 @@
 		p = 0.6;
 		i = 0.0;
 		d = 0.1;
+		rotateTolerance = 0.2;
 		strafeSpeedTolerance = 0.2;
 		strafeAngleTolerance = 3;
 		strafeAngle = 0.0;
@@ -73,6 +73,7 @@
 		SmartDashboard::PutNumber("strafeAngleTolerance", strafeAngleTolerance);
 		SmartDashboard::PutNumber("StrafeAngle", strafeAngle);
 		SmartDashboard::PutNumber("StrafeSpeedTolerance", strafeSpeedTolerance);
+		SmartDashboard::PutNumber("RotateTolerance", rotateTolerance);
 
 		strafeSpeed = SmartDashboard::GetNumber("strafeSpeed", 0.8);
 		driveSpeed = SmartDashboard::GetNumber("driveSpeed", 0.8);
@@ -83,13 +84,14 @@
 		d = SmartDashboard::GetNumber("StrafePID/d", 0.1);
 		strafeSpeedTolerance = SmartDashboard::GetNumber("StrafeSpeedTolerance", 0.2);
 		strafeAngleTolerance = SmartDashboard::GetNumber("strafeAngleTolerance", strafeAngleTolerance);
+		rotateTolerance = SmartDashboard::GetNumber("RotateTolerance", rotateTolerance);
 		pid->SetPID(p, i, d);
 	}
 
 	void DriveTrain::ArcadeDrive(double forward, double rotate, double strafe){
 		GetValues();
 		SmartDashboard::PutNumber("Strafe", strafe);
-		if (rotate != 0){
+		if (rotate > rotateTolerance || rotate < -rotateTolerance){
 			strafeAngle = sensors->GetGyroAngle();
 		}
 		strafeDifference = sensors->GetGyroAngle() - strafeAngle;

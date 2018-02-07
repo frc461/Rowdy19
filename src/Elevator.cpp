@@ -9,21 +9,38 @@
 #include "Robot.h"
 
 Elevator::Elevator() {
-	elevator1 = new VictorSPX(Elevator1CAN);
+	elevator1 = new TalonSRX(Elevator1CAN);
 	elevator2 = new VictorSPX(Elevator2CAN);
 	elevator3 = new VictorSPX(Elevator3CAN);
+	elevatorBrake = new DoubleSolenoid(ElevatorBrake1, ElevatorBrake2);
 
+	postValues();
 	elevator2->Follow(*elevator1);
 	elevator3->Follow(*elevator1);
 	encoderVal = elevator1->GetSelectedSensorPosition(0);
 }
 
 void Elevator::goUp(){
-	elevator1->Set(ControlMode::PercentOutput, elevateSpeed);
+	BrakeRelease();
+	elevator1->Set(ControlMode::PercentOutput, -raiseSpeed);
+}
+
+void Elevator::move(double speed){
+	BrakeRelease();
+	elevator1->Set(ControlMode::PercentOutput, speed);
 }
 
 void Elevator::goDown(){
-	elevator1->Set(ControlMode::PercentOutput, -elevateSpeed);
+	BrakeRelease();
+	elevator1->Set(ControlMode::PercentOutput, lowerSpeed);
+}
+
+void Elevator::Brake(){
+	elevatorBrake->Set(DoubleSolenoid::kForward);
+}
+
+void Elevator::BrakeRelease(){
+	elevatorBrake->Set(DoubleSolenoid::kReverse);
 }
 
 void Elevator::goToSwitchHeight(){
@@ -68,12 +85,14 @@ void Elevator::goToIntakeExchangeHeight(){
 
 void Elevator::haltMotion(){
 	elevator1->Set(ControlMode::PercentOutput, 0.0);
+	Brake();
 }
 
 void Elevator::resetEncoder(){}
 
 void Elevator::postValues(){
-	SmartDashboard::PutNumber("Elevator/elevateSpeed", elevateSpeed);
+	SmartDashboard::PutNumber("Elevator/raiseSpeed", raiseSpeed);
+	SmartDashboard::PutNumber("Elevator/lowerSpeed", lowerSpeed);
 	SmartDashboard::PutNumber("Elevator/heightTolerance", heightTolerance);
 	SmartDashboard::PutNumber("Elevator/elevatorEncoder", encoderVal);
 
@@ -88,7 +107,8 @@ void Elevator::periodicValues(){
 	SmartDashboard::PutNumber("Elevator/elevatorEncoder", encoderVal);
 
 	heightTolerance = SmartDashboard::GetNumber("Elevator/heightTolerance", heightTolerance);
-	elevateSpeed = SmartDashboard::GetNumber("Elevator/elevateSpeed", elevateSpeed);
+	raiseSpeed = SmartDashboard::GetNumber("Elevator/raiseSpeed", raiseSpeed);
+	lowerSpeed = SmartDashboard::GetNumber("Elevator/lowerSpeed", lowerSpeed);
 
 	intakeExchangeHeight = SmartDashboard::GetNumber("Elevator/intakeExchangeHeight", intakeExchangeHeight);
 	switchHeight = SmartDashboard::GetNumber("Elevator/switchHeight", switchHeight);

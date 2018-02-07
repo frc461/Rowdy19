@@ -14,8 +14,7 @@
 class Sensors {
 public:
 	Sensors();
-	int GetLeftEncoderDistance();
-	int GetRightEncoderDistance();
+
 	int GetGyroAngle();
 	int GetElevatorEncoders();
 	void ResetGyro();
@@ -23,8 +22,7 @@ public:
 
 private:
 ADXRS450_Gyro *gyro;
-Encoder *leftDriveEncoder;
-Encoder *rightDriveEncoder;
+
 };
 
 #endif /* SRC_SENSORS_H_ */

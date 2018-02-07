@@ -9,24 +9,21 @@
 #include "Robot.h"
 
 Intake::Intake() {
-	intakeExtension = new DoubleSolenoid(0,1);
-	solenoidStatus = Undetermined;
-
-	intakeInLeft = new Spark(LeftInIntakePWM);
-	intakeInRight = new Spark(RightInIntakePWM);
-	intakeOutLeft = new Talon(LeftOutIntakePWM);
-	intakeOutRight = new Talon(RightOutIntakePWM);
-
+	intakeExtension = new DoubleSolenoid(Intake1, Intake2);
+	intakeInLeft = new Talon(LeftInIntakePWM);
+	intakeInRight = new Talon(RightInIntakePWM);
+	intakeOutLeft = new Spark(LeftOutIntakePWM);
+	intakeOutRight = new Spark(RightOutIntakePWM);
 }
 
 void Intake::takeInOuter(){
-	intakeOutLeft->Set(intakeSpeed);
-	intakeOutRight->Set(-intakeSpeed);
+	intakeOutLeft->Set(-intakeSpeed);
+	intakeOutRight->Set(intakeSpeed);
 }
 
 void Intake::takeInInner(){
-	intakeInLeft->Set(intakeSpeed);
-	intakeInRight->Set(-intakeSpeed);
+	intakeInLeft->Set(-intakeSpeed);
+	intakeInRight->Set(intakeSpeed);
 }
 
 void Intake::takeInAll(){
@@ -35,13 +32,13 @@ void Intake::takeInAll(){
 }
 
 void Intake::outputOuter(){
-	intakeOutLeft->Set(-intakeSpeed);
-	intakeOutRight->Set(intakeSpeed);
+	intakeOutLeft->Set(intakeSpeed);
+	intakeOutRight->Set(-intakeSpeed);
 }
 
 void Intake::outputInner(){
-	intakeInLeft->Set(-intakeSpeed);
-	intakeInRight->Set(intakeSpeed);
+	intakeInLeft->Set(intakeSpeed);
+	intakeInRight->Set(-intakeSpeed);
 }
 
 void Intake::outputAll(){
@@ -49,16 +46,29 @@ void Intake::outputAll(){
 	outputInner();
 }
 
-void Intake::actuateIntake(){
-	if(solenoidStatus == Out){
-		intakeExtension->Set(DoubleSolenoid::kReverse);
-		solenoidStatus = In;
-	} else {
-		intakeExtension->Set(DoubleSolenoid::kForward);
-		solenoidStatus = Out;
-	}
+void Intake::spinOuter(){
+	intakeOutLeft->Set(-intakeSpeed);
+	intakeOutRight->Set(-intakeSpeed);
+	takeInInner();
 }
 
+void Intake::spinInner(){
+	intakeInLeft->Set(intakeSpeed);
+	intakeInRight->Set(intakeSpeed);
+	takeInOuter();
+}
+
+void Intake::extendIntake(){
+	intakeExtension->Set(DoubleSolenoid::kForward);
+}
+
+void Intake::retractIntake(){
+	intakeExtension->Set(DoubleSolenoid::kReverse);
+}
+
+int Intake::getSolenoid(){
+	return intakeExtension->Get();
+}
 
 void Intake::allOff(){
 	intakeOutLeft->Set(0.0);
@@ -68,6 +78,6 @@ void Intake::allOff(){
 }
 
 void Intake::PostGetValues(){
-	SmartDashboard::PutNumber("intakeSpeed", intakeSpeed);
-	intakeSpeed = SmartDashboard::GetNumber("intakeSpeed", 0.8);
+	SmartDashboard::PutNumber("Intake/intakeSpeed", intakeSpeed);
+	intakeSpeed = SmartDashboard::GetNumber("Intake/intakeSpeed", 0.8);
 }

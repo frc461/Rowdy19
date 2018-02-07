@@ -13,13 +13,6 @@ Sensors::Sensors() {
 	gyro = new ADXRS450_Gyro();
 }
 
-int Sensors::GetLeftEncoderDistance(){
-	return leftDriveEncoder->GetDistance();
-}
-
-int Sensors::GetRightEncoderDistance(){
-	return rightDriveEncoder->GetDistance();
-}
 
 int Sensors::GetGyroAngle(){
 	return gyro->GetAngle();

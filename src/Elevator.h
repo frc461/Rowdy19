@@ -15,6 +15,7 @@ public:
 	Elevator();
 	void goUp();
 	void goDown();
+	void move(double);
 	void goToSwitchHeight();
 	void goToScaleHeight();
 	void goToClimbHeight();
@@ -23,14 +24,17 @@ public:
 	void resetEncoder();
 	void postValues();
 	void periodicValues();
+	void Brake();
+	void BrakeRelease();
 
 private:
-	VictorSPX* elevator1;
+	TalonSRX* elevator1;
 	VictorSPX* elevator2;
 	VictorSPX* elevator3;
+	DoubleSolenoid* elevatorBrake;
 
 	int encoderVal;
-	double elevateSpeed = 0.8;
+	double raiseSpeed = 0.3, lowerSpeed = 0.1;
 	double heightTolerance = 250;
 	double intakeExchangeHeight = 200;
 	double switchHeight = 1300;

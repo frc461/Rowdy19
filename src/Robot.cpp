@@ -36,8 +36,8 @@ public:
 	PowerDistributionPanel *pdp;
 	DriveTrain *driveTrain;
 	ShuffleboardPoster *boardHandler;
-//	Intake* intake;
-//	Elevator* elevator;
+	Intake* intake;
+	Elevator* elevator;
 
 	Autonomous *auton;
 	Sensors *sensors;	
@@ -53,8 +53,8 @@ public:
 		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
 		auton = new Autonomous(*driveTrain, *sensors);
-//		intake = new Intake();
-//		elevator = new Elevator();
+		intake = new Intake();
+		elevator = new Elevator();
 	}
 
 
@@ -75,41 +75,48 @@ public:
 			auton->SwitchLeftAuto();
 		} else {
 			auton->DefaultCross();
-	    }	
+	    }
 	}
 
 	void TeleopInit() {
 		driveTrain->ResetEncoders();
+		intake->extendIntake();
+		elevator->BrakeRelease();
 	}
 
 	void TeleopPeriodic() {
 		boardHandler->ShufflePeriodic();
+		elevator->periodicValues();
 		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
-		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
+//		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
 
-//		if(rightJoystick->GetRawButton(thumbSwitch)){
-//			intake->takeInAll();
-//		} else if (leftJoystick->GetRawButton(thumbSwitch)){
-//			intake->outputAll();
-//		} else {
-//			intake->allOff();
-//		}
-
-//		if(rightJoystick->GetRawButton(leftButton)){
-//			elevator->goDown();
-//		} else if(rightJoystick->GetRawButton(rightButton)){
-//			elevator->goUp();
-//		} else {
-//			elevator->haltMotion();
-//		}
-
-		if (rightJoystick->GetRawButton(trigger)){
-			driveTrain->TankDrive(forwardL, forwardR, strafe);
+		if(rightJoystick->GetRawButton(thumbSwitch)){
+			intake->takeInAll();
+		} else if (leftJoystick->GetRawButton(thumbSwitch)){
+			intake->outputAll();
+		} else if (rightJoystick->GetRawButton(topRightRight)){
+			intake->spinOuter();
 		} else {
-			driveTrain->ArcadeDrive(forwardR, rotate, strafe);
-		 }
+			intake->allOff();
+		}
+
+		if(rightJoystick->GetRawButton(rightButton)){
+			elevator->goUp();
+		} else if (rightJoystick->GetRawButton(leftButton)){
+			elevator->goDown();
+		} else {
+			elevator->haltMotion();
+		}
+
+		if (leftJoystick->GetRawButton(trigger)){
+			intake->extendIntake();
+		} else {
+			intake->retractIntake();
+		}
+
+		driveTrain->ArcadeDrive(forwardR, rotate, strafe);
 	}
 
 	void TestPeriodic() {}
