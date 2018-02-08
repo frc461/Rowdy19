@@ -58,6 +58,12 @@ enum DIOPorts {
 	Elevator3DIO2
 };
 
+enum startingPositions {
+	LeftPosition = 0,
+	CenterPosition,
+	RightPosition
+};
+
 enum actuationStatus{
 	Undetermined = 0,
 	Out,

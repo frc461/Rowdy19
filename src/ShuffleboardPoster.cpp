@@ -13,6 +13,11 @@
 ShuffleboardPoster::ShuffleboardPoster(DriveTrain& dt, Sensors& srs) {
 	driveTrain = &dt;
 	sensors = &srs;
+	SendableChooser<int> startingPosition;
+	startingPosition.AddDefault("Left Side", LeftPosition);
+	startingPosition.AddDefault("Center", CenterPosition);
+	startingPosition.AddDefault("Right Side", RightPosition);
+//	SmartDashboard::PutData("Starting Position", startingPosition);
 }
 
 void ShuffleboardPoster::TeleopGet(){

@@ -44,6 +44,7 @@ private:
 	driveAwayDist = 15000;
 
 
+
 	double autoDriveSpeed, autoTurnSpeed;
 
 	DriveTrain* driveTrain;

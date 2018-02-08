@@ -31,6 +31,7 @@ public:
 	//Controls
 	Joystick *leftJoystick;
 	Joystick *rightJoystick;
+	Joystick *throttle;
 
 	//Robot parts
 	PowerDistributionPanel *pdp;
@@ -92,25 +93,25 @@ public:
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
 
-		if(rightJoystick->GetRawButton(thumbSwitch)){
+		if(throttle->GetRawButton(topLittleFingerButton)){
 			intake->takeInAll();
-		} else if (leftJoystick->GetRawButton(thumbSwitch)){
+		} else if (throttle->GetRawButton(topRingFingerButton)){
 			intake->outputAll();
-		} else if (rightJoystick->GetRawButton(topRightRight)){
+		} else if (throttle->GetRawButton(rightThumbOrange)){
 			intake->spinOuter();
 		} else {
 			intake->allOff();
 		}
 
-		if(rightJoystick->GetRawButton(rightButton)){
+		if(throttle->GetRawAxis(paddleTR) > 0){
 			elevator->goUp();
-		} else if (rightJoystick->GetRawButton(leftButton)){
+		} else if (throttle->GetRawAxis(paddleTR) < 0){
 			elevator->goDown();
 		} else {
 			elevator->haltMotion();
 		}
 
-		if (leftJoystick->GetRawButton(trigger)){
+		if (leftJoystick->GetRawButton(rightThumbOrange)){
 			intake->extendIntake();
 		} else {
 			intake->retractIntake();

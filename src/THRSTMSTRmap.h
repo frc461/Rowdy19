@@ -37,7 +37,7 @@ enum ThrustThrottleAxis {
 	zAxisTR,
 	deadXRotateTR,
 	deadYRotateTR,
-	weirdAwkwardButtonThingTR,
+	paddleTR,
 	sliderTR
 };
 
