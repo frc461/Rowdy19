@@ -46,16 +46,16 @@ void Intake::outputAll(){
 	outputInner();
 }
 
-void Intake::spinOuter(){
+void Intake::spinRight(){
 	intakeOutLeft->Set(-intakeSpeed);
 	intakeOutRight->Set(-intakeSpeed);
 	takeInInner();
 }
 
-void Intake::spinInner(){
-	intakeInLeft->Set(intakeSpeed);
-	intakeInRight->Set(intakeSpeed);
-	takeInOuter();
+void Intake::spinLeft(){
+	intakeOutLeft->Set(intakeSpeed);
+	intakeOutRight->Set(intakeSpeed);
+	takeInInner();
 }
 
 void Intake::extendIntake(){

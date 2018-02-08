@@ -22,8 +22,8 @@ public:
 	void outputInner();
 	void outputAll();
 
-	void spinOuter();
-	void spinInner();
+	void spinRight();
+	void spinLeft();
 
 	void retractIntake();
 	void extendIntake();

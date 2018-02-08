@@ -97,8 +97,10 @@ public:
 			intake->takeInAll();
 		} else if (throttle->GetRawButton(topRingFingerButton)){
 			intake->outputAll();
-		} else if (throttle->GetRawButton(rightThumbOrange)){
-			intake->spinOuter();
+		} else if (throttle->GetRawButton(flipOffTop)){
+			intake->spinLeft();
+		} else if (throttle->GetRawButton(flipOffBottom)){
+			intake->spinRight();
 		} else {
 			intake->allOff();
 		}
@@ -111,7 +113,7 @@ public:
 			elevator->haltMotion();
 		}
 
-		if (leftJoystick->GetRawButton(rightThumbOrange)){
+		if (throttle->GetRawButton(rightThumbOrange)){
 			intake->extendIntake();
 		} else {
 			intake->retractIntake();
