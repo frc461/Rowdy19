@@ -7,22 +7,30 @@
 
 #ifndef AUTONOMOUS_H_
 #define AUTONOMOUS_H_
+#include <WPILib.h>
 #include "DriveTrain.h"
 #include "Robot.h"
 #include "Sensors.h"
+#include "ShuffleboardPoster.h"
+#include "Elevator.h"
 
 class Autonomous {
 public:
-	Autonomous(DriveTrain&, Sensors&);
+	Autonomous(DriveTrain&, Sensors&, ShuffleboardPoster&, Elevator&);
+	void RunAuto();
+
 	void AutonPostValues();
 	void AutonPeriodicValues();
+	void SwitchFromSide();
+	void ScaleFromSide();
+	void ScaleFromCenter();
 	void SwitchPeriodicValues();
 	void ScalePeriodicValues();
 	void PutShuffleboardValues();
 	void SwitchRightAuto();
 	void SwitchLeftAuto();
-	void ScaleRightAuto();
-	void ScaleLeftAuto();
+	void SwitchFromMiddle();
+
 
 	void DefaultCross();
 	void SetAutoState(int);
@@ -43,12 +51,17 @@ private:
 	int drivePastDist = 7000,
 	driveAwayDist = 15000;
 
+	int target, startingPosition, ourSwitch, ourScale;
+
 
 
 	double autoDriveSpeed, autoTurnSpeed;
 
 	DriveTrain* driveTrain;
 	Sensors* sensors;
+	ShuffleboardPoster* board;
+	Elevator* elevator;
 };
+
 
 #endif /* AUTONOMOUS_H_ */

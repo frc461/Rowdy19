@@ -44,7 +44,8 @@ public:
 	Sensors *sensors;	
 
 	//Custom variables
-	int ourSwitch;
+	int startPos, target, ourSwitch, ourScale;
+	bool intakeIn, previouslyToggled;
 
 
 	void RobotInit() {
@@ -53,9 +54,9 @@ public:
 		sensors = new Sensors();
 		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
-		auton = new Autonomous(*driveTrain, *sensors);
 		intake = new Intake();
 		elevator = new Elevator();
+		auton = new Autonomous(*driveTrain, *sensors, *boardHandler, *elevator);
 	}
 
 
@@ -63,25 +64,20 @@ public:
 		boardHandler->ShufflePeriodic();
 		driveTrain->ResetEncoders();
 		auton->SetAutoState(InitialStart);
-		ourSwitch = boardHandler->GetOurSwitch();
 	}
 
 
 	void AutonomousPeriodic() {
 		boardHandler->ShufflePeriodic();
+		if(target == Switch){
 
-		if (ourSwitch == RightSide) {
-			auton->SwitchRightAuto();
-		} else if (ourSwitch == LeftSide)  {
-			auton->SwitchLeftAuto();
-		} else {
-			auton->DefaultCross();
-	    }
+		}
 	}
 
 	void TeleopInit() {
 		driveTrain->ResetEncoders();
 		intake->extendIntake();
+		intakeIn = true;
 		elevator->BrakeRelease();
 	}
 
@@ -113,10 +109,21 @@ public:
 			elevator->haltMotion();
 		}
 
+		if (throttle->GetRawButton(axisButton)){
+			if (!previouslyToggled){
+				intakeIn = !intakeIn;
+			}
+		}
+		previouslyToggled = throttle->GetRawButton(axisButton);
+
 		if (throttle->GetRawButton(rightThumbOrange)){
-			intake->extendIntake();
-		} else {
 			intake->retractIntake();
+		} else {
+			if(intakeIn){
+				intake->retractIntake();
+			} else {
+				intake->extendIntake();
+			}
 		}
 
 		driveTrain->ArcadeDrive(forwardR, rotate, strafe);

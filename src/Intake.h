@@ -28,12 +28,14 @@ public:
 	void retractIntake();
 	void extendIntake();
 
+
 	void PostGetValues();
 
 	void allOff();
 	int getSolenoid();
 private:
 	double intakeSpeed = 0.8;
+	bool intakeOut, lastIntakeOut;
 
 	DoubleSolenoid* intakeExtension;
 	Talon* intakeInLeft;

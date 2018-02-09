@@ -59,12 +59,13 @@ void Intake::spinLeft(){
 }
 
 void Intake::extendIntake(){
-	intakeExtension->Set(DoubleSolenoid::kForward);
+	intakeExtension->Set(DoubleSolenoid::kReverse);
 }
 
 void Intake::retractIntake(){
-	intakeExtension->Set(DoubleSolenoid::kReverse);
+	intakeExtension->Set(DoubleSolenoid::kForward);
 }
+
 
 int Intake::getSolenoid(){
 	return intakeExtension->Get();

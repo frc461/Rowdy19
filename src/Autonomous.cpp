@@ -6,18 +6,41 @@
  */
 
 #include "Autonomous.h"
-#include <WPILib.h>
-#include "Robot.h"
-#include "ShuffleboardPoster.h"
-#include "Sensors.h"
 
-Autonomous::Autonomous(DriveTrain& dt, Sensors& srs) {
+Autonomous::Autonomous(DriveTrain& dt, Sensors& srs, ShuffleboardPoster& boardHandler, Elevator& elevatorP) {
 	autoState = InitialStart;
 	driveTrain = &dt;
 	sensors = &srs;
+	elevator = &elevatorP;
+	board = &boardHandler;
 	AutonPostValues();
 	SwitchPeriodicValues();
 	ScalePeriodicValues();
+	target = board->GetTarget();
+	startingPosition = board->GetStartingPosition();
+
+}
+
+void Autonomous::RunAuto(){
+	if(target == Scale){
+		if(startingPosition == CenterPosition){
+			ScaleFromCenter();
+		} else {
+			ScaleFromSide();
+		}
+	} else if(target == Switch){
+		if(startingPosition == CenterPosition){
+			if(board->GetOurSwitch() == LeftSide){
+				SwitchRightAuto();
+			} else{
+				SwitchLeftAuto();
+			}
+		} else {
+			SwitchFromSide();
+		}
+	} else {
+		DefaultCross();
+	}
 }
 
 void Autonomous::SetAutoState(int pAutoState){
@@ -66,11 +89,15 @@ void Autonomous::ScalePeriodicValues(){
 	SmartDashboard::PutNumber("Auton/Scale/autoDriveSpeed", -0.8);
 }
 
-void Autonomous::ScaleRightAuto(){
+void Autonomous::SwitchFromSide(){
 
 }
 
-void Autonomous::ScaleLeftAuto(){
+void Autonomous::ScaleFromCenter(){
+
+}
+
+void Autonomous::ScaleFromSide(){
 	switch (autoState) {
 		case(InitialStart):
 			if(true){

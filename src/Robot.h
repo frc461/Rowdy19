@@ -64,10 +64,9 @@ enum startingPositions {
 	RightPosition
 };
 
-enum actuationStatus{
-	Undetermined = 0,
-	Out,
-	In
+enum autoTarget{
+	Switch = 0,
+	Scale,
 };
 
 enum StructureData {

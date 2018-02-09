@@ -13,15 +13,32 @@
 ShuffleboardPoster::ShuffleboardPoster(DriveTrain& dt, Sensors& srs) {
 	driveTrain = &dt;
 	sensors = &srs;
-	SendableChooser<int> startingPosition;
+	GenerateSelectors();
+}
+
+void ShuffleboardPoster::GenerateSelectors(){
 	startingPosition.AddDefault("Left Side", LeftPosition);
-	startingPosition.AddDefault("Center", CenterPosition);
-	startingPosition.AddDefault("Right Side", RightPosition);
-//	SmartDashboard::PutData("Starting Position", startingPosition);
+		startingPosition.AddDefault("Center", CenterPosition);
+		startingPosition.AddDefault("Right Side", RightPosition);
+		SmartDashboard::PutData("Starting Position", &startingPosition);
+		SmartDashboard::Delete("Warning");
+
+		startingPosition.AddDefault("Switch", Switch);
+		target.AddDefault("Scale", Scale);
+		SmartDashboard::PutData("Starting Position", &target);
+		SmartDashboard::Delete("Warning");
 }
 
 void ShuffleboardPoster::TeleopGet(){
 
+}
+
+int ShuffleboardPoster::GetStartingPosition(){
+	return startingPosition.GetSelected();
+}
+
+int ShuffleboardPoster::GetTarget(){
+	return target.GetSelected();
 }
 
 void ShuffleboardPoster::ShufflePeriodic(){
