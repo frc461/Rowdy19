@@ -25,6 +25,9 @@ public:
 	void spinRight();
 	void spinLeft();
 
+	void resetSpitCount();
+	void spitCube();
+
 	void retractIntake();
 	void extendIntake();
 
@@ -35,7 +38,7 @@ public:
 	int getSolenoid();
 private:
 	double intakeSpeed = 0.8;
-	bool intakeOut, lastIntakeOut;
+	int spitCount = 0;
 
 	DoubleSolenoid* intakeExtension;
 	Talon* intakeInLeft;

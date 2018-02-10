@@ -58,6 +58,18 @@ void Intake::spinLeft(){
 	takeInInner();
 }
 
+void Intake::resetSpitCount(){
+	spitCount = 0;
+}
+
+void Intake::spitCube(){
+	if (spitCount < 10){
+		outputAll();
+	} else {
+		allOff();
+	}
+}
+
 void Intake::extendIntake(){
 	intakeExtension->Set(DoubleSolenoid::kReverse);
 }

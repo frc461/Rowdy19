@@ -54,9 +54,9 @@ public:
 		sensors = new Sensors();
 		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
-		intake = new Intake();
 		elevator = new Elevator();
-		auton = new Autonomous(*driveTrain, *sensors, *boardHandler, *elevator);
+		intake = new Intake();
+		auton = new Autonomous(*driveTrain, *sensors, *boardHandler, *elevator, *intake);
 	}
 
 
@@ -64,14 +64,13 @@ public:
 		boardHandler->ShufflePeriodic();
 		driveTrain->ResetEncoders();
 		auton->SetAutoState(InitialStart);
+		intake->resetSpitCount();
 	}
 
 
 	void AutonomousPeriodic() {
 		boardHandler->ShufflePeriodic();
-		if(target == Switch){
-
-		}
+		auton->RunAuto();
 	}
 
 	void TeleopInit() {
@@ -79,6 +78,7 @@ public:
 		intake->extendIntake();
 		intakeIn = true;
 		elevator->BrakeRelease();
+		intake->resetSpitCount();
 	}
 
 	void TeleopPeriodic() {

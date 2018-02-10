@@ -13,10 +13,11 @@
 #include "Sensors.h"
 #include "ShuffleboardPoster.h"
 #include "Elevator.h"
+#include "Intake.h"
 
 class Autonomous {
 public:
-	Autonomous(DriveTrain&, Sensors&, ShuffleboardPoster&, Elevator&);
+	Autonomous(DriveTrain&, Sensors&, ShuffleboardPoster&, Elevator&, Intake&);
 	void RunAuto();
 
 	void AutonPostValues();
@@ -30,13 +31,15 @@ public:
 	void SwitchRightAuto();
 	void SwitchLeftAuto();
 	void SwitchFromMiddle();
+	void Switch();
 
 
 	void DefaultCross();
 	void SetAutoState(int);
 
 private:
-	int initDist = 2000,
+	int encoderDist, gyroAngle,
+	initDist = 2000,
 	lTurn1 = -55,
 	lTurn2 = 3000,
 	lDrive3 = 55,
@@ -46,6 +49,10 @@ private:
 	rDrive2 = 4000,
 	rDrive3 = 2000,
 	defaultDist = 1750,
+	switchSideDist = 4000,
+	turnToSwitchAngle = 90,
+	driveToSwitchDist = 2500,
+
 	autoState = InitialStart;
 
 	int drivePastDist = 7000,
@@ -61,6 +68,7 @@ private:
 	Sensors* sensors;
 	ShuffleboardPoster* board;
 	Elevator* elevator;
+	Intake* intake;
 };
 
 

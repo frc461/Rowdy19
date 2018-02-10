@@ -14,7 +14,8 @@ enum AutonomousStates {
 	DriveDiagonal,
 	FaceSwitch,
 	DriveSideSwitch,
-	DeployBlock,
+	RaiseElevator,
+	DeployCube,
 	DrivePastSwitch,
 	TurnTowardsScale,
 	DriveTowardsScale,
@@ -59,8 +60,8 @@ enum DIOPorts {
 };
 
 enum startingPositions {
-	LeftPosition = 0,
-	CenterPosition,
+	CenterPosition = 0,
+	LeftPosition,
 	RightPosition
 };
 

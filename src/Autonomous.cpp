@@ -7,16 +7,18 @@
 
 #include "Autonomous.h"
 
-Autonomous::Autonomous(DriveTrain& dt, Sensors& srs, ShuffleboardPoster& boardHandler, Elevator& elevatorP) {
+Autonomous::Autonomous(DriveTrain& dt, Sensors& srs, ShuffleboardPoster& boardHandler, Elevator& elevatorP, Intake& intakeP) {
 	autoState = InitialStart;
 	driveTrain = &dt;
 	sensors = &srs;
 	elevator = &elevatorP;
 	board = &boardHandler;
+	intake = &intakeP;
 	AutonPostValues();
 	SwitchPeriodicValues();
 	ScalePeriodicValues();
 	target = board->GetTarget();
+
 	startingPosition = board->GetStartingPosition();
 
 }
@@ -28,7 +30,7 @@ void Autonomous::RunAuto(){
 		} else {
 			ScaleFromSide();
 		}
-	} else if(target == Switch){
+	} else if(target == autoTarget::Switch){
 		if(startingPosition == CenterPosition){
 			if(board->GetOurSwitch() == LeftSide){
 				SwitchRightAuto();
@@ -83,6 +85,8 @@ void Autonomous::AutonPeriodicValues(){
 	autoTurnSpeed = SmartDashboard::GetNumber("Auton/autoTurnSpeed", -0.6);
 	SmartDashboard::PutNumber("Auton/autoState", autoState);
 	SmartDashboard::PutNumber("gyro", sensors->GetGyroAngle());
+	encoderDist = driveTrain->GetEncoderVal(LeftSide);
+	gyroAngle = sensors->GetGyroAngle();
 }
 
 void Autonomous::ScalePeriodicValues(){
@@ -90,7 +94,50 @@ void Autonomous::ScalePeriodicValues(){
 }
 
 void Autonomous::SwitchFromSide(){
+	if(ourSwitch == startingPosition){
+		switch (autoState) {
+		case(InitialStart):
+				if(encoderDist < switchSideDist){
+					driveTrain->ArcadeDrive(autoDriveSpeed, 0.0, 0.0);
+				} else {
+					autoState = FaceSwitch;
+					sensors->ResetGyro();
+				}
+				break;
+		case(FaceSwitch):
+				if(ourSwitch == RightSide && gyroAngle < turnToSwitchAngle){
+					driveTrain->ArcadeDrive(0.0, autoTurnSpeed, 0.0);
+				} else if (ourSwitch == LeftSide && gyroAngle > -turnToSwitchAngle){
+					driveTrain->ArcadeDrive(0.0, -autoTurnSpeed, 0.0);
+				} else {
+					autoState = DriveSideSwitch;
+					driveTrain->ResetEncoders();
+				}
+			break;
+		case(DriveSideSwitch):
+				if(encoderDist < driveToSwitchDist){
+					driveTrain->ArcadeDrive(autoDriveSpeed, 0.0, 0.0);
+				} else {
+					autoState = RaiseElevator;
 
+				}
+			break;
+		case(RaiseElevator):
+				if(true){
+					elevator->goUp();
+				} else {
+					autoState = DeployCube;
+				}
+			break;
+		case(DeployCube):
+				if(true){
+
+				} else {
+
+				}
+			break;
+		}
+	}
 }
 
 void Autonomous::ScaleFromCenter(){
@@ -199,11 +246,11 @@ void Autonomous::SwitchRightAuto(){
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     			} else {
     				driveTrain->TankDrive(0.0, 0.0, 0.0);
-    				autoState = DeployBlock;
+    				autoState = RaiseElevator;
     			}
 			break;
 
-    		case (DeployBlock):
+    		case (RaiseElevator):
     			break;
     	}
 	
@@ -258,11 +305,11 @@ void Autonomous::SwitchLeftAuto(){
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     			}
     			else {
-    				autoState = DeployBlock;
+    				autoState = RaiseElevator;
     			}
     			break;
 
-    		case (DeployBlock):
+    		case (RaiseElevator):
     			break;
     	}
 }
