@@ -38,7 +38,7 @@ void Autonomous::RunAuto(){
 				SwitchRightAuto();
 				printf("Switch right from center\n");
 			} else{
-//				SwitchLeftAuto();
+				SwitchLeftAuto();
 				printf("Switch left from center");
 			}
 		} else {
@@ -240,6 +240,7 @@ void Autonomous::SwitchRightAuto(){
     		case (FaceSwitch):
     			if (gyroAngle > rTurn2) {
     				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
+    				driveTrain->ResetEncoders();
     			} else {
     				driveTrain->ResetEncoders();
     				autoState = DriveSideSwitch;
@@ -269,7 +270,7 @@ void Autonomous::SwitchLeftAuto(){
 
     	switch (autoState) {
     		case (InitialStart):
-    			if (rightEncDist < initDist) {
+    			if (rightEncDist > -initDist) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     			} else {
     				sensors->ResetGyro();
@@ -287,7 +288,7 @@ void Autonomous::SwitchLeftAuto(){
 			break;
 
     		case (DriveDiagonal):
-    			if (rightEncDist < lDrive2) {
+    			if (rightEncDist > -lDrive2) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     			}
     			else {
@@ -307,15 +308,16 @@ void Autonomous::SwitchLeftAuto(){
 			break;
 
     		case (DriveSideSwitch):
-    			if (rightEncDist < lDrive3){
+    			if (rightEncDist > -lDrive3){
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     			}
     			else {
-    				autoState = RaiseElevator;
+    				autoState = DeployCube;
     			}
     			break;
 
-    		case (RaiseElevator):
+    		case (DeployCube):
+    			intake->spitCube();
     			break;
     	}
 }

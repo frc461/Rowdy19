@@ -66,6 +66,7 @@ public:
 		boardHandler->ShufflePeriodic();
 		driveTrain->ResetEncoders();
 		auton->SetAutoState(InitialStart);
+		intake->retractIntake();
 		intake->resetSpitCount();
 	}
 
@@ -78,7 +79,7 @@ public:
 	void TeleopInit() {
 		driveTrain->ResetEncoders();
 		intake->extendIntake();
-//		intakeIn = false;
+		intakeIn = true;
 		elevator->BrakeRelease();
 //		intake->resetSpitCount();
 	}
