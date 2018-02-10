@@ -99,7 +99,8 @@ void Elevator::postValues(){
 	SmartDashboard::PutNumber("Elevator/intakeExchangeHeight", intakeExchangeHeight);
 	SmartDashboard::PutNumber("Elevator/switchHeight", switchHeight);
 	SmartDashboard::PutNumber("Elevator/scaleHeight", scaleHeight);
-	SmartDashboard::PutNumber("Elevatore/climbHeight", climbHeight);
+	SmartDashboard::PutNumber("Elevator/climbHeight", climbHeight);
+	SmartDashboard::PutNumber("Elevator/EleEncoder", elevator1->GetSelectedSensorPosition(0));
 }
 
 void Elevator::periodicValues(){

@@ -65,6 +65,7 @@ void Intake::resetSpitCount(){
 void Intake::spitCube(){
 	if (spitCount < 10){
 		outputAll();
+		spitCount++;
 	} else {
 		allOff();
 	}
@@ -76,6 +77,12 @@ void Intake::extendIntake(){
 
 void Intake::retractIntake(){
 	intakeExtension->Set(DoubleSolenoid::kForward);
+}
+
+
+void Intake::spitInner(){
+	outputInner();
+	takeInOuter();
 }
 
 

@@ -42,7 +42,7 @@ enum ThrustThrottleAxis {
 };
 
 enum ThrustThrottleButtons {
-	rightThumbOrange,
+	rightThumbOrange = 1,
 	topLittleFingerButton,
 	topRingFingerButton,
 	flipOffTop,

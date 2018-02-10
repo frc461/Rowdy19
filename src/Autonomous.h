@@ -39,14 +39,14 @@ public:
 
 private:
 	int encoderDist, gyroAngle,
-	initDist = 2000,
+	initDist = 6000,
 	lTurn1 = -55,
 	lTurn2 = 3000,
 	lDrive3 = 55,
 	lDrive2 = 2000,
-	rTurn1 = 55,
+	rTurn1 = 25,
 	rTurn2 = -45,
-	rDrive2 = 4000,
+	rDrive2 = 8000,
 	rDrive3 = 2000,
 	defaultDist = 1750,
 	switchSideDist = 4000,

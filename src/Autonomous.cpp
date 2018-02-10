@@ -26,22 +26,28 @@ Autonomous::Autonomous(DriveTrain& dt, Sensors& srs, ShuffleboardPoster& boardHa
 void Autonomous::RunAuto(){
 	if(target == Scale){
 		if(startingPosition == CenterPosition){
-			ScaleFromCenter();
+//			ScaleFromCenter();
+			printf("Scale from center");
 		} else {
-			ScaleFromSide();
+//			ScaleFromSide();
+			printf("Scale from side");
 		}
 	} else if(target == autoTarget::Switch){
 		if(startingPosition == CenterPosition){
-			if(board->GetOurSwitch() == LeftSide){
+			if(board->GetOurSwitch() == RightSide){
 				SwitchRightAuto();
+				printf("Switch right from center\n");
 			} else{
-				SwitchLeftAuto();
+//				SwitchLeftAuto();
+				printf("Switch left from center");
 			}
 		} else {
-			SwitchFromSide();
+//			SwitchFromSide();
+			printf("Switch from side");
 		}
 	} else {
-		DefaultCross();
+//		DefaultCross();
+		printf("Defaulting");
 	}
 }
 
@@ -87,6 +93,8 @@ void Autonomous::AutonPeriodicValues(){
 	SmartDashboard::PutNumber("gyro", sensors->GetGyroAngle());
 	encoderDist = driveTrain->GetEncoderVal(LeftSide);
 	gyroAngle = sensors->GetGyroAngle();
+	target = board->GetTarget();
+	startingPosition = board->GetStartingPosition();
 }
 
 void Autonomous::ScalePeriodicValues(){
@@ -130,11 +138,8 @@ void Autonomous::SwitchFromSide(){
 				}
 			break;
 		case(DeployCube):
-				if(true){
+				intake->spitCube();
 
-				} else {
-
-				}
 			break;
 		}
 	}
@@ -205,7 +210,7 @@ void Autonomous::SwitchRightAuto(){
 
     	switch (autoState) {
     		case (InitialStart):
-    			if (rightEncDist < initDist) {
+    			if (rightEncDist > -initDist) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     			} else {
     				sensors->ResetGyro();
@@ -223,7 +228,7 @@ void Autonomous::SwitchRightAuto(){
     			break;
 
     		case (DriveDiagonal):
-    			if (rightEncDist < rDrive2) {
+    			if (rightEncDist > -rDrive2) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     			} else {
     				sensors->ResetGyro();
@@ -242,15 +247,16 @@ void Autonomous::SwitchRightAuto(){
 			break;
 
     		case (DriveSideSwitch):
-    			if (rightEncDist < rDrive3) {
+    			if (rightEncDist > -rDrive3) {
     				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     			} else {
     				driveTrain->TankDrive(0.0, 0.0, 0.0);
-    				autoState = RaiseElevator;
+    				autoState = DeployCube;
     			}
 			break;
 
-    		case (RaiseElevator):
+    		case (DeployCube):
+    				intake->spitCube();
     			break;
     	}
 	

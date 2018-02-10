@@ -18,7 +18,9 @@
 		leftDrive3  = new WPI_VictorSPX(LeftDrive3CAN);
 		strafe1     = new TalonSRX(Strafe1CAN);
 		strafe2     = new VictorSPX(Strafe2CAN);
+
 		sensors = &sensorsPass;
+
 		isStrafing = false;
 		pidoutput = 0.0;
 		pidAdd = 0.0;
@@ -114,7 +116,7 @@
 	void DriveTrain::TankDrive(double left, double right, double strafe){
 		GetValues();
 		PutValues();
-		driveTrain->TankDrive(-left * driveSpeed, -right * driveSpeed);
+		driveTrain->TankDrive(-left, -right);
 		strafe1->Set(ControlMode::PercentOutput, strafe * -strafeSpeed);
 	}
 

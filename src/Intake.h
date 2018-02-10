@@ -26,6 +26,7 @@ public:
 	void spinLeft();
 
 	void resetSpitCount();
+	void spitInner();
 	void spitCube();
 
 	void retractIntake();

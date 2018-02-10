@@ -51,6 +51,8 @@ public:
 	void RobotInit() {
 		leftJoystick = new Joystick(0);
 		rightJoystick = new Joystick(1);
+		throttle = new Joystick(2);
+
 		sensors = new Sensors();
 		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
@@ -76,25 +78,27 @@ public:
 	void TeleopInit() {
 		driveTrain->ResetEncoders();
 		intake->extendIntake();
-		intakeIn = true;
+//		intakeIn = false;
 		elevator->BrakeRelease();
-		intake->resetSpitCount();
+//		intake->resetSpitCount();
 	}
 
 	void TeleopPeriodic() {
 		boardHandler->ShufflePeriodic();
 		elevator->periodicValues();
+
 		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
-//		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
+		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
+		driveTrain->ArcadeDrive(forwardR, rotate, strafe);
 
 		if(throttle->GetRawButton(topLittleFingerButton)){
 			intake->takeInAll();
 		} else if (throttle->GetRawButton(topRingFingerButton)){
 			intake->outputAll();
 		} else if (throttle->GetRawButton(flipOffTop)){
-			intake->spinLeft();
+			intake->spitInner();
 		} else if (throttle->GetRawButton(flipOffBottom)){
 			intake->spinRight();
 		} else {
@@ -116,6 +120,11 @@ public:
 		}
 		previouslyToggled = throttle->GetRawButton(axisButton);
 
+		if (rightJoystick->GetRawButton(topLeftLeft)){
+			driveTrain->ResetEncoders();
+			sensors->ResetGyro();
+		}
+
 		if (throttle->GetRawButton(rightThumbOrange)){
 			intake->retractIntake();
 		} else {
@@ -126,7 +135,8 @@ public:
 			}
 		}
 
-		driveTrain->ArcadeDrive(forwardR, rotate, strafe);
+		SmartDashboard::PutBoolean("intakeToggled", intakeIn);
+
 	}
 
 	void TestPeriodic() {}
