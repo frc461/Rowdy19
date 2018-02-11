@@ -79,7 +79,7 @@ public:
 	void TeleopInit() {
 		driveTrain->ResetEncoders();
 		intake->extendIntake();
-		intakeIn = true;
+		intakeIn = false;
 		elevator->BrakeRelease();
 //		intake->resetSpitCount();
 	}

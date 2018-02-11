@@ -32,6 +32,7 @@
 		strafeSpeedTolerance = 0.2;
 		strafeAngleTolerance = 3;
 		strafeAngle = 0.0;
+		straightCorrection = 0.15;
 
 		SpeedControllerGroup *left  = new SpeedControllerGroup(*leftDrive1,  *leftDrive2,  *leftDrive3);
 		SpeedControllerGroup *right = new SpeedControllerGroup(*rightDrive1, *rightDrive2, *rightDrive3);
@@ -47,6 +48,14 @@
 		SmartDashboard::PutNumber("strafeSpeed", 0.8);
 		SmartDashboard::PutNumber("driveSpeed", 0.8);
 		SmartDashboard::PutNumber("turnSpeed", 0.8);
+		SmartDashboard::PutBoolean("isStrafing", isStrafing);
+
+
+		SmartDashboard::PutNumber("strafeDiff", strafeDifference);
+		SmartDashboard::PutNumber("strafeAngleTolerance", strafeAngleTolerance);
+		SmartDashboard::PutNumber("StrafeAngle", strafeAngle);
+		SmartDashboard::PutNumber("StrafeSpeedTolerance", strafeSpeedTolerance);
+		SmartDashboard::PutNumber("RotateTolerance", rotateTolerance);
 	}
 
 	int DriveTrain::GetEncoderVal(int sideSelect){
@@ -63,20 +72,12 @@
 	}
 
 	void DriveTrain::GetValues(){
-		SmartDashboard::PutBoolean("isStrafing", isStrafing);
+
 		SmartDashboard::PutNumber("LeftEncoderValue", leftDrive1->GetSelectedSensorPosition(0));
 		SmartDashboard::PutNumber("RightEncoderValue", GetEncoderVal(RightSide));
-
-
+		SmartDashboard::PutNumber("StraightCorrection", straightCorrection);
 		SmartDashboard::PutData("StrafePID", pid);
 		SmartDashboard::PutNumber("PIDOutput", pidoutput);
-
-		SmartDashboard::PutNumber("strafeDiff", strafeDifference);
-		SmartDashboard::PutNumber("strafeAngleTolerance", strafeAngleTolerance);
-		SmartDashboard::PutNumber("StrafeAngle", strafeAngle);
-		SmartDashboard::PutNumber("StrafeSpeedTolerance", strafeSpeedTolerance);
-		SmartDashboard::PutNumber("RotateTolerance", rotateTolerance);
-
 		strafeSpeed = SmartDashboard::GetNumber("strafeSpeed", 0.8);
 		driveSpeed = SmartDashboard::GetNumber("driveSpeed", 0.8);
 		turnSpeed = SmartDashboard::GetNumber("turnSpeed", 0.6);
@@ -84,6 +85,8 @@
 		p = SmartDashboard::GetNumber("StrafePID/p", 0.8);
 		i = SmartDashboard::GetNumber("StrafePID/i", 0.0);
 		d = SmartDashboard::GetNumber("StrafePID/d", 0.1);
+		straightCorrection = SmartDashboard::PutNumber("StraightCorrection", straightCorrection);
+
 		strafeSpeedTolerance = SmartDashboard::GetNumber("StrafeSpeedTolerance", 0.2);
 		strafeAngleTolerance = SmartDashboard::GetNumber("strafeAngleTolerance", strafeAngleTolerance);
 		rotateTolerance = SmartDashboard::GetNumber("RotateTolerance", rotateTolerance);
@@ -116,7 +119,7 @@
 	void DriveTrain::TankDrive(double left, double right, double strafe){
 		GetValues();
 		PutValues();
-		driveTrain->TankDrive(-left, -right);
+		driveTrain->TankDrive(-left, -right + 0.008);
 		strafe1->Set(ControlMode::PercentOutput, strafe * -strafeSpeed);
 	}
 

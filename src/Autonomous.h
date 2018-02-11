@@ -53,6 +53,10 @@ private:
 	turnToSwitchAngle = 90,
 	driveToSwitchDist = 2500,
 
+	scaleSideDist = 32500,
+	faceScaleAngle = 69,
+	scaleAdjustDist = 500,
+
 	autoState = InitialStart;
 
 	int drivePastDist = 7000,

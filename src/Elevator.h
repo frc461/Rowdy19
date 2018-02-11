@@ -34,7 +34,7 @@ private:
 	DoubleSolenoid* elevatorBrake;
 
 	int encoderVal;
-	double raiseSpeed = 0.3, lowerSpeed = 0.1;
+	double raiseSpeed = 0.3, lowerSpeed = 0.2;
 	double heightTolerance = 250;
 	double intakeExchangeHeight = 200;
 	double switchHeight = 1300;
