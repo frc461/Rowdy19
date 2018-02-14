@@ -21,9 +21,15 @@ Elevator::Elevator(Sensors &srs) {
 }
 
 void Elevator::goUp(){
+
+	int distFromTop = elevatorTop - encoderVal, supplementalSpeed = 0;
+//	if(distFromTop < slowTopThreshold){
+//		supplementalSpeed =  distFromTop / slowTopThreshold * slowDownMultiplier;
+//	}
+
 	if(encoderVal < 23000){
 		BrakeRelease();
-		elevator1->Set(ControlMode::PercentOutput, -raiseSpeed);
+		elevator1->Set(ControlMode::PercentOutput, -raiseSpeed + supplementalSpeed);
 	}
 }
 
@@ -33,9 +39,14 @@ void Elevator::move(double speed){
 }
 
 void Elevator::goDown(){
+	int distFromTop = elevatorTop - encoderVal, supplementalSpeed = 0;
+	//	if(distFromTop < slowTopThreshold){
+	//		supplementalSpeed =  distFromTop / slowTopThreshold * slowDownMultiplier;
+	//	}
+
 	if(!sensors->getElevatorBottom()){
 		BrakeRelease();
-		elevator1->Set(ControlMode::PercentOutput, lowerSpeed);
+		elevator1->Set(ControlMode::PercentOutput, lowerSpeed - supplementalSpeed);
 	}
 }
 
@@ -106,7 +117,12 @@ void Elevator::postValues(){
 	SmartDashboard::PutNumber("Elevator/switchHeight", switchHeight);
 	SmartDashboard::PutNumber("Elevator/scaleHeight", scaleHeight);
 	SmartDashboard::PutNumber("Elevator/climbHeight", climbHeight);
+	SmartDashboard::PutNumber("Elevator/elevatorTop", elevatorTop);
 	SmartDashboard::PutNumber("Elevator/eleEncoder", elevator1->GetSelectedSensorPosition(0));
+	SmartDashboard::PutNumber("Elevator/moveUpSpeedThreshold", slowTopThreshold);
+	SmartDashboard::PutNumber("Elevator/moveDownSpeedThreshold", slowBottomThreshold);
+	SmartDashboard::PutNumber("Elevator/slowDownMultiplier", slowDownMultiplier);
+
 }
 
 void Elevator::periodicValues(){
@@ -117,10 +133,16 @@ void Elevator::periodicValues(){
 	encoderVal = elevator1->GetSelectedSensorPosition(0);
 	SmartDashboard::PutNumber("Elevator/elevatorEncoder", encoderVal);
 
+
 	heightTolerance = SmartDashboard::GetNumber("Elevator/heightTolerance", heightTolerance);
 	raiseSpeed = SmartDashboard::GetNumber("Elevator/raiseSpeed", raiseSpeed);
 	lowerSpeed = SmartDashboard::GetNumber("Elevator/lowerSpeed", lowerSpeed);
 
+	slowTopThreshold = SmartDashboard::GetNumber("Elevator/slowTopThreshold", slowTopThreshold);
+	slowBottomThreshold = SmartDashboard::GetNumber("Elevator/slowBottomThreshold", slowBottomThreshold);
+	slowDownMultiplier = SmartDashboard::GetNumber("Elevator/slowDownMultiplier", slowDownMultiplier);
+
+	elevatorTop = SmartDashboard::GetNumber("Elevator/elevatorTop", elevatorTop);
 	intakeExchangeHeight = SmartDashboard::GetNumber("Elevator/intakeExchangeHeight", intakeExchangeHeight);
 	switchHeight = SmartDashboard::GetNumber("Elevator/switchHeight", switchHeight);
 	scaleHeight = SmartDashboard::GetNumber("Elevator/scaleHeight", scaleHeight);

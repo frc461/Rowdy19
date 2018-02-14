@@ -36,7 +36,11 @@ private:
 	DoubleSolenoid* elevatorBrake;
 	Sensors* sensors;
 
-	int encoderVal;
+	int encoderVal,
+	slowTopThreshold = 500,
+	slowBottomThreshold = 500,
+	slowDownMultiplier = 0.2,
+	elevatorTop = 2300;
 	double raiseSpeed = 0.3, lowerSpeed = 0.2;
 	double heightTolerance = 250;
 	double intakeExchangeHeight = 200;

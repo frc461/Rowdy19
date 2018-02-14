@@ -8,6 +8,7 @@
 #include "Autonomous.h"
 
 Autonomous::Autonomous(DriveTrain& dt, Sensors& srs, ShuffleboardPoster& boardHandler, Elevator& elevatorP, Intake& intakeP) {
+
 	autoState = InitialStart;
 	driveTrain = &dt;
 	sensors = &srs;

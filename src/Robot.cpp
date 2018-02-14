@@ -3,7 +3,7 @@
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
-/* Author: Hank Krutulis - 461                                          */
+/* Author: Hank Krutulis - 461                                                */
 /* Created: Jan 13, 2017                                                      */
 /*----------------------------------------------------------------------------*/
 
@@ -67,7 +67,7 @@ public:
 		boardHandler->ShufflePeriodic();
 		driveTrain->ResetEncoders();
 		auton->SetAutoState(InitialStart);
-
+		intake->PeriodicValues();
 		intake->resetSpitCount();
 	}
 
@@ -77,6 +77,7 @@ public:
 			intake->retractIntake();
 		}
 		boardHandler->ShufflePeriodic();
+		intake->PeriodicValues();
 		auton->RunAuto();
 	}
 
