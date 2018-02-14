@@ -2,7 +2,7 @@
  * Sensors.h
  *
  *  Created on: Jan 24, 2018
- *      Author: hank
+ *      Author: Hank Krutulis - 461
  */
 
 #ifndef SRC_SENSORS_H_
@@ -17,11 +17,12 @@ public:
 
 	int GetGyroAngle();
 	int GetElevatorEncoders();
+	bool getElevatorBottom();
 	void ResetGyro();
-	void ResetEncoders();
 
 private:
 ADXRS450_Gyro *gyro;
+DigitalInput *elevatorBottom;
 
 };
 

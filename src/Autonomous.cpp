@@ -2,7 +2,7 @@
  * Autonomous.cpp
  *
  *  Created on: Jan 23, 2018
- *      Author: hank
+ *      Author: Hank Krutulis - 461
  */
 
 #include "Autonomous.h"
@@ -15,18 +15,17 @@ Autonomous::Autonomous(DriveTrain& dt, Sensors& srs, ShuffleboardPoster& boardHa
 	board = &boardHandler;
 	intake = &intakeP;
 	AutonPostValues();
-	SwitchPeriodicValues();
-	ScalePeriodicValues();
+	AutonPeriodicValues();
 	target = board->GetTarget();
 
 	startingPosition = board->GetStartingPosition();
-
 }
 
 void Autonomous::RunAuto(){
+	AutonPeriodicValues();
 	if(target == Scale){
 		if(startingPosition == CenterPosition){
-//			ScaleFromCenter();
+			ScaleFromCenter();
 			printf("Scale from center");
 		} else {
 			ScaleFromSide();
@@ -42,11 +41,11 @@ void Autonomous::RunAuto(){
 				printf("Switch left from center");
 			}
 		} else {
-//			SwitchFromSide();
+			SwitchFromSide();
 			printf("Switch from side");
 		}
 	} else {
-//		DefaultCross();
+		DefaultCross();
 		printf("Defaulting");
 	}
 }
@@ -57,6 +56,8 @@ void Autonomous::SetAutoState(int pAutoState){
 
 void Autonomous::AutonPostValues(){
 	SmartDashboard::PutNumber("Auton/initDist", initDist);
+	SmartDashboard::PutNumber("Auton/autoDriveSpeed", -0.8);
+
 	SmartDashboard::PutNumber("Auton/Switch/lTurn1", lTurn1);
 	SmartDashboard::PutNumber("Auton/Switch/lDrive2", lDrive2);
 	SmartDashboard::PutNumber("Auton/Switch/lTurn2", lTurn2);
@@ -67,6 +68,10 @@ void Autonomous::AutonPostValues(){
 	SmartDashboard::PutNumber("Auton/Switch/rDrive3", rDrive3);
 	SmartDashboard::PutNumber("Auton/Switch/defaultDist", defaultDist);
 
+	SmartDashboard::PutNumber("Auton/Switch/faceSwitchAngleRight", faceSwitchAngleRight);
+	SmartDashboard::PutNumber("Auton/Switch/faceSwitchAngleLeft", faceSwitchAngleLeft);
+	SmartDashboard::PutNumber("Auton/Switch/driveToSwitchDist", driveToSwitchDist);
+
 	SmartDashboard::PutNumber("Auton/Scale/scaleSideDist", scaleSideDist);
 	SmartDashboard::PutNumber("Auton/Scale/faceScaleAngle", faceScaleAngle);
 	SmartDashboard::PutNumber("Auton/Scale/scaleAdjustDist", scaleAdjustDist);
@@ -76,7 +81,9 @@ void Autonomous::AutonPostValues(){
 
 }
 
-void Autonomous::SwitchPeriodicValues(){
+
+
+void Autonomous::AutonPeriodicValues(){
 	initDist = SmartDashboard::GetNumber("Auton/initDist", initDist);
 	lTurn1 = SmartDashboard::GetNumber("Auton/Switch/lTurn1", lTurn1);
 	lTurn2 =  SmartDashboard::GetNumber("Auton/Switch/lTurn2", lTurn2);
@@ -88,13 +95,10 @@ void Autonomous::SwitchPeriodicValues(){
 	rDrive3 = SmartDashboard::GetNumber("Auton/Switch/rDrive3",rDrive3);
 	defaultDist = SmartDashboard::GetNumber("Auton/defaultDist", defaultDist);
 
-	scaleSideDist = SmartDashboard::PutNumber("Auton/Scale/scaleSideDist", scaleSideDist);
-	faceScaleAngle = SmartDashboard::PutNumber("Auton/Scale/faceScaleAngle", faceScaleAngle);
-	scaleAdjustDist = SmartDashboard::PutNumber("Auton/Scale/scaleAdjustDist", scaleAdjustDist);
-	AutonPeriodicValues();
-}
+	scaleSideDist = SmartDashboard::GetNumber("Auton/Scale/scaleSideDist", scaleSideDist);
+	faceScaleAngle = SmartDashboard::GetNumber("Auton/Scale/faceScaleAngle", faceScaleAngle);
+	scaleAdjustDist = SmartDashboard::GetNumber("Auton/Scale/scaleAdjustDist", scaleAdjustDist);
 
-void Autonomous::AutonPeriodicValues(){
 	autoDriveSpeed = SmartDashboard::GetNumber("Auton/autoDriveSpeed", -0.75);
 	autoTurnSpeed = SmartDashboard::GetNumber("Auton/autoTurnSpeed", -0.6);
 	SmartDashboard::PutNumber("Auton/autoState", autoState);
@@ -105,15 +109,11 @@ void Autonomous::AutonPeriodicValues(){
 	startingPosition = board->GetStartingPosition();
 }
 
-void Autonomous::ScalePeriodicValues(){
-	SmartDashboard::PutNumber("Auton/Scale/autoDriveSpeed", -0.8);
-}
-
 void Autonomous::SwitchFromSide(){
 	if(ourSwitch == startingPosition){
 		switch (autoState) {
 		case(InitialStart):
-				if(encoderDist < switchSideDist){
+				if(encoderDist > -switchSideDist){
 					driveTrain->ArcadeDrive(autoDriveSpeed, 0.0, 0.0);
 				} else {
 					autoState = FaceSwitch;
@@ -121,9 +121,9 @@ void Autonomous::SwitchFromSide(){
 				}
 				break;
 		case(FaceSwitch):
-				if(ourSwitch == RightSide && gyroAngle < turnToSwitchAngle){
+				if(ourSwitch == RightSide && gyroAngle < faceSwitchAngleRight){
 					driveTrain->ArcadeDrive(0.0, autoTurnSpeed, 0.0);
-				} else if (ourSwitch == LeftSide && gyroAngle > -turnToSwitchAngle){
+				} else if (ourSwitch == LeftSide && gyroAngle > -faceSwitchAngleLeft){
 					driveTrain->ArcadeDrive(0.0, -autoTurnSpeed, 0.0);
 				} else {
 					autoState = DriveSideSwitch;
@@ -134,7 +134,7 @@ void Autonomous::SwitchFromSide(){
 				if(encoderDist < driveToSwitchDist){
 					driveTrain->ArcadeDrive(autoDriveSpeed, 0.0, 0.0);
 				} else {
-					autoState = RaiseElevator;
+					autoState = DeployCube;
 
 				}
 			break;
@@ -173,7 +173,7 @@ void Autonomous::ScaleFromSide(){
 			break;
 		case(TurnTowardsScale):
 			if(gyroAngle < faceScaleAngle){
-				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
+				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
 				driveTrain->ResetEncoders();
 			} else {
 				autoState = DriveTowardsScale;
@@ -184,7 +184,7 @@ void Autonomous::ScaleFromSide(){
 				if(encoderDist > -scaleAdjustDist){
 					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
 				} else {
-					autoState = FaceScale;
+					autoState = DeployCube;
 					sensors->ResetGyro();
 				}
 			break;
@@ -197,7 +197,7 @@ void Autonomous::ScaleFromSide(){
 
 void Autonomous::SwitchRightAuto(){
 
-	SwitchPeriodicValues();
+	AutonPeriodicValues();
 	int rightEncDist = driveTrain->GetEncoderVal(RightSide);
 	int gyroAngle = sensors->GetGyroAngle();
 
@@ -259,7 +259,7 @@ void Autonomous::SwitchRightAuto(){
 void Autonomous::SwitchLeftAuto(){
 	int rightEncDist = driveTrain->GetEncoderVal(RightSide);
 	int gyroAngle = sensors->GetGyroAngle();
-	SwitchPeriodicValues();
+	AutonPeriodicValues();
 
     	switch (autoState) {
     		case (InitialStart):

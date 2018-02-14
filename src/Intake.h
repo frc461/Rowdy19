@@ -2,9 +2,10 @@
  * Intake.h
  *
  *  Created on: Jan 27, 2018
- *      Author: hank
+ *      Author: Hank Krutulis - 461
  */
 #include <WPILib.h>
+#include "Elevator.h"
 #include "ctre/Phoenix.h"
 
 #ifndef SRC_INTAKE_H_
@@ -33,7 +34,8 @@ public:
 	void extendIntake();
 
 
-	void PostGetValues();
+	void InitValues();
+	void PeriodicValues();
 
 	void allOff();
 	int getSolenoid();

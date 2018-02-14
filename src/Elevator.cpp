@@ -2,27 +2,29 @@
  * Elevator.cpp
  *
  *  Created on: Jan 27, 2018
- *      Author: hank
+ *      Author: Hank Krutulis - 461
  */
-
 #include <Elevator.h>
-#include "Robot.h"
 
-Elevator::Elevator() {
+
+Elevator::Elevator(Sensors &srs) {
 	elevator1 = new TalonSRX(Elevator1CAN);
 	elevator2 = new VictorSPX(Elevator2CAN);
 	elevator3 = new VictorSPX(Elevator3CAN);
 	elevatorBrake = new DoubleSolenoid(ElevatorBrake1, ElevatorBrake2);
+	sensors = &srs;
 
-	postValues();
 	elevator2->Follow(*elevator1);
 	elevator3->Follow(*elevator1);
 	encoderVal = elevator1->GetSelectedSensorPosition(0);
+	postValues();
 }
 
 void Elevator::goUp(){
-	BrakeRelease();
-	elevator1->Set(ControlMode::PercentOutput, -raiseSpeed);
+	if(encoderVal < 23000){
+		BrakeRelease();
+		elevator1->Set(ControlMode::PercentOutput, -raiseSpeed);
+	}
 }
 
 void Elevator::move(double speed){
@@ -31,8 +33,10 @@ void Elevator::move(double speed){
 }
 
 void Elevator::goDown(){
-	BrakeRelease();
-	elevator1->Set(ControlMode::PercentOutput, lowerSpeed);
+	if(!sensors->getElevatorBottom()){
+		BrakeRelease();
+		elevator1->Set(ControlMode::PercentOutput, lowerSpeed);
+	}
 }
 
 void Elevator::Brake(){
@@ -88,22 +92,28 @@ void Elevator::haltMotion(){
 	Brake();
 }
 
-void Elevator::resetEncoder(){}
+void Elevator::resetEncoder(){
+	elevator1->SetSelectedSensorPosition(0,0,0);
+}
 
 void Elevator::postValues(){
 	SmartDashboard::PutNumber("Elevator/raiseSpeed", raiseSpeed);
 	SmartDashboard::PutNumber("Elevator/lowerSpeed", lowerSpeed);
 	SmartDashboard::PutNumber("Elevator/heightTolerance", heightTolerance);
-	SmartDashboard::PutNumber("Elevator/elevatorEncoder", encoderVal);
+	SmartDashboard::PutNumber("Elevator/encoderVal", encoderVal);
 
 	SmartDashboard::PutNumber("Elevator/intakeExchangeHeight", intakeExchangeHeight);
 	SmartDashboard::PutNumber("Elevator/switchHeight", switchHeight);
 	SmartDashboard::PutNumber("Elevator/scaleHeight", scaleHeight);
 	SmartDashboard::PutNumber("Elevator/climbHeight", climbHeight);
-	SmartDashboard::PutNumber("Elevator/EleEncoder", elevator1->GetSelectedSensorPosition(0));
+	SmartDashboard::PutNumber("Elevator/eleEncoder", elevator1->GetSelectedSensorPosition(0));
 }
 
 void Elevator::periodicValues(){
+	if(sensors->getElevatorBottom()){
+		resetEncoder();
+	}
+
 	encoderVal = elevator1->GetSelectedSensorPosition(0);
 	SmartDashboard::PutNumber("Elevator/elevatorEncoder", encoderVal);
 

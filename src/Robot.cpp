@@ -3,7 +3,7 @@
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
-/* Author:Hank Krutulis                                                       */
+/* Author: Hank Krutulis - 461                                          */
 /* Created: Jan 13, 2017                                                      */
 /*----------------------------------------------------------------------------*/
 
@@ -53,10 +53,11 @@ public:
 		rightJoystick = new Joystick(1);
 		throttle = new Joystick(2);
 
+
 		sensors = new Sensors();
 		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
-		elevator = new Elevator();
+		elevator = new Elevator(*sensors);
 		intake = new Intake();
 		auton = new Autonomous(*driveTrain, *sensors, *boardHandler, *elevator, *intake);
 	}
@@ -66,12 +67,15 @@ public:
 		boardHandler->ShufflePeriodic();
 		driveTrain->ResetEncoders();
 		auton->SetAutoState(InitialStart);
-		intake->retractIntake();
+
 		intake->resetSpitCount();
 	}
 
 
 	void AutonomousPeriodic() {
+		if(!sensors->getElevatorBottom()){
+			intake->retractIntake();
+		}
 		boardHandler->ShufflePeriodic();
 		auton->RunAuto();
 	}
@@ -81,7 +85,7 @@ public:
 		intake->extendIntake();
 		intakeIn = false;
 		elevator->BrakeRelease();
-//		intake->resetSpitCount();
+		intake->resetSpitCount();
 	}
 
 	void TeleopPeriodic() {
@@ -89,7 +93,7 @@ public:
 		elevator->periodicValues();
 
 		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
-		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
+//		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
 		driveTrain->ArcadeDrive(forwardR, rotate, strafe);
@@ -124,6 +128,7 @@ public:
 		if (rightJoystick->GetRawButton(topLeftLeft)){
 			driveTrain->ResetEncoders();
 			sensors->ResetGyro();
+			elevator->resetEncoder();
 		}
 
 		if (throttle->GetRawButton(rightThumbOrange)){

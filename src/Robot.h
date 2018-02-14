@@ -2,7 +2,7 @@
  * Robot.h
  *
  *  Created on: Jan 20, 2018
- *      Author: hank
+ *      Author: Hank Krutulis - 461
  */
 
 #ifndef SRC_ROBOT_H_

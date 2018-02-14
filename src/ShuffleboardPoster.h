@@ -35,7 +35,6 @@ private:
 	SendableChooser<int> target;
 	SendableChooser<int> startingPosition;
 
-
 	std::string gameData;
 	DriveTrain* driveTrain;
 	Sensors* sensors;	

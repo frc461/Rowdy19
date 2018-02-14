@@ -6,7 +6,6 @@
  */
 
 #include <Intake.h>
-#include "Robot.h"
 
 Intake::Intake() {
 	intakeExtension = new DoubleSolenoid(Intake1, Intake2);
@@ -97,7 +96,10 @@ void Intake::allOff(){
 	intakeInRight->Set(0.0);
 }
 
-void Intake::PostGetValues(){
+void Intake::InitValues(){
 	SmartDashboard::PutNumber("Intake/intakeSpeed", intakeSpeed);
-	intakeSpeed = SmartDashboard::GetNumber("Intake/intakeSpeed", 0.8);
+}
+
+void Intake::PeriodicValues(){
+	intakeSpeed = SmartDashboard::PutNumber("Intale/intakeSpeed", 0.8);
 }

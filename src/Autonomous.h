@@ -2,7 +2,7 @@
  * Autonomous.h
  *
  *  Created on: Jan 23, 2018
- *      Author: hank
+ *      Author: Hank Krutulis - 461
  */
 
 #ifndef AUTONOMOUS_H_
@@ -25,8 +25,6 @@ public:
 	void SwitchFromSide();
 	void ScaleFromSide();
 	void ScaleFromCenter();
-	void SwitchPeriodicValues();
-	void ScalePeriodicValues();
 	void PutShuffleboardValues();
 	void SwitchRightAuto();
 	void SwitchLeftAuto();
@@ -49,8 +47,9 @@ private:
 	rDrive2 = 8000,
 	rDrive3 = 2000,
 	defaultDist = 1750,
-	switchSideDist = 4000,
-	turnToSwitchAngle = 90,
+	switchSideDist = 12000,
+	faceSwitchAngleRight = 45,
+	faceSwitchAngleLeft = -35,
 	driveToSwitchDist = 2500,
 
 	scaleSideDist = 32500,

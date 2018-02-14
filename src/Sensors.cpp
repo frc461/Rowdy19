@@ -2,7 +2,7 @@
  * Sensors.cpp
  *
  *  Created on: Jan 24, 2018
- *      Author: hank
+ *      Author: Hank Krutulis - 461
  */
 
 #include <Sensors.h>
@@ -11,20 +11,17 @@
 
 Sensors::Sensors() {
 	gyro = new ADXRS450_Gyro();
+	elevatorBottom = new DigitalInput(9);
 }
-
 
 int Sensors::GetGyroAngle(){
 	return gyro->GetAngle();
 }
 
-int Sensors::GetElevatorEncoders(){return 0;}
+bool Sensors::getElevatorBottom(){
+	return elevatorBottom->Get();
+}
 
 void Sensors::ResetGyro(){
 	gyro->Reset();
-}
-
-void Sensors::ResetEncoders(){
-//	leftDriveEncoder->Reset();
-//	rightDriveEncoder->Reset();
 }

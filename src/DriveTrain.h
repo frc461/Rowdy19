@@ -2,7 +2,7 @@
  * DriveTrain.h
  *
  *  Created on: Jan 20, 2018
- *      Author: Hank Krutulis
+ *      Author: Hank Krutulis - 461
  */
 
 #ifndef DRIVETRAIN_H_
@@ -19,8 +19,8 @@ public:
 	DriveTrain(Sensors&);
 	void ArcadeDrive(double, double, double);
 	void TankDrive(double, double, double);
-	void PutValues();
-	void GetValues();
+	void InitValues();
+	void PeriodicValues();
 	void CalculateStrafeRotate(double);
 	void InitPID();
 	int GetEncoderVal(int);

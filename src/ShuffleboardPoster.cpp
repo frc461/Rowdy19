@@ -43,6 +43,7 @@ int ShuffleboardPoster::GetTarget(){
 
 void ShuffleboardPoster::ShufflePeriodic(){
 	SmartDashboard::PutNumber("gyro", sensors->GetGyroAngle());
+	SmartDashboard::PutBoolean("ElevatorSwitch", sensors->getElevatorBottom());
 	SmartDashboard::PutNumber("LeftEncoderDist", driveTrain->GetEncoderVal(LeftSide));
 	SmartDashboard::PutNumber("RightEncoderDist", driveTrain->GetEncoderVal(RightSide));
 //	SmartDashboard::PutData("PDP", driveTrain->GetPDP());

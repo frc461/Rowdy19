@@ -2,7 +2,7 @@
  * DriveTrain.cpp
  *
  *  Created on: Jan 20, 2018
- *      Author: Hank Krutulis
+ *      Author: Hank Krutulis - 461
  */
 
 #include <WPILib.h>
@@ -40,11 +40,11 @@
 		strafe2->Follow(*strafe1);
 
 		InitPID();
-		PutValues();
-		GetValues();
+		InitValues();
+		PeriodicValues();
 	}
 
-	void DriveTrain::PutValues(){
+	void DriveTrain::InitValues(){
 		SmartDashboard::PutNumber("strafeSpeed", 0.8);
 		SmartDashboard::PutNumber("driveSpeed", 0.8);
 		SmartDashboard::PutNumber("turnSpeed", 0.8);
@@ -71,7 +71,7 @@
 		rightDrive1->SetSelectedSensorPosition(0,0,0);
 	}
 
-	void DriveTrain::GetValues(){
+	void DriveTrain::PeriodicValues(){
 
 		SmartDashboard::PutNumber("LeftEncoderValue", leftDrive1->GetSelectedSensorPosition(0));
 		SmartDashboard::PutNumber("RightEncoderValue", GetEncoderVal(RightSide));
@@ -94,7 +94,7 @@
 	}
 
 	void DriveTrain::ArcadeDrive(double forward, double rotate, double strafe){
-		GetValues();
+		PeriodicValues();
 		SmartDashboard::PutNumber("Strafe", strafe);
 		if (rotate > rotateTolerance || rotate < -rotateTolerance){
 			strafeAngle = sensors->GetGyroAngle();
@@ -117,8 +117,7 @@
 	}	
 
 	void DriveTrain::TankDrive(double left, double right, double strafe){
-		GetValues();
-		PutValues();
+		PeriodicValues();
 		driveTrain->TankDrive(-left, -right + 0.008);
 		strafe1->Set(ControlMode::PercentOutput, strafe * -strafeSpeed);
 	}

@@ -2,17 +2,19 @@
  * Elevator.h
  *
  *  Created on: Jan 27, 2018
- *      Author: hank
+ *      Author: Hank Krutulis - 461
  */
 #include <WPILib.h>
 #include "ctre/Phoenix.h"
+#include "Sensors.h"
+#include "Robot.h"
 
 #ifndef SRC_ELEVATOR_H_
 #define SRC_ELEVATOR_H_
 
 class Elevator {
 public:
-	Elevator();
+	Elevator(Sensors&);
 	void goUp();
 	void goDown();
 	void move(double);
@@ -32,6 +34,7 @@ private:
 	VictorSPX* elevator2;
 	VictorSPX* elevator3;
 	DoubleSolenoid* elevatorBrake;
+	Sensors* sensors;
 
 	int encoderVal;
 	double raiseSpeed = 0.3, lowerSpeed = 0.2;
