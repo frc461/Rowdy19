@@ -159,41 +159,48 @@ void Autonomous::ScaleFromCenter(){
 }
 
 void Autonomous::ScaleFromSide(){
-	if(false){
+	if(!elevatorZeroed){
+		elevator->goDown();
+		if(sensors->getElevatorBottom()){
+			elevatorZeroed = true;
+		}
+	} else if (elevator->encoderValue() < scaleHeight) {
 		elevator->goUp();
+	} else {
+		elevator->haltMotion();
 	}
 
-	switch (autoState) {
-		case(InitialStart):
-			if(encoderDist > -scaleSideDist){
-				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-			} else {
-				autoState = TurnTowardsScale;
-				sensors->ResetGyro();
-			}
-			break;
-		case(TurnTowardsScale):
-			if(gyroAngle < faceScaleAngle){
-				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
-				driveTrain->ResetEncoders();
-			} else {
-				autoState = DriveTowardsScale;
-				driveTrain->ResetEncoders();
-			}
-			break;
-		case(DriveTowardsScale):
-				if(encoderDist > -scaleAdjustDist){
-					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-				} else {
-					autoState = DeployCube;
-					sensors->ResetGyro();
-				}
-			break;
-		case(DeployCube):
-			intake->spitCube();
-			break;
-
-	}
+//	switch (autoState) {
+//		case(InitialStart):
+//			if(encoderDist > -scaleSideDist){
+//				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed * (1.025 + (gyroAngle / 45)), 0.0);
+//			} else {
+//				autoState = TurnTowardsScale;
+//				sensors->ResetGyro();
+//			}
+//			break;
+//		case(TurnTowardsScale):
+//			if(gyroAngle < faceScaleAngle){
+//				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
+//				driveTrain->ResetEncoders();
+//			} else {
+//				autoState = DriveTowardsScale;
+//				driveTrain->ResetEncoders();
+//			}
+//			break;
+//		case(DriveTowardsScale):
+//				if(encoderDist > -scaleAdjustDist){
+//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+//				} else {
+//					autoState = DeployCube;
+//					sensors->ResetGyro();
+//				}
+//			break;
+//		case(DeployCube):
+//			intake->spitCube();
+//			break;
+//
+//	}
 }
 
 void Autonomous::SwitchRightAuto(){
@@ -314,6 +321,10 @@ void Autonomous::SwitchLeftAuto(){
     			intake->spitCube();
     			break;
     	}
+}
+
+void Autonomous::ResetZeroed(){
+	elevatorZeroed = false;
 }
 
 void Autonomous::DefaultCross(){

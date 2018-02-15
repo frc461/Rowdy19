@@ -118,7 +118,7 @@
 
 	void DriveTrain::TankDrive(double left, double right, double strafe){
 		PeriodicValues();
-		driveTrain->TankDrive(-left, -right + 0.008);
+		driveTrain->TankDrive(-left, -right);
 		strafe1->Set(ControlMode::PercentOutput, strafe * -strafeSpeed);
 	}
 

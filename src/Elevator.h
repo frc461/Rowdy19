@@ -26,6 +26,7 @@ public:
 	void resetEncoder();
 	void postValues();
 	void periodicValues();
+	int encoderValue();
 	void Brake();
 	void BrakeRelease();
 
@@ -36,6 +37,7 @@ private:
 	DoubleSolenoid* elevatorBrake;
 	Sensors* sensors;
 
+
 	double encoderVal,
 	slowTopThreshold = 3000,
 	slowBottomThreshold = 5000,
@@ -43,11 +45,11 @@ private:
 	slowDownMultiplierBottom = 0.2,
 	elevatorTop = 23000;
 	double raiseSpeed = 1, lowerSpeed = 0.7;
-	double heightTolerance = 250;
-	double intakeExchangeHeight = 200;
-	double switchHeight = 1300;
-	double scaleHeight = 3500;
-	double climbHeight = 4000;
+	int heightTolerance = 250;
+	int intakeExchangeHeight = 200;
+	int switchHeight = 1300;
+	int scaleHeight = 3500;
+	int climbHeight = 4000;
 };
 
 #endif /* SRC_ELEVATOR_H_ */

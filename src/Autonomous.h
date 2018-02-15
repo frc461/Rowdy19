@@ -30,12 +30,15 @@ public:
 	void SwitchLeftAuto();
 	void SwitchFromMiddle();
 	void Switch();
-
+	void ResetZeroed();
 
 	void DefaultCross();
 	void SetAutoState(int);
 
 private:
+	bool elevatorZeroed = false;
+
+	int scaleHeight = 10000;
 	int encoderDist, gyroAngle,
 	initDist = 5000,
 	lTurn1 = -35,

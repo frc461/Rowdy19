@@ -18,6 +18,7 @@
 
 //Include custom headers
 #include "THRSTMSTRmap.h"
+#include "XboxJoystickMap.h"
 #include "Robot.h"
 #include "DriveTrain.h"
 #include "ShuffleboardPoster.h"
@@ -31,7 +32,7 @@ public:
 	//Controls
 	Joystick *leftJoystick;
 	Joystick *rightJoystick;
-	Joystick *throttle;
+	Joystick *operatorController;
 
 	//Robot parts
 	PowerDistributionPanel *pdp;
@@ -51,7 +52,7 @@ public:
 	void RobotInit() {
 		leftJoystick = new Joystick(0);
 		rightJoystick = new Joystick(1);
-		throttle = new Joystick(2);
+		operatorController = new Joystick(2);
 
 
 		sensors = new Sensors();
@@ -66,16 +67,21 @@ public:
 	void AutonomousInit() override {
 		boardHandler->ShufflePeriodic();
 		driveTrain->ResetEncoders();
+		sensors->ResetGyro();
+		auton->ResetZeroed();
 		auton->SetAutoState(InitialStart);
+		elevator->periodicValues();
 		intake->PeriodicValues();
+		intake->extendIntake();
 		intake->resetSpitCount();
 	}
 
 
 	void AutonomousPeriodic() {
-		if(!sensors->getElevatorBottom()){
-			intake->retractIntake();
-		}
+//		if(!sensors->getElevatorBottom()){
+//			intake->retractIntake();
+//		}
+		elevator->periodicValues();
 		boardHandler->ShufflePeriodic();
 		intake->PeriodicValues();
 		auton->RunAuto();
@@ -99,40 +105,40 @@ public:
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
 		driveTrain->ArcadeDrive(forwardR, rotate, strafe);
 
-		if(throttle->GetRawButton(topLittleFingerButton)){
+		if(operatorController->GetRawButton(XboxButtonX)){
 			intake->takeInAll();
-		} else if (throttle->GetRawButton(topRingFingerButton)){
+		} else if (operatorController->GetRawButton(XboxButtonB)){
 			intake->outputAll();
-		} else if (throttle->GetRawButton(flipOffTop)){
+		} else if (operatorController->GetRawButton(XboxButtonY)){
 			intake->spitInner();
-		} else if (throttle->GetRawButton(flipOffBottom)){
+		} else if (operatorController->GetRawButton(XboxButtonA)){
 			intake->spinRight();
 		} else {
 			intake->allOff();
 		}
 
-		if(throttle->GetRawAxis(paddleTR) > 0){
+		if(operatorController->GetRawAxis(XboxAxisLeftStickY) < 0){
 			elevator->goUp();
-		} else if (throttle->GetRawAxis(paddleTR) < 0){
+		} else if (operatorController->GetRawAxis(XboxAxisLeftStickY) > 0){
 			elevator->goDown();
 		} else {
 			elevator->haltMotion();
 		}
 
-		if (throttle->GetRawButton(axisButton)){
+		if (operatorController->GetRawButton(XboxButtonRightBumper)){
 			if (!previouslyToggled){
 				intakeIn = !intakeIn;
 			}
 		}
-		previouslyToggled = throttle->GetRawButton(axisButton);
+		previouslyToggled = operatorController->GetRawButton(XboxButtonRightBumper);
 
-		if (rightJoystick->GetRawButton(topLeftLeft)){
+		if (operatorController->GetRawButton(XboxButtonLeftBumper)){
 			driveTrain->ResetEncoders();
 			sensors->ResetGyro();
 			elevator->resetEncoder();
 		}
 
-		if (throttle->GetRawButton(rightThumbOrange)){
+		if (operatorController->GetRawButton(rightThumbOrange)){
 			intake->retractIntake();
 		} else {
 			if(intakeIn){

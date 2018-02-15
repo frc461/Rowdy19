@@ -109,6 +109,10 @@ void Elevator::haltMotion(){
 	Brake();
 }
 
+int Elevator::encoderValue(){
+	return encoderVal;
+}
+
 void Elevator::resetEncoder(){
 	elevator1->SetSelectedSensorPosition(0,0,0);
 }
