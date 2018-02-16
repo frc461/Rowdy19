@@ -18,22 +18,31 @@
 class Autonomous {
 public:
 	Autonomous(DriveTrain&, Sensors&, ShuffleboardPoster&, Elevator&, Intake&);
-	void RunAuto();
+	void runAuto();
 
-	void AutonPostValues();
-	void AutonPeriodicValues();
-	void SwitchFromSide();
-	void ScaleFromSide();
-	void ScaleFromCenter();
-	void PutShuffleboardValues();
-	void SwitchRightAuto();
-	void SwitchLeftAuto();
-	void SwitchFromMiddle();
-	void Switch();
-	void ResetZeroed();
+	//Shuffleboard interactions
+	void autonPostValues();
+	void autonPeriodicValues();
 
-	void DefaultCross();
-	void SetAutoState(int);
+	//Switch autons
+	void switchFromSide();
+	void switchRightAuto();
+	void switchLeftAuto();
+	void switchFromMiddle();
+
+	//Scale auton
+	void scaleFromSide();
+	void scaleFromCenter();
+
+	//Emergency auton
+	void defaultCross();
+
+	//Manual data modifiers
+	void resetZeroed();
+	void updateStarts();
+	void setAutoState(int);
+
+
 
 private:
 	bool elevatorZeroed = false;

@@ -13,6 +13,7 @@ Intake::Intake() {
 	intakeInRight = new Talon(RightInIntakePWM);
 	intakeOutLeft = new Spark(LeftOutIntakePWM);
 	intakeOutRight = new Spark(RightOutIntakePWM);
+	putValues();
 }
 
 void Intake::takeInOuter(){
@@ -96,10 +97,10 @@ void Intake::allOff(){
 	intakeInRight->Set(0.0);
 }
 
-void Intake::InitValues(){
+void Intake::putValues(){
 	SmartDashboard::PutNumber("Intake/intakeSpeed", intakeSpeed);
 }
 
-void Intake::PeriodicValues(){
+void Intake::periodicValues(){
 	intakeSpeed = SmartDashboard::PutNumber("Intale/intakeSpeed", 0.8);
 }

@@ -14,7 +14,7 @@ Sensors::Sensors() {
 	elevatorBottom = new DigitalInput(9);
 }
 
-int Sensors::GetGyroAngle(){
+int Sensors::getGyroAngle(){
 	return gyro->GetAngle();
 }
 
@@ -22,6 +22,6 @@ bool Sensors::getElevatorBottom(){
 	return elevatorBottom->Get();
 }
 
-void Sensors::ResetGyro(){
+void Sensors::resetGyro(){
 	gyro->Reset();
 }

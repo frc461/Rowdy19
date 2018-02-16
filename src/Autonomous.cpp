@@ -15,46 +15,46 @@ Autonomous::Autonomous(DriveTrain& dt, Sensors& srs, ShuffleboardPoster& boardHa
 	elevator = &elevatorP;
 	board = &boardHandler;
 	intake = &intakeP;
-	AutonPostValues();
-	AutonPeriodicValues();
-	target = board->GetTarget();
-	startingPosition = board->GetStartingPosition();
+	autonPostValues();
+	autonPeriodicValues();
+	target = board->getTarget();
+	startingPosition = board->getStartingPosition();
 }
 
-void Autonomous::RunAuto(){
-	AutonPeriodicValues();
+void Autonomous::runAuto(){
+	autonPeriodicValues();
 	if(target == Scale){
 		if(startingPosition == CenterPosition){
-			ScaleFromCenter();
+			scaleFromCenter();
 			printf("Scale from center");
 		} else {
-			ScaleFromSide();
+			scaleFromSide();
 			printf("Scale from side\n");
 		}
 	} else if(target == autoTarget::Switch){
 		if(startingPosition == CenterPosition){
-			if(board->GetOurSwitch() == RightSide){
-				SwitchRightAuto();
+			if(board->getOurSwitch() == RightSide){
+				switchRightAuto();
 				printf("Switch right from center\n");
 			} else{
-				SwitchLeftAuto();
+				switchLeftAuto();
 				printf("Switch left from center");
 			}
 		} else {
-			SwitchFromSide();
+			switchFromSide();
 			printf("Switch from side");
 		}
 	} else {
-		DefaultCross();
+		defaultCross();
 		printf("Defaulting");
 	}
 }
 
-void Autonomous::SetAutoState(int pAutoState){
+void Autonomous::setAutoState(int pAutoState){
 	autoState = pAutoState;
 }
 
-void Autonomous::AutonPostValues(){
+void Autonomous::autonPostValues(){
 	SmartDashboard::PutNumber("Auton/initDist", initDist);
 	SmartDashboard::PutNumber("Auton/autoDriveSpeed", -0.8);
 
@@ -81,9 +81,7 @@ void Autonomous::AutonPostValues(){
 
 }
 
-
-
-void Autonomous::AutonPeriodicValues(){
+void Autonomous::autonPeriodicValues(){
 	initDist = SmartDashboard::GetNumber("Auton/initDist", initDist);
 	lTurn1 = SmartDashboard::GetNumber("Auton/Switch/lTurn1", lTurn1);
 	lTurn2 =  SmartDashboard::GetNumber("Auton/Switch/lTurn2", lTurn2);
@@ -102,41 +100,40 @@ void Autonomous::AutonPeriodicValues(){
 	autoDriveSpeed = SmartDashboard::GetNumber("Auton/autoDriveSpeed", -0.75);
 	autoTurnSpeed = SmartDashboard::GetNumber("Auton/autoTurnSpeed", -0.6);
 	SmartDashboard::PutNumber("Auton/autoState", autoState);
-	SmartDashboard::PutNumber("gyro", sensors->GetGyroAngle());
 
-	ourSwitch = board->GetOurSwitch();
-	ourScale = board->GetOurScale();
 
-	encoderDist = driveTrain->GetEncoderVal(RightSide);
-	gyroAngle = sensors->GetGyroAngle();
-	target = board->GetTarget();
-	startingPosition = board->GetStartingPosition();
+	ourSwitch = board->getOurSwitch();
+	ourScale = board->getOurScale();
+
+	encoderDist = driveTrain->getEncoderVal(RightSide);
+	gyroAngle = sensors->getGyroAngle();
+	SmartDashboard::PutNumber("Auton/gyro", gyroAngle);
 }
 
-void Autonomous::SwitchFromSide(){
+void Autonomous::switchFromSide(){
 	if(ourSwitch == startingPosition){
 		switch (autoState) {
 		case(InitialStart):
 				if(encoderDist > -switchSideDist){
-					driveTrain->ArcadeDrive(autoDriveSpeed, 0.0, 0.0);
+					driveTrain->arcadeDrive(autoDriveSpeed, 0.0, 0.0);
 				} else {
 					autoState = FaceSwitch;
-					sensors->ResetGyro();
+					sensors->resetGyro();
 				}
 				break;
 		case(FaceSwitch):
 				if(ourSwitch == RightSide && gyroAngle < faceSwitchAngleRight){
-					driveTrain->ArcadeDrive(0.0, autoTurnSpeed, 0.0);
+					driveTrain->arcadeDrive(0.0, autoTurnSpeed, 0.0);
 				} else if (ourSwitch == LeftSide && gyroAngle > -faceSwitchAngleLeft){
-					driveTrain->ArcadeDrive(0.0, -autoTurnSpeed, 0.0);
+					driveTrain->arcadeDrive(0.0, -autoTurnSpeed, 0.0);
 				} else {
 					autoState = DriveSideSwitch;
-					driveTrain->ResetEncoders();
+					driveTrain->resetEncoders();
 				}
 			break;
 		case(DriveSideSwitch):
 				if(encoderDist < driveToSwitchDist){
-					driveTrain->ArcadeDrive(autoDriveSpeed, 0.0, 0.0);
+					driveTrain->arcadeDrive(autoDriveSpeed, 0.0, 0.0);
 				} else {
 					autoState = DeployCube;
 
@@ -157,11 +154,127 @@ void Autonomous::SwitchFromSide(){
 	}
 }
 
-void Autonomous::ScaleFromCenter(){
+void Autonomous::switchRightAuto(){
+
+	autonPeriodicValues();
+
+    	switch (autoState) {
+    		case (InitialStart):
+    			if (encoderDist > -initDist) {
+    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+    			} else {
+    				sensors->resetGyro();
+    				autoState = TurnDownMiddle;
+    			}
+    			break;
+
+    		case (TurnDownMiddle):
+    			if (gyroAngle < rTurn1) {
+    				driveTrain->tankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
+    			} else {
+    				driveTrain->resetEncoders();
+    				autoState = DriveDiagonal;
+    			}
+    			break;
+
+    		case (DriveDiagonal):
+    			if (encoderDist > -rDrive2) {
+    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+    			} else {
+    				sensors->resetGyro();
+    				driveTrain->resetEncoders();
+    				autoState = FaceSwitch;
+    			}
+			break;
+
+    		case (FaceSwitch):
+    			if (gyroAngle > rTurn2) {
+    				driveTrain->tankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
+    				driveTrain->resetEncoders();
+    			} else {
+    				driveTrain->resetEncoders();
+    				autoState = DriveSideSwitch;
+    			}
+			break;
+
+    		case (DriveSideSwitch):
+    			if (encoderDist > -rDrive3) {
+    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+    			} else {
+    				driveTrain->tankDrive(0.0, 0.0, 0.0);
+    				autoState = DeployCube;
+    			}
+			break;
+
+    		case (DeployCube):
+    				intake->spitCube();
+    			break;
+    	}
+	
+}
+
+void Autonomous::switchLeftAuto(){
+	autonPeriodicValues();
+
+    	switch (autoState) {
+    		case (InitialStart):
+    			if (encoderDist > -initDist) {
+    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+    			} else {
+    				sensors->resetGyro();
+    				autoState = TurnDownMiddle;
+    			}
+			break;
+
+    		case (TurnDownMiddle):
+    			if (gyroAngle > lTurn1) {
+    				driveTrain->tankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
+    			} else {
+    				driveTrain->resetEncoders();
+    				autoState = DriveDiagonal;
+    			}
+			break;
+
+    		case (DriveDiagonal):
+    			if (encoderDist > -lDrive2) {
+    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+    			}
+    			else {
+    				driveTrain->resetEncoders();
+    				sensors->resetGyro();
+    				autoState = FaceSwitch;
+    			}
+    			break;
+
+    		case (FaceSwitch):
+    			if (gyroAngle < lTurn2) {
+    				driveTrain->tankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
+    			} else {
+    				driveTrain->resetEncoders();
+    				autoState = DriveSideSwitch;
+    			}
+			break;
+
+    		case (DriveSideSwitch):
+    			if (encoderDist > -lDrive3){
+    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+    			}
+    			else {
+    				autoState = DeployCube;
+    			}
+    			break;
+
+    		case (DeployCube):
+    			intake->spitCube();
+    			break;
+    	}
+}
+
+void Autonomous::scaleFromCenter(){
 
 }
 
-void Autonomous::ScaleFromSide(){
+void Autonomous::scaleFromSide(){
 	if(!elevatorZeroed){
 		elevator->goDown();
 		if(sensors->getElevatorBottom()){
@@ -176,27 +289,27 @@ void Autonomous::ScaleFromSide(){
 	switch (autoState) {
 		case(InitialStart):
 			if(encoderDist > -scaleSideDist){
-				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed * (1.025 + (gyroAngle / 45)), 0.0);
+				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed * (1.025 + (gyroAngle / 45)), 0.0);
 			} else {
 				autoState = TurnTowardsScale;
-				sensors->ResetGyro();
+				sensors->resetGyro();
 			}
 			break;
 		case(TurnTowardsScale):
 			if(ourScale == LeftSide && gyroAngle < faceScaleAngle){
-				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
-				driveTrain->ResetEncoders();
+				driveTrain->tankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
+				driveTrain->resetEncoders();
 			} else {
 				autoState = DriveTowardsScale;
-				driveTrain->ResetEncoders();
+				driveTrain->resetEncoders();
 			}
 			break;
 		case(DriveTowardsScale):
 				if(encoderDist > -scaleAdjustDist){
-					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+					driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
 				} else {
 					autoState = DeployCube;
-					sensors->ResetGyro();
+					sensors->resetGyro();
 				}
 			break;
 		case(DeployCube):
@@ -206,130 +319,17 @@ void Autonomous::ScaleFromSide(){
 	}
 }
 
-void Autonomous::SwitchRightAuto(){
 
-	AutonPeriodicValues();
-	int rightEncDist = driveTrain->GetEncoderVal(RightSide);
-	int gyroAngle = sensors->GetGyroAngle();
 
-    	switch (autoState) {
-    		case (InitialStart):
-    			if (rightEncDist > -initDist) {
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    			} else {
-    				sensors->ResetGyro();
-    				autoState = TurnDownMiddle;
-    			}
-    			break;
-
-    		case (TurnDownMiddle):
-    			if (gyroAngle < rTurn1) {
-    				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
-    			} else {
-    				driveTrain->ResetEncoders();
-    				autoState = DriveDiagonal;
-    			}
-    			break;
-
-    		case (DriveDiagonal):
-    			if (rightEncDist > -rDrive2) {
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    			} else {
-    				sensors->ResetGyro();
-    				driveTrain->ResetEncoders();
-    				autoState = FaceSwitch;
-    			}
-			break;
-
-    		case (FaceSwitch):
-    			if (gyroAngle > rTurn2) {
-    				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
-    				driveTrain->ResetEncoders();
-    			} else {
-    				driveTrain->ResetEncoders();
-    				autoState = DriveSideSwitch;
-    			}
-			break;
-
-    		case (DriveSideSwitch):
-    			if (rightEncDist > -rDrive3) {
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    			} else {
-    				driveTrain->TankDrive(0.0, 0.0, 0.0);
-    				autoState = DeployCube;
-    			}
-			break;
-
-    		case (DeployCube):
-    				intake->spitCube();
-    			break;
-    	}
-	
-}
-
-void Autonomous::SwitchLeftAuto(){
-	int rightEncDist = driveTrain->GetEncoderVal(RightSide);
-	int gyroAngle = sensors->GetGyroAngle();
-	AutonPeriodicValues();
-
-    	switch (autoState) {
-    		case (InitialStart):
-    			if (rightEncDist > -initDist) {
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    			} else {
-    				sensors->ResetGyro();
-    				autoState = TurnDownMiddle;
-    			}
-			break;
-
-    		case (TurnDownMiddle):
-    			if (gyroAngle > lTurn1) {
-    				driveTrain->TankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
-    			} else {
-    				driveTrain->ResetEncoders();
-    				autoState = DriveDiagonal;
-    			}
-			break;
-
-    		case (DriveDiagonal):
-    			if (rightEncDist > -lDrive2) {
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    			}
-    			else {
-    				driveTrain->ResetEncoders();
-    				sensors->ResetGyro();
-    				autoState = FaceSwitch;
-    			}
-    			break;
-
-    		case (FaceSwitch):
-    			if (gyroAngle < lTurn2) {
-    				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
-    			} else {
-    				driveTrain->ResetEncoders();
-    				autoState = DriveSideSwitch;
-    			}
-			break;
-
-    		case (DriveSideSwitch):
-    			if (rightEncDist > -lDrive3){
-    				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-    			}
-    			else {
-    				autoState = DeployCube;
-    			}
-    			break;
-
-    		case (DeployCube):
-    			intake->spitCube();
-    			break;
-    	}
-}
-
-void Autonomous::ResetZeroed(){
+void Autonomous::resetZeroed(){
 	elevatorZeroed = false;
 }
 
-void Autonomous::DefaultCross(){
+void Autonomous::updateStarts(){
+	target = board->getTarget();
+	startingPosition = board->getStartingPosition();
+}
+
+void Autonomous::defaultCross(){
 
 };

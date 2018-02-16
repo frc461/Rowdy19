@@ -13,10 +13,10 @@
 ShuffleboardPoster::ShuffleboardPoster(DriveTrain& dt, Sensors& srs) {
 	driveTrain = &dt;
 	sensors = &srs;
-	GenerateSelectors();
+	generateSelectors();
 }
 
-void ShuffleboardPoster::GenerateSelectors(){
+void ShuffleboardPoster::generateSelectors(){
 	startingPosition.AddObject("Left Side", LeftPosition);
 		startingPosition.AddDefault("Center", CenterPosition);
 		startingPosition.AddObject("Right Side", RightPosition);
@@ -29,27 +29,27 @@ void ShuffleboardPoster::GenerateSelectors(){
 		SmartDashboard::Delete("Warning");
 }
 
-void ShuffleboardPoster::TeleopGet(){
+void ShuffleboardPoster::teleopGet(){
 
 }
 
-int ShuffleboardPoster::GetStartingPosition(){
+int ShuffleboardPoster::getStartingPosition(){
 	return startingPosition.GetSelected();
 }
 
-int ShuffleboardPoster::GetTarget(){
+int ShuffleboardPoster::getTarget(){
 	return target.GetSelected();
 }
 
-void ShuffleboardPoster::ShufflePeriodic(){
-	SmartDashboard::PutNumber("gyro", sensors->GetGyroAngle());
+void ShuffleboardPoster::shufflePeriodic(){
+	SmartDashboard::PutNumber("gyro", sensors->getGyroAngle());
 	SmartDashboard::PutBoolean("ElevatorSwitch", sensors->getElevatorBottom());
-	SmartDashboard::PutNumber("LeftEncoderDist", driveTrain->GetEncoderVal(LeftSide));
-	SmartDashboard::PutNumber("RightEncoderDist", driveTrain->GetEncoderVal(RightSide));
+	SmartDashboard::PutNumber("LeftEncoderDist", driveTrain->getEncoderVal(LeftSide));
+	SmartDashboard::PutNumber("RightEncoderDist", driveTrain->getEncoderVal(RightSide));
 //	SmartDashboard::PutData("PDP", driveTrain->GetPDP());
 }
 
-int ShuffleboardPoster::GetOurSwitch(){
+int ShuffleboardPoster::getOurSwitch(){
 	gameData = frc::DriverStation::GetInstance().GetGameSpecificMessage();
 	if(gameData[0] == 'L'){
 		return LeftSide;
@@ -61,7 +61,7 @@ int ShuffleboardPoster::GetOurSwitch(){
 }
 
 
-int ShuffleboardPoster::GetOurScale(){
+int ShuffleboardPoster::getOurScale(){
 	if(gameData[1] == 'L'){
 		return LeftSide;
 	} else if(gameData[1] == 'R'){
@@ -71,7 +71,7 @@ int ShuffleboardPoster::GetOurScale(){
 	}
 }
 
-int ShuffleboardPoster::GetTheirSideSwitch(){
+int ShuffleboardPoster::getTheirSideSwitch(){
 	if(gameData[2] == 'L'){
 		return LeftSide;
 	} else if(gameData[2] == 'R'){

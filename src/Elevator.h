@@ -15,20 +15,32 @@
 class Elevator {
 public:
 	Elevator(Sensors&);
+
+	//Basic motions
 	void goUp();
 	void goDown();
 	void move(double);
+	void haltMotion();
+
+	//Brake bois
+	void brake();
+	void brakeRelease();
+
+	//Automatic height reachers
 	void goToSwitchHeight();
 	void goToScaleHeight();
 	void goToClimbHeight();
 	void goToIntakeExchangeHeight();
-	void haltMotion();
+
+	//Encoder handlers
+	int  encoderValue();
 	void resetEncoder();
+
+
+	//Shuffleboard Interactions
 	void postValues();
 	void periodicValues();
-	int encoderValue();
-	void Brake();
-	void BrakeRelease();
+
 
 private:
 	TalonSRX* elevator1;

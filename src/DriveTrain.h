@@ -17,14 +17,17 @@
 class DriveTrain {
 public:
 	DriveTrain(Sensors&);
-	void ArcadeDrive(double, double, double);
-	void TankDrive(double, double, double);
-	void InitValues();
-	void PeriodicValues();
-	void CalculateStrafeRotate(double);
-	void InitPID();
-	int GetEncoderVal(int);
-	void ResetEncoders();
+
+	//Drive methods
+	void arcadeDrive(double, double, double);
+	void tankDrive(double, double, double);
+
+	void putValues();
+	void periodicValues();
+	void calculateStrafeRotate(double);
+	void initPID();
+	int getEncoderVal(int);
+	void resetEncoders();
 
 //	PowerDistributionPanel GetPDP();
 private:

@@ -15,10 +15,12 @@ class Sensors {
 public:
 	Sensors();
 
-	int GetGyroAngle();
-	int GetElevatorEncoders();
+	//Limit Switches
 	bool getElevatorBottom();
-	void ResetGyro();
+
+	//Gyro stuff
+	int getGyroAngle();
+	void resetGyro();
 
 private:
 ADXRS450_Gyro *gyro;

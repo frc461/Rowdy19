@@ -39,12 +39,12 @@
 		driveTrain = new DifferentialDrive(*left, *right);
 		strafe2->Follow(*strafe1);
 
-		InitPID();
-		InitValues();
-		PeriodicValues();
+		initPID();
+		putValues();
+		periodicValues();
 	}
 
-	void DriveTrain::InitValues(){
+	void DriveTrain::putValues(){
 		SmartDashboard::PutNumber("strafeSpeed", 0.8);
 		SmartDashboard::PutNumber("driveSpeed", 0.8);
 		SmartDashboard::PutNumber("turnSpeed", 0.8);
@@ -58,7 +58,7 @@
 		SmartDashboard::PutNumber("RotateTolerance", rotateTolerance);
 	}
 
-	int DriveTrain::GetEncoderVal(int sideSelect){
+	int DriveTrain::getEncoderVal(int sideSelect){
 		if (sideSelect == LeftSide){
 				return leftDrive1->GetSelectedSensorPosition(0);
 		} else {
@@ -66,15 +66,15 @@
 		}
 	}
 
-	void DriveTrain::ResetEncoders(){
+	void DriveTrain::resetEncoders(){
 		leftDrive1->SetSelectedSensorPosition(0,0,0);
 		rightDrive1->SetSelectedSensorPosition(0,0,0);
 	}
 
-	void DriveTrain::PeriodicValues(){
+	void DriveTrain::periodicValues(){
 
 		SmartDashboard::PutNumber("LeftEncoderValue", leftDrive1->GetSelectedSensorPosition(0));
-		SmartDashboard::PutNumber("RightEncoderValue", GetEncoderVal(RightSide));
+		SmartDashboard::PutNumber("RightEncoderValue", getEncoderVal(RightSide));
 		SmartDashboard::PutNumber("StraightCorrection", straightCorrection);
 		SmartDashboard::PutData("StrafePID", pid);
 		SmartDashboard::PutNumber("PIDOutput", pidoutput);
@@ -93,22 +93,22 @@
 		pid->SetPID(p, i, d);
 	}
 
-	void DriveTrain::ArcadeDrive(double forward, double rotate, double strafe){
-		PeriodicValues();
+	void DriveTrain::arcadeDrive(double forward, double rotate, double strafe){
+		periodicValues();
 		SmartDashboard::PutNumber("Strafe", strafe);
 		if (rotate > rotateTolerance || rotate < -rotateTolerance){
-			strafeAngle = sensors->GetGyroAngle();
+			strafeAngle = sensors->getGyroAngle();
 		}
-		strafeDifference = sensors->GetGyroAngle() - strafeAngle;
+		strafeDifference = sensors->getGyroAngle() - strafeAngle;
 		pidsrc->set(strafeDifference);
 		pid->SetOutputRange(-pidMax, pidMax);
-		CalculateStrafeRotate(strafe);
+		calculateStrafeRotate(strafe);
 		rotate += pidoutput;
 		driveTrain->ArcadeDrive(-forward * driveSpeed, rotate * turnSpeed);
 		strafe1->Set(ControlMode::PercentOutput, strafe * -strafeSpeed);
 	}
 
-	void DriveTrain::InitPID(){
+	void DriveTrain::initPID(){
 		pidout = new SettablePIDOut();
 		pidsrc = new SettablePIDSource();
 		pid = new PIDController(p, i, d, pidsrc, pidout);
@@ -116,19 +116,19 @@
 		SmartDashboard::PutNumber("PIDMax", pidMax);
 	}	
 
-	void DriveTrain::TankDrive(double left, double right, double strafe){
-		PeriodicValues();
+	void DriveTrain::tankDrive(double left, double right, double strafe){
+		periodicValues();
 		driveTrain->TankDrive(-left, -right);
 		strafe1->Set(ControlMode::PercentOutput, strafe * -strafeSpeed);
 	}
 
-	void DriveTrain::CalculateStrafeRotate(double strafe){
+	void DriveTrain::calculateStrafeRotate(double strafe){
 		if (strafe > strafeSpeedTolerance || strafe < -strafeSpeedTolerance) {
 			isStrafing = true;
 		} else {
 			pid->Reset();
 			pid->Enable();
-			strafeAngle = sensors->GetGyroAngle();
+			strafeAngle = sensors->getGyroAngle();
 			isStrafing = false;
 		}
 

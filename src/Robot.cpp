@@ -65,13 +65,14 @@ public:
 
 
 	void AutonomousInit() override {
-		boardHandler->ShufflePeriodic();
-		driveTrain->ResetEncoders();
-		sensors->ResetGyro();
-		auton->ResetZeroed();
-		auton->SetAutoState(InitialStart);
+		boardHandler->shufflePeriodic();
+		driveTrain->resetEncoders();
+		sensors->resetGyro();
+		auton->updateStarts();
+		auton->resetZeroed();
+		auton->setAutoState(InitialStart);
 		elevator->periodicValues();
-		intake->PeriodicValues();
+		intake->periodicValues();
 		intake->extendIntake();
 		intake->resetSpitCount();
 	}
@@ -82,28 +83,27 @@ public:
 //			intake->retractIntake();
 //		}
 		elevator->periodicValues();
-		boardHandler->ShufflePeriodic();
-		intake->PeriodicValues();
-		auton->RunAuto();
+		boardHandler->shufflePeriodic();
+		intake->periodicValues();
+		auton->runAuto();
 	}
 
 	void TeleopInit() {
-		driveTrain->ResetEncoders();
+		driveTrain->resetEncoders();
 		intake->extendIntake();
 		intakeIn = false;
-		elevator->BrakeRelease();
 		intake->resetSpitCount();
 	}
 
 	void TeleopPeriodic() {
-		boardHandler->ShufflePeriodic();
+		boardHandler->shufflePeriodic();
 		elevator->periodicValues();
 
 		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
 //		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
-		driveTrain->ArcadeDrive(forwardR, rotate, strafe);
+		driveTrain->arcadeDrive(forwardR, rotate, strafe);
 
 		if(operatorController->GetRawButton(XboxButtonA)){
 			intake->takeInAll();
@@ -133,8 +133,8 @@ public:
 		previouslyToggled = operatorController->GetRawButton(XboxButtonRightBumper);
 
 		if (operatorController->GetRawButton(XboxButtonLeftBumper)){
-			driveTrain->ResetEncoders();
-			sensors->ResetGyro();
+			driveTrain->resetEncoders();
+			sensors->resetGyro();
 			elevator->resetEncoder();
 		}
 
@@ -149,7 +149,6 @@ public:
 		}
 
 		SmartDashboard::PutBoolean("intakeToggled", intakeIn);
-
 	}
 
 	void TestPeriodic() {}

@@ -17,19 +17,19 @@ public:
 	ShuffleboardPoster(DriveTrain&, Sensors&);
 
 
-	void TeleopGet();
-	void ShufflePeriodic();
-	void GenerateSelectors();
+	void teleopGet();
+	void shufflePeriodic();
+	void generateSelectors();
 
-	double GetTeleopDriveSpeedLimit();
-	double GetTeleopRotateSpeedLimit();
-	double GetTeleopStrafeSpeedLimit();
+	double getTeleopDriveSpeedLimit();
+	double getTeleopRotateSpeedLimit();
+	double getTeleopStrafeSpeedLimit();
 
-	int GetOurSwitch();
-	int GetOurScale();
-	int GetTheirSideSwitch();
-	int GetStartingPosition();
-	int GetTarget();
+	int getOurSwitch();
+	int getOurScale();
+	int getTheirSideSwitch();
+	int getStartingPosition();
+	int getTarget();
 
 private:
 	SendableChooser<int> target;

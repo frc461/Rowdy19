@@ -15,30 +15,37 @@ class Intake {
 public:
 	Intake();
 
+	//Intake
 	void takeInOuter();
 	void takeInInner();
 	void takeInAll();
 
+	//Output
 	void outputOuter();
 	void outputInner();
 	void outputAll();
 
+	//Spins
 	void spinRight();
 	void spinLeft();
 
+	//Spits
 	void resetSpitCount();
 	void spitInner();
 	void spitCube();
 
+	//Intake solenoid stuffs
 	void retractIntake();
 	void extendIntake();
-
-
-	void InitValues();
-	void PeriodicValues();
-
-	void allOff();
 	int getSolenoid();
+
+	//Shuffleboard Interactions
+	void putValues();
+	void periodicValues();
+
+	//Halt activity
+	void allOff();
+
 private:
 	double intakeSpeed = 0.8;
 	int spitCount = 0;

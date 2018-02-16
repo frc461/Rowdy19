@@ -29,7 +29,7 @@ void Elevator::goUp(){
 	}
 
 	if(encoderVal < 23000){
-		BrakeRelease();
+		brakeRelease();
 		elevator1->Set(ControlMode::PercentOutput, -actualSpeed);
 	} else {
 		haltMotion();
@@ -37,7 +37,7 @@ void Elevator::goUp(){
 }
 
 void Elevator::move(double speed){
-	BrakeRelease();
+	brakeRelease();
 	elevator1->Set(ControlMode::PercentOutput, speed);
 }
 
@@ -49,18 +49,18 @@ void Elevator::goDown(){
 		}
 
 	if(!sensors->getElevatorBottom()){
-		BrakeRelease();
+		brakeRelease();
 		elevator1->Set(ControlMode::PercentOutput, actualSpeed);
 	} else {
 		haltMotion();
 	}
 }
 
-void Elevator::Brake(){
+void Elevator::brake(){
 	elevatorBrake->Set(DoubleSolenoid::kForward);
 }
 
-void Elevator::BrakeRelease(){
+void Elevator::brakeRelease(){
 	elevatorBrake->Set(DoubleSolenoid::kReverse);
 }
 
@@ -106,7 +106,7 @@ void Elevator::goToIntakeExchangeHeight(){
 
 void Elevator::haltMotion(){
 	elevator1->Set(ControlMode::PercentOutput, 0.0);
-	Brake();
+	brake();
 }
 
 int Elevator::encoderValue(){
