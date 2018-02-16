@@ -18,7 +18,6 @@ Autonomous::Autonomous(DriveTrain& dt, Sensors& srs, ShuffleboardPoster& boardHa
 	AutonPostValues();
 	AutonPeriodicValues();
 	target = board->GetTarget();
-
 	startingPosition = board->GetStartingPosition();
 }
 
@@ -104,6 +103,10 @@ void Autonomous::AutonPeriodicValues(){
 	autoTurnSpeed = SmartDashboard::GetNumber("Auton/autoTurnSpeed", -0.6);
 	SmartDashboard::PutNumber("Auton/autoState", autoState);
 	SmartDashboard::PutNumber("gyro", sensors->GetGyroAngle());
+
+	ourSwitch = board->GetOurSwitch();
+	ourScale = board->GetOurScale();
+
 	encoderDist = driveTrain->GetEncoderVal(RightSide);
 	gyroAngle = sensors->GetGyroAngle();
 	target = board->GetTarget();
@@ -170,37 +173,37 @@ void Autonomous::ScaleFromSide(){
 		elevator->haltMotion();
 	}
 
-//	switch (autoState) {
-//		case(InitialStart):
-//			if(encoderDist > -scaleSideDist){
-//				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed * (1.025 + (gyroAngle / 45)), 0.0);
-//			} else {
-//				autoState = TurnTowardsScale;
-//				sensors->ResetGyro();
-//			}
-//			break;
-//		case(TurnTowardsScale):
-//			if(gyroAngle < faceScaleAngle){
-//				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
-//				driveTrain->ResetEncoders();
-//			} else {
-//				autoState = DriveTowardsScale;
-//				driveTrain->ResetEncoders();
-//			}
-//			break;
-//		case(DriveTowardsScale):
-//				if(encoderDist > -scaleAdjustDist){
-//					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
-//				} else {
-//					autoState = DeployCube;
-//					sensors->ResetGyro();
-//				}
-//			break;
-//		case(DeployCube):
-//			intake->spitCube();
-//			break;
-//
-//	}
+	switch (autoState) {
+		case(InitialStart):
+			if(encoderDist > -scaleSideDist){
+				driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed * (1.025 + (gyroAngle / 45)), 0.0);
+			} else {
+				autoState = TurnTowardsScale;
+				sensors->ResetGyro();
+			}
+			break;
+		case(TurnTowardsScale):
+			if(ourScale == LeftSide && gyroAngle < faceScaleAngle){
+				driveTrain->TankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
+				driveTrain->ResetEncoders();
+			} else {
+				autoState = DriveTowardsScale;
+				driveTrain->ResetEncoders();
+			}
+			break;
+		case(DriveTowardsScale):
+				if(encoderDist > -scaleAdjustDist){
+					driveTrain->TankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+				} else {
+					autoState = DeployCube;
+					sensors->ResetGyro();
+				}
+			break;
+		case(DeployCube):
+			intake->spitCube();
+			break;
+
+	}
 }
 
 void Autonomous::SwitchRightAuto(){

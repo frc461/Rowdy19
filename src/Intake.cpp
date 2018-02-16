@@ -71,11 +71,11 @@ void Intake::spitCube(){
 }
 
 void Intake::extendIntake(){
-	intakeExtension->Set(DoubleSolenoid::kReverse);
+//	intakeExtension->Set(DoubleSolenoid::kReverse);
 }
 
 void Intake::retractIntake(){
-	intakeExtension->Set(DoubleSolenoid::kForward);
+//	intakeExtension->Set(DoubleSolenoid::kForward);
 }
 
 

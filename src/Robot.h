@@ -19,7 +19,9 @@ enum AutonomousStates {
 	DrivePastSwitch,
 	TurnTowardsScale,
 	DriveTowardsScale,
-	FaceScale
+	FaceScale,
+	TurnToBlock,
+	DriveAtBlock,
 };
 
 enum PWM{

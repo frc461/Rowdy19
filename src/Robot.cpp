@@ -105,21 +105,21 @@ public:
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
 		driveTrain->ArcadeDrive(forwardR, rotate, strafe);
 
-		if(operatorController->GetRawButton(XboxButtonX)){
+		if(operatorController->GetRawButton(XboxButtonA)){
 			intake->takeInAll();
-		} else if (operatorController->GetRawButton(XboxButtonB)){
-			intake->outputAll();
 		} else if (operatorController->GetRawButton(XboxButtonY)){
-			intake->spitInner();
-		} else if (operatorController->GetRawButton(XboxButtonA)){
+			intake->outputAll();
+		} else if (operatorController->GetRawButton(XboxButtonX)){
+			intake->spinLeft();
+		} else if (operatorController->GetRawButton(XboxButtonB)){
 			intake->spinRight();
 		} else {
 			intake->allOff();
 		}
 
-		if(operatorController->GetRawAxis(XboxAxisLeftStickY) < 0){
+		if(operatorController->GetRawAxis(XboxAxisLeftStickY) < -0.3){
 			elevator->goUp();
-		} else if (operatorController->GetRawAxis(XboxAxisLeftStickY) > 0){
+		} else if (operatorController->GetRawAxis(XboxAxisLeftStickY) > 0.3){
 			elevator->goDown();
 		} else {
 			elevator->haltMotion();
@@ -138,7 +138,7 @@ public:
 			elevator->resetEncoder();
 		}
 
-		if (operatorController->GetRawButton(rightThumbOrange)){
+		if (operatorController->GetRawAxis(XboxAxisRightTrigger) > 0.2){
 			intake->retractIntake();
 		} else {
 			if(intakeIn){
