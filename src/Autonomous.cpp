@@ -275,21 +275,21 @@ void Autonomous::scaleFromCenter(){
 }
 
 void Autonomous::scaleFromSide(){
-	if(!elevatorZeroed){
-		elevator->goDown();
-		if(sensors->getElevatorBottom()){
-			elevatorZeroed = true;
-		}
-	} else if (elevator->encoderValue() < scaleHeight) {
-		elevator->goUp();
-	} else {
-		elevator->haltMotion();
-	}
+//	if(!elevatorZeroed){
+//		elevator->goDown();
+//		if(sensors->getElevatorBottom()){
+//			elevatorZeroed = true;
+//		}
+//	} else if (elevator->encoderValue() < scaleHeight) {
+//		elevator->goUp();
+//	} else {
+//		elevator->haltMotion();
+//	}
 
 	switch (autoState) {
 		case(InitialStart):
 			if(encoderDist > -scaleSideDist){
-				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed * (1.025 + (gyroAngle / 45)), 0.0);
+				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed * (1.021 + (gyroAngle / 45)), 0.0);
 			} else {
 				autoState = TurnTowardsScale;
 				sensors->resetGyro();

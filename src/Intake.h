@@ -51,8 +51,8 @@ private:
 	int spitCount = 0;
 
 	DoubleSolenoid* intakeExtension;
-	Talon* intakeInLeft;
-	Talon* intakeInRight;
+	Victor* intakeInLeft;
+	Victor* intakeInRight;
 	Spark* intakeOutLeft;
 	Spark* intakeOutRight;
 };

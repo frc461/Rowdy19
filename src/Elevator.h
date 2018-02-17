@@ -56,7 +56,7 @@ private:
 	slowDownMultiplierTop = 0.3,
 	slowDownMultiplierBottom = 0.2,
 	elevatorTop = 23000;
-	double raiseSpeed = 1, lowerSpeed = 0.7;
+	double raiseSpeed = 0.6, lowerSpeed = 0.3;
 	int heightTolerance = 250;
 	int intakeExchangeHeight = 200;
 	int switchHeight = 1300;

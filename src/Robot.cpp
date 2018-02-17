@@ -26,6 +26,8 @@
 #include "Intake.h"
 #include "Elevator.h"
 
+#include <opencv2/core/core.hpp>
+
 class Robot : public frc::IterativeRobot {
 public:
 
@@ -54,6 +56,12 @@ public:
 		rightJoystick = new Joystick(1);
 		operatorController = new Joystick(2);
 
+		//Hank's failed attempt at making a USB Camera work
+		//(It at least puts something in the cameraserver stream)
+		cs::UsbCamera* topCam = new cs::UsbCamera("cam0", 1);
+		topCam->SetResolution(320,240);
+		topCam->SetFPS(20);
+		CameraServer::GetInstance()->PutVideo("topCam", 320, 240);
 
 		sensors = new Sensors();
 		driveTrain = new DriveTrain(*sensors);
@@ -100,10 +108,15 @@ public:
 		elevator->periodicValues();
 
 		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
-//		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
+		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
-		driveTrain->arcadeDrive(forwardR, rotate, strafe);
+
+		if(rightJoystick->GetRawButton(trigger)){
+			driveTrain->tankDrive(forwardR, forwardL, strafe);
+		} else{
+			driveTrain->arcadeDrive(forwardR, rotate, strafe);
+		}
 
 		if(operatorController->GetRawButton(XboxButtonA)){
 			intake->takeInAll();

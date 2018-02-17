@@ -47,7 +47,7 @@ public:
 private:
 	bool elevatorZeroed = false;
 
-	int scaleHeight = 10000;
+	int scaleHeight = 18500;
 	int encoderDist, gyroAngle,
 	initDist = 5000,
 	lTurn1 = -35,

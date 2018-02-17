@@ -9,8 +9,8 @@
 
 Intake::Intake() {
 	intakeExtension = new DoubleSolenoid(Intake1, Intake2);
-	intakeInLeft = new Talon(LeftInIntakePWM);
-	intakeInRight = new Talon(RightInIntakePWM);
+	intakeInLeft = new Victor(LeftInIntakePWM);
+	intakeInRight = new Victor(RightInIntakePWM);
 	intakeOutLeft = new Spark(LeftOutIntakePWM);
 	intakeOutRight = new Spark(RightOutIntakePWM);
 	putValues();
