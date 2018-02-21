@@ -47,7 +47,7 @@ public:
 	void allOff();
 
 private:
-	double intakeSpeed = 0.8;
+	double intakeSpeed = 0.8, spinSpeed = 0.6;
 	int spitCount = 0;
 
 	DoubleSolenoid* intakeExtension;

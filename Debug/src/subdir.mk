@@ -5,6 +5,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/Autonomous.cpp \
+../src/Camera.cpp \
 ../src/DriveTrain.cpp \
 ../src/Elevator.cpp \
 ../src/Intake.cpp \
@@ -15,6 +16,7 @@ CPP_SRCS += \
 
 OBJS += \
 ./src/Autonomous.o \
+./src/Camera.o \
 ./src/DriveTrain.o \
 ./src/Elevator.o \
 ./src/Intake.o \
@@ -25,6 +27,7 @@ OBJS += \
 
 CPP_DEPS += \
 ./src/Autonomous.d \
+./src/Camera.d \
 ./src/DriveTrain.d \
 ./src/Elevator.d \
 ./src/Intake.d \

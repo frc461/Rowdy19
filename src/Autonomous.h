@@ -24,6 +24,9 @@ public:
 	void autonPostValues();
 	void autonPeriodicValues();
 
+	//Elevator operator
+	void elevatorAutoRun();
+
 	//Switch autons
 	void switchFromSide();
 	void switchRightAuto();
@@ -37,17 +40,18 @@ public:
 	//Emergency auton
 	void defaultCross();
 
-	//Manual data modifiers
+	//Data
 	void resetZeroed();
 	void updateStarts();
 	void setAutoState(int);
+	int targetHeight();
 
 
 
 private:
 	bool elevatorZeroed = false;
 
-	int scaleHeight = 18500;
+	int scaleHeight = 18500, switchHeight = 10000;
 	int encoderDist, gyroAngle,
 	initDist = 5000,
 	lTurn1 = -35,
@@ -65,7 +69,8 @@ private:
 	driveToSwitchDist = 2500,
 
 	scaleSideDist = 32500,
-	faceScaleAngle = 69,
+	faceScaleLeft = 69,
+	faceScaleRight = 45,
 	scaleAdjustDist = 500,
 
 	autoState = InitialStart;

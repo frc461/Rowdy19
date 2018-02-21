@@ -44,7 +44,6 @@ void Elevator::move(double speed){
 void Elevator::goDown(){
 	double  actualSpeed = lowerSpeed;
 		if(encoderVal < slowBottomThreshold){
-//			actualSpeed = encoderVal / slowBottomThreshold * slowDownMultiplierBottom;
 			actualSpeed = slowDownMultiplierBottom;
 		}
 

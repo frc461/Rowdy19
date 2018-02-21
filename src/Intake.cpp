@@ -22,8 +22,8 @@ void Intake::takeInOuter(){
 }
 
 void Intake::takeInInner(){
-	intakeInLeft->Set(-intakeSpeed);
-	intakeInRight->Set(intakeSpeed);
+	intakeInLeft->Set(intakeSpeed);
+	intakeInRight->Set(-intakeSpeed);
 }
 
 void Intake::takeInAll(){
@@ -37,8 +37,8 @@ void Intake::outputOuter(){
 }
 
 void Intake::outputInner(){
-	intakeInLeft->Set(intakeSpeed);
-	intakeInRight->Set(-intakeSpeed);
+	intakeInLeft->Set(-intakeSpeed);
+	intakeInRight->Set(intakeSpeed);
 }
 
 void Intake::outputAll(){
@@ -47,15 +47,15 @@ void Intake::outputAll(){
 }
 
 void Intake::spinRight(){
-	intakeOutLeft->Set(-intakeSpeed);
-	intakeOutRight->Set(-intakeSpeed);
-	takeInInner();
+	intakeInLeft->Set(-intakeSpeed);
+	intakeInRight->Set(-intakeSpeed);
+
 }
 
 void Intake::spinLeft(){
-	intakeOutLeft->Set(intakeSpeed);
-	intakeOutRight->Set(intakeSpeed);
-	takeInInner();
+	intakeInLeft->Set(intakeSpeed);
+	intakeInRight->Set(intakeSpeed);
+
 }
 
 void Intake::resetSpitCount(){
@@ -99,8 +99,10 @@ void Intake::allOff(){
 
 void Intake::putValues(){
 	SmartDashboard::PutNumber("Intake/intakeSpeed", intakeSpeed);
+	SmartDashboard::PutNumber("Intake/spinSpeed", spinSpeed);
 }
 
 void Intake::periodicValues(){
-	intakeSpeed = SmartDashboard::PutNumber("Intale/intakeSpeed", 0.8);
+	intakeSpeed = SmartDashboard::GetNumber("Intake/intakeSpeed", intakeSpeed);
+	spinSpeed = SmartDashboard::GetNumber("Intake/spinSpeed", spinSpeed);
 }

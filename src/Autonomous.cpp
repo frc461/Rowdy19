@@ -73,7 +73,8 @@ void Autonomous::autonPostValues(){
 	SmartDashboard::PutNumber("Auton/Switch/driveToSwitchDist", driveToSwitchDist);
 
 	SmartDashboard::PutNumber("Auton/Scale/scaleSideDist", scaleSideDist);
-	SmartDashboard::PutNumber("Auton/Scale/faceScaleAngle", faceScaleAngle);
+	SmartDashboard::PutNumber("Auton/Scale/faceScaleRight", faceScaleRight);
+	SmartDashboard::PutNumber("Auton/Scale/faceScaleLeft", faceScaleLeft);
 	SmartDashboard::PutNumber("Auton/Scale/scaleAdjustDist", scaleAdjustDist);
 
 	SmartDashboard::PutNumber("Auton/Scale/drivePastDist", drivePastDist);
@@ -94,13 +95,16 @@ void Autonomous::autonPeriodicValues(){
 	defaultDist = SmartDashboard::GetNumber("Auton/defaultDist", defaultDist);
 
 	scaleSideDist = SmartDashboard::GetNumber("Auton/Scale/scaleSideDist", scaleSideDist);
-	faceScaleAngle = SmartDashboard::GetNumber("Auton/Scale/faceScaleAngle", faceScaleAngle);
+	faceScaleRight = SmartDashboard::GetNumber("Auton/Scale/faceScaleRight", faceScaleRight);
+	faceScaleLeft = SmartDashboard::GetNumber("Auton/Scale/faceScaleLeft", faceScaleLeft);
 	scaleAdjustDist = SmartDashboard::GetNumber("Auton/Scale/scaleAdjustDist", scaleAdjustDist);
 
 	autoDriveSpeed = SmartDashboard::GetNumber("Auton/autoDriveSpeed", -0.75);
 	autoTurnSpeed = SmartDashboard::GetNumber("Auton/autoTurnSpeed", -0.6);
 	SmartDashboard::PutNumber("Auton/autoState", autoState);
 
+	scaleHeight = SmartDashboard::GetNumber("Auton/scaleHeight", scaleHeight);
+	switchHeight = SmartDashboard::GetNumber("Auton/scaleHeight", switchHeight);
 
 	ourSwitch = board->getOurSwitch();
 	ourScale = board->getOurScale();
@@ -111,6 +115,18 @@ void Autonomous::autonPeriodicValues(){
 }
 
 void Autonomous::switchFromSide(){
+//		if(!elevatorZeroed){
+//			elevator->goDown();
+//			if(sensors->getElevatorBottom()){
+//				elevatorZeroed = true;
+//			}
+//		} else if (elevator->encoderValue() < switchHeight) {
+//			elevator->goUp();
+//		} else {
+//			elevator->haltMotion();
+//		}
+	elevatorAutoRun();
+
 	if(ourSwitch == startingPosition){
 		switch (autoState) {
 		case(InitialStart):
@@ -136,14 +152,6 @@ void Autonomous::switchFromSide(){
 					driveTrain->arcadeDrive(autoDriveSpeed, 0.0, 0.0);
 				} else {
 					autoState = DeployCube;
-
-				}
-			break;
-		case(RaiseElevator):
-				if(true){
-					elevator->goUp();
-				} else {
-					autoState = DeployCube;
 				}
 			break;
 		case(DeployCube):
@@ -155,8 +163,7 @@ void Autonomous::switchFromSide(){
 }
 
 void Autonomous::switchRightAuto(){
-
-	autonPeriodicValues();
+	elevatorAutoRun();
 
     	switch (autoState) {
     		case (InitialStart):
@@ -214,7 +221,7 @@ void Autonomous::switchRightAuto(){
 }
 
 void Autonomous::switchLeftAuto(){
-	autonPeriodicValues();
+	elevatorAutoRun();
 
     	switch (autoState) {
     		case (InitialStart):
@@ -285,19 +292,24 @@ void Autonomous::scaleFromSide(){
 //	} else {
 //		elevator->haltMotion();
 //	}
+	elevatorAutoRun();
+
 
 	switch (autoState) {
 		case(InitialStart):
 			if(encoderDist > -scaleSideDist){
-				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed * (1.021 + (gyroAngle / 45)), 0.0);
+				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed /** (1.015 + (gyroAngle / 45))*/, 0.0);
 			} else {
 				autoState = TurnTowardsScale;
 				sensors->resetGyro();
 			}
 			break;
 		case(TurnTowardsScale):
-			if(ourScale == LeftSide && gyroAngle < faceScaleAngle){
+			if(ourScale == LeftSide && gyroAngle < faceScaleLeft){
 				driveTrain->tankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
+				driveTrain->resetEncoders();
+			} else if (ourScale == RightSide && gyroAngle > faceScaleRight){
+				driveTrain->tankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
 				driveTrain->resetEncoders();
 			} else {
 				autoState = DriveTowardsScale;
@@ -315,11 +327,30 @@ void Autonomous::scaleFromSide(){
 		case(DeployCube):
 			intake->spitCube();
 			break;
-
 	}
 }
 
+void Autonomous::elevatorAutoRun(){
+	if(!elevatorZeroed){
+		elevator->goDown();
+		if(sensors->getElevatorBottom()){
+			elevatorZeroed = true;
+		}
+	} else if (elevator->encoderValue() < targetHeight()) {
+		elevator->goUp();
+	} else {
+		elevator->haltMotion();
+	}
+}
 
+int Autonomous::targetHeight(){
+	if (target == Switch){
+		return switchHeight;
+	} else if (target == Scale){
+		return scaleHeight;
+	}
+	return 0;
+}
 
 void Autonomous::resetZeroed(){
 	elevatorZeroed = false;

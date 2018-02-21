@@ -25,8 +25,7 @@
 #include "Autonomous.h"
 #include "Intake.h"
 #include "Elevator.h"
-
-#include <opencv2/core/core.hpp>
+#include "Camera.h"
 
 class Robot : public frc::IterativeRobot {
 public:
@@ -43,6 +42,10 @@ public:
 	Intake* intake;
 	Elevator* elevator;
 
+	//Camera
+	Camera *camera;
+
+
 	Autonomous *auton;
 	Sensors *sensors;	
 
@@ -56,13 +59,7 @@ public:
 		rightJoystick = new Joystick(1);
 		operatorController = new Joystick(2);
 
-		//Hank's failed attempt at making a USB Camera work
-		//(It at least puts something in the cameraserver stream)
-		cs::UsbCamera* topCam = new cs::UsbCamera("cam0", 1);
-		topCam->SetResolution(320,240);
-		topCam->SetFPS(20);
-		CameraServer::GetInstance()->PutVideo("topCam", 320, 240);
-
+		camera = new Camera();
 		sensors = new Sensors();
 		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
@@ -107,6 +104,8 @@ public:
 		boardHandler->shufflePeriodic();
 		elevator->periodicValues();
 
+		camera->cameraPeriodic(operatorController->GetRawButton(XboxButtonRightStick));
+
 		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
 		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
@@ -130,6 +129,10 @@ public:
 			intake->allOff();
 		}
 
+		if(operatorController->GetRawAxis(XboxAxisLeftTrigger) > 0.2 && operatorController->GetRawAxis(XboxAxisRightTrigger) > 0.2){
+			elevator->move(1.0);
+		}
+
 		if(operatorController->GetRawAxis(XboxAxisLeftStickY) < -0.3){
 			elevator->goUp();
 		} else if (operatorController->GetRawAxis(XboxAxisLeftStickY) > 0.3){
@@ -151,21 +154,28 @@ public:
 			elevator->resetEncoder();
 		}
 
-		if (operatorController->GetRawAxis(XboxAxisRightTrigger) > 0.2){
-			intake->retractIntake();
-		} else {
-			if(intakeIn){
-				intake->retractIntake();
-			} else {
-				intake->extendIntake();
-			}
-		}
+//		if (operatorController->GetRawAxis(XboxAxisRightTrigger) > 0.2){
+//			intake->retractIntake();
+//		} else {
+//			if(intakeIn){
+//				intake->retractIntake();
+//			} else {
+//				intake->extendIntake();
+//			}
+//		}
 
-		SmartDashboard::PutBoolean("intakeToggled", intakeIn);
 	}
 
 	void TestPeriodic() {}
 
+	void DisabledInit() {
+
+	}
+
+	void DisabledPeriodic() {
+//		cvSink->GrabFrame(source);
+//		outputStreamStd.PutFrame(source);
+	}
 
 private:
 
