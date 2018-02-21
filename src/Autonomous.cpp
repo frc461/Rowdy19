@@ -112,6 +112,8 @@ void Autonomous::autonPeriodicValues(){
 	encoderDist = driveTrain->getEncoderVal(RightSide);
 	gyroAngle = sensors->getGyroAngle();
 	SmartDashboard::PutNumber("Auton/gyro", gyroAngle);
+	SmartDashboard::PutBoolean("Auton/elevatorZeroed", elevatorZeroed);
+
 }
 
 void Autonomous::switchFromSide(){
@@ -282,18 +284,7 @@ void Autonomous::scaleFromCenter(){
 }
 
 void Autonomous::scaleFromSide(){
-//	if(!elevatorZeroed){
-//		elevator->goDown();
-//		if(sensors->getElevatorBottom()){
-//			elevatorZeroed = true;
-//		}
-//	} else if (elevator->encoderValue() < scaleHeight) {
-//		elevator->goUp();
-//	} else {
-//		elevator->haltMotion();
-//	}
 	elevatorAutoRun();
-
 
 	switch (autoState) {
 		case(InitialStart):
@@ -318,8 +309,9 @@ void Autonomous::scaleFromSide(){
 			break;
 		case(DriveTowardsScale):
 				if(encoderDist > -scaleAdjustDist){
-					driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+					driveTrain->tankDrive(-0.6, -0.6, 0.0);
 				} else {
+					driveTrain->tankDrive(-0.0, -0.0, 0.0);
 					autoState = DeployCube;
 					sensors->resetGyro();
 				}
@@ -332,14 +324,18 @@ void Autonomous::scaleFromSide(){
 
 void Autonomous::elevatorAutoRun(){
 	if(!elevatorZeroed){
+		printf("Going down!\n");
 		elevator->goDown();
 		if(sensors->getElevatorBottom()){
 			elevatorZeroed = true;
 		}
-	} else if (elevator->encoderValue() < targetHeight()) {
+	} else if (!heightReached && elevator->encoderValue() < targetHeight()) {
 		elevator->goUp();
+		printf("Going up!\n");
 	} else {
 		elevator->haltMotion();
+		heightReached = true;
+		printf("Height reached!\n");
 	}
 }
 
@@ -354,6 +350,7 @@ int Autonomous::targetHeight(){
 
 void Autonomous::resetZeroed(){
 	elevatorZeroed = false;
+	heightReached = false;
 }
 
 void Autonomous::updateStarts(){

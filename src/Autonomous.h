@@ -51,7 +51,7 @@ public:
 private:
 	bool elevatorZeroed = false;
 
-	int scaleHeight = 18500, switchHeight = 10000;
+	int scaleHeight = 21000, switchHeight = 10000;
 	int encoderDist, gyroAngle,
 	initDist = 5000,
 	lTurn1 = -35,
@@ -68,10 +68,10 @@ private:
 	faceSwitchAngleLeft = -35,
 	driveToSwitchDist = 2500,
 
-	scaleSideDist = 32500,
-	faceScaleLeft = 69,
+	scaleSideDist = 25000,
+	faceScaleLeft = 20,
 	faceScaleRight = 45,
-	scaleAdjustDist = 500,
+	scaleAdjustDist = 2500,
 
 	autoState = InitialStart;
 
@@ -80,6 +80,7 @@ private:
 
 	int target, startingPosition, ourSwitch, ourScale;
 
+	bool heightReached = false;
 
 
 	double autoDriveSpeed, autoTurnSpeed;

@@ -11,7 +11,7 @@
 
 Sensors::Sensors() {
 	gyro = new ADXRS450_Gyro();
-	elevatorBottom = new DigitalInput(9);
+	elevatorBottom = new DigitalInput(8);
 }
 
 int Sensors::getGyroAngle(){

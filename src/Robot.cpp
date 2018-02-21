@@ -133,9 +133,9 @@ public:
 			elevator->move(1.0);
 		}
 
-		if(operatorController->GetRawAxis(XboxAxisLeftStickY) < -0.3){
+		if(operatorController->GetRawAxis(XboxAxisLeftStickY) < -0.5){
 			elevator->goUp();
-		} else if (operatorController->GetRawAxis(XboxAxisLeftStickY) > 0.3){
+		} else if (operatorController->GetRawAxis(XboxAxisLeftStickY) > 0.5){
 			elevator->goDown();
 		} else {
 			elevator->haltMotion();

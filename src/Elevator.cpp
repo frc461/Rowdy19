@@ -43,9 +43,9 @@ void Elevator::move(double speed){
 
 void Elevator::goDown(){
 	double  actualSpeed = lowerSpeed;
-		if(encoderVal < slowBottomThreshold){
-			actualSpeed = slowDownMultiplierBottom;
-		}
+//		if(encoderVal < slowBottomThreshold){
+//			actualSpeed = slowDownMultiplierBottom;
+//		}
 
 	if(!sensors->getElevatorBottom()){
 		brakeRelease();
