@@ -78,8 +78,9 @@ public:
 		auton->setAutoState(InitialStart);
 		elevator->periodicValues();
 		intake->periodicValues();
-		intake->extendIntake();
+		intakeIn = false;
 		intake->resetSpitCount();
+		elevator->autonStart();
 	}
 
 
@@ -95,7 +96,6 @@ public:
 
 	void TeleopInit() {
 		driveTrain->resetEncoders();
-		intake->extendIntake();
 		intakeIn = false;
 		intake->resetSpitCount();
 	}
@@ -103,40 +103,56 @@ public:
 	void TeleopPeriodic() {
 		boardHandler->shufflePeriodic();
 		elevator->periodicValues();
-
-		camera->cameraPeriodic(operatorController->GetRawButton(XboxButtonRightStick));
+		camera->cameraPeriodic(operatorController->GetRawButton(XboxButtonLeftStick));
 
 		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
 		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
+		int dPad = operatorController->GetPOV();
 
-		if(rightJoystick->GetRawButton(trigger)){
-			driveTrain->tankDrive(forwardR, forwardL, strafe);
-		} else{
-			driveTrain->arcadeDrive(forwardR, rotate, strafe);
+		if(intakeIn){
+			intake->extendIntake();
+		} else {
+			intake->retractIntake();
 		}
 
-		if(operatorController->GetRawButton(XboxButtonA)){
-			intake->takeInAll();
-		} else if (operatorController->GetRawButton(XboxButtonY)){
+//		if(rightJoystick->GetRawButton(trigger)){
+//			driveTrain->tankDrive(forwardL, forwardR, strafe);
+//		} else {
+			driveTrain->arcadeDrive(forwardR, rotate, strafe);
+//		}
+
+		if(operatorController->GetRawAxis(XboxAxisRightStickY) < -0.5 || operatorController->GetRawButton(XboxButtonY)){
 			intake->outputAll();
-		} else if (operatorController->GetRawButton(XboxButtonX)){
+		} else if (operatorController->GetRawAxis(XboxAxisRightStickY) > 0.5 || operatorController->GetRawButton(XboxButtonA)){
+			intake->takeInAll();
+		} else if (operatorController->GetRawAxis(XboxAxisRightStickX) < -0.5 || operatorController->GetRawButton(XboxButtonX)){
 			intake->spinLeft();
-		} else if (operatorController->GetRawButton(XboxButtonB)){
+		} else if (operatorController->GetRawAxis(XboxAxisRightStickX) > 0.5 || operatorController->GetRawButton(XboxButtonB)){
 			intake->spinRight();
+		} else if (operatorController->GetRawButton(XboxButtonRightStick)){
+			intake->slowOutput();
 		} else {
 			intake->allOff();
 		}
 
-		if(operatorController->GetRawAxis(XboxAxisLeftTrigger) > 0.2 && operatorController->GetRawAxis(XboxAxisRightTrigger) > 0.2){
-			elevator->move(1.0);
-		}
 
-		if(operatorController->GetRawAxis(XboxAxisLeftStickY) < -0.5){
+		SmartDashboard::PutNumber("XboxDPad", operatorController->GetPOV(0));
+
+		if(operatorController->GetPOV(0) > XboxDPadDownLeft && operatorController->GetRawAxis(XboxDPad) < XboxDPadDownRight){
+			elevator->move(1.0);
+		} else if(operatorController->GetRawAxis(XboxAxisLeftStickY) < -0.5){
 			elevator->goUp();
-		} else if (operatorController->GetRawAxis(XboxAxisLeftStickY) > 0.5){
+		} else if (operatorController->GetRawAxis(XboxAxisLeftStickY) > 0.5 || dPad == XboxDPadDown){
 			elevator->goDown();
+		} else if (dPad == XboxDPadRight){
+			elevator->goToScaleHeight();
+		} else if (dPad == XboxDPadLeft){
+			elevator->goToSwitchHeight();
+		} else if (operatorController->GetRawAxis(XboxAxisLeftTrigger) < -0.5
+				&& operatorController->GetRawAxis(XboxAxisRightTrigger) < -0.5){
+			elevator->move(1.0);
 		} else {
 			elevator->haltMotion();
 		}
@@ -154,22 +170,14 @@ public:
 			elevator->resetEncoder();
 		}
 
-//		if (operatorController->GetRawAxis(XboxAxisRightTrigger) > 0.2){
-//			intake->retractIntake();
-//		} else {
-//			if(intakeIn){
-//				intake->retractIntake();
-//			} else {
-//				intake->extendIntake();
-//			}
-//		}
+	}
+
+	void TestPeriodic() {
 
 	}
 
-	void TestPeriodic() {}
-
 	void DisabledInit() {
-
+		elevator->haltMotion();
 	}
 
 	void DisabledPeriodic() {

@@ -45,9 +45,10 @@
 	}
 
 	void DriveTrain::putValues(){
-		SmartDashboard::PutNumber("strafeSpeed", 0.8);
-		SmartDashboard::PutNumber("driveSpeed", 0.8);
-		SmartDashboard::PutNumber("turnSpeed", 0.8);
+		SmartDashboard::PutNumber("strafeSpeed", 1.0);
+		SmartDashboard::PutNumber("driveSpeed", 1.0);
+		SmartDashboard::PutNumber("turnSpeed", 1.0);
+		SmartDashboard::PutNumber("strafeDrift", 0.3);
 		SmartDashboard::PutBoolean("isStrafing", isStrafing);
 
 
@@ -72,20 +73,19 @@
 	}
 
 	void DriveTrain::periodicValues(){
-
-		SmartDashboard::PutNumber("LeftEncoderValue", leftDrive1->GetSelectedSensorPosition(0));
 		SmartDashboard::PutNumber("RightEncoderValue", getEncoderVal(RightSide));
-		SmartDashboard::PutNumber("StraightCorrection", straightCorrection);
+		SmartDashboard::PutNumber("LeftEncoderValue", getEncoderVal(LeftSide));
 		SmartDashboard::PutData("StrafePID", pid);
 		SmartDashboard::PutNumber("PIDOutput", pidoutput);
-		strafeSpeed = SmartDashboard::GetNumber("strafeSpeed", 0.8);
-		driveSpeed = SmartDashboard::GetNumber("driveSpeed", 0.8);
-		turnSpeed = SmartDashboard::GetNumber("turnSpeed", 0.6);
+		strafeSpeed = SmartDashboard::GetNumber("strafeSpeed", 1.0);
+		driveSpeed = SmartDashboard::GetNumber("driveSpeed", 1.0);
+		turnSpeed = SmartDashboard::GetNumber("turnSpeed", 1.0);
+		strafeDrift = SmartDashboard::GetNumber("strafeDrift", strafeDrift);
+
 		pidMax = SmartDashboard::GetNumber("PIDMax", 0.8);
 		p = SmartDashboard::GetNumber("StrafePID/p", 0.8);
 		i = SmartDashboard::GetNumber("StrafePID/i", 0.0);
 		d = SmartDashboard::GetNumber("StrafePID/d", 0.1);
-		straightCorrection = SmartDashboard::PutNumber("StraightCorrection", straightCorrection);
 
 		strafeSpeedTolerance = SmartDashboard::GetNumber("StrafeSpeedTolerance", 0.2);
 		strafeAngleTolerance = SmartDashboard::GetNumber("strafeAngleTolerance", strafeAngleTolerance);
@@ -105,7 +105,13 @@
 		calculateStrafeRotate(strafe);
 		rotate += pidoutput;
 		driveTrain->ArcadeDrive(-forward * driveSpeed, rotate * turnSpeed);
+
 		strafe1->Set(ControlMode::PercentOutput, strafe * -strafeSpeed);
+
+	}
+
+	void DriveTrain::haltMotion(){
+		driveTrain->TankDrive(0.0,0.0);
 	}
 
 	void DriveTrain::initPID(){
@@ -138,7 +144,3 @@
 			pidoutput = 0.0;
 		}
 	}
-
-//	PowerDistributionPanel DriveTrain::GetPDP(){
-//		return pdp;
-//	}

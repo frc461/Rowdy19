@@ -28,7 +28,7 @@ void Elevator::goUp(){
 		actualSpeed = slowDownMultiplierTop;
 	}
 
-	if(encoderVal < 23000){
+	if(encoderVal < elevatorTop){
 		brakeRelease();
 		elevator1->Set(ControlMode::PercentOutput, -actualSpeed);
 	} else {
@@ -37,15 +37,21 @@ void Elevator::goUp(){
 }
 
 void Elevator::move(double speed){
-	brakeRelease();
-	elevator1->Set(ControlMode::PercentOutput, speed);
+	if((speed > 0 && !sensors->getElevatorBottom())
+	|| (speed < 0 && encoderVal < elevatorTop)){
+		brakeRelease();
+		elevator1->Set(ControlMode::PercentOutput, speed);
+	}
+	else {
+		haltMotion();
+	}
 }
 
 void Elevator::goDown(){
 	double  actualSpeed = lowerSpeed;
-//		if(encoderVal < slowBottomThreshold){
-//			actualSpeed = slowDownMultiplierBottom;
-//		}
+	if(encoderVal < slowBottomThreshold){
+		actualSpeed = slowDownMultiplierBottom;
+	}
 
 	if(!sensors->getElevatorBottom()){
 		brakeRelease();
@@ -120,19 +126,21 @@ void Elevator::postValues(){
 	SmartDashboard::PutNumber("Elevator/raiseSpeed", raiseSpeed);
 	SmartDashboard::PutNumber("Elevator/lowerSpeed", lowerSpeed);
 	SmartDashboard::PutNumber("Elevator/heightTolerance", heightTolerance);
-	SmartDashboard::PutNumber("Elevator/encoderVal", encoderVal);
 
 	SmartDashboard::PutNumber("Elevator/intakeExchangeHeight", intakeExchangeHeight);
 	SmartDashboard::PutNumber("Elevator/switchHeight", switchHeight);
 	SmartDashboard::PutNumber("Elevator/scaleHeight", scaleHeight);
 	SmartDashboard::PutNumber("Elevator/climbHeight", climbHeight);
 	SmartDashboard::PutNumber("Elevator/elevatorTop", elevatorTop);
-	SmartDashboard::PutNumber("Elevator/eleEncoder", elevator1->GetSelectedSensorPosition(0));
 	SmartDashboard::PutNumber("Elevator/slowTopThreshold", slowTopThreshold);
 	SmartDashboard::PutNumber("Elevator/slowBottomThreshold", slowBottomThreshold);
 	SmartDashboard::PutNumber("Elevator/slowDownMultiplierTop", slowDownMultiplierTop);
 	SmartDashboard::PutNumber("Elevator/slowDownMultiplierBottom", slowDownMultiplierBottom);
 
+}
+
+void Elevator::autonStart(){
+	elevator1->SetSelectedSensorPosition(13000, 0,0);
 }
 
 void Elevator::periodicValues(){

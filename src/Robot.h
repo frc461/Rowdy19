@@ -22,6 +22,10 @@ enum AutonomousStates {
 	FaceScale,
 	TurnToBlock,
 	DriveAtBlock,
+	TurnDownPlatformZone,
+	DriveThruPlatformZone,
+
+
 };
 
 enum PWM{
@@ -36,7 +40,7 @@ enum CanChain {
 	RightDrive1CAN = 0,
 	RightDrive2CAN,
 	RightDrive3CAN,
-	LeftDrive1CAN,
+	LeftDrive1CAN ,
 	LeftDrive2CAN,
 	LeftDrive3CAN,
 	Strafe1CAN,
@@ -69,7 +73,7 @@ enum startingPositions {
 
 enum autoTarget{
 	Switch = 0,
-	Scale,
+	Scale
 };
 
 enum StructureData {
@@ -77,5 +81,8 @@ enum StructureData {
 	LeftSide,
 	RightSide
 };
+
+#define DEBUGGING
+
 
 #endif /* SRC_ROBOT_H_ */

@@ -35,6 +35,7 @@ public:
 	//Encoder handlers
 	int  encoderValue();
 	void resetEncoder();
+	void autonStart();
 
 
 	//Shuffleboard Interactions
@@ -52,16 +53,17 @@ private:
 
 	double encoderVal,
 	slowTopThreshold = 3000,
-	slowBottomThreshold = 5000,
+	slowBottomThreshold = 3000,
 	slowDownMultiplierTop = 0.3,
 	slowDownMultiplierBottom = 0.2,
-	elevatorTop = 23000;
-	double raiseSpeed = 0.6, lowerSpeed = 0.3;
-	int heightTolerance = 250;
+	elevatorTop = 26000;
+	double raiseSpeed = 1.0, lowerSpeed = 0.8;
+	int heightTolerance = 1000;
 	int intakeExchangeHeight = 200;
 	int switchHeight = 1300;
 	int scaleHeight = 3500;
 	int climbHeight = 4000;
+
 };
 
 #endif /* SRC_ELEVATOR_H_ */

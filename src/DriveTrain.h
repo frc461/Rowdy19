@@ -21,6 +21,7 @@ public:
 	//Drive methods
 	void arcadeDrive(double, double, double);
 	void tankDrive(double, double, double);
+	void haltMotion();
 
 	void putValues();
 	void periodicValues();
@@ -31,9 +32,19 @@ public:
 
 //	PowerDistributionPanel GetPDP();
 private:
-	double driveSpeed, straightCorrection, turnSpeed, strafeSpeed, strafeDifference, strafeSpeedTolerance, strafeAngleTolerance, strafeAngle, rotateTolerance;
+	double driveSpeed,
+	strafeDrift,
+	straightCorrection,
+	turnSpeed,
+	strafeSpeed,
+	strafeDifference,
+	strafeSpeedTolerance,
+	strafeAngleTolerance,
+	strafeAngle,
+	rotateTolerance;
+
 	bool isStrafing;
-	double p, i, d, pidoutput, pidAdd, pidMax;
+	double p, i, d, pidoutput, pidAdd, pidMax;;
 	PIDController* pid;
 	SettablePIDOut* pidout;
 	SettablePIDSource* pidsrc;

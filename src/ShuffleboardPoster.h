@@ -30,10 +30,12 @@ public:
 	int getTheirSideSwitch();
 	int getStartingPosition();
 	int getTarget();
+	int getSecondChoice();
 
 private:
 	SendableChooser<int> target;
 	SendableChooser<int> startingPosition;
+	SendableChooser<int> secondChoice;
 
 	std::string gameData;
 	DriveTrain* driveTrain;

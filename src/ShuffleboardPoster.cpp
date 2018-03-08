@@ -17,6 +17,11 @@ ShuffleboardPoster::ShuffleboardPoster(DriveTrain& dt, Sensors& srs) {
 }
 
 void ShuffleboardPoster::generateSelectors(){
+		secondChoice.AddDefault("Switch", Switch);
+		secondChoice.AddDefault("Scale", Scale);
+		secondChoice.AddDefault("Default", 0);
+		SmartDashboard::PutData("Auton/secondChoice", &secondChoice);
+
 		startingPosition.AddObject("Left Side", LeftPosition);
 		startingPosition.AddDefault("Center", CenterPosition);
 		startingPosition.AddObject("Right Side", RightPosition);
@@ -41,11 +46,14 @@ int ShuffleboardPoster::getTarget(){
 	return target.GetSelected();
 }
 
+int ShuffleboardPoster::getSecondChoice(){
+	return secondChoice.GetSelected();
+}
+
 void ShuffleboardPoster::shufflePeriodic(){
 	SmartDashboard::PutNumber("gyro", sensors->getGyroAngle());
 	SmartDashboard::PutBoolean("ElevatorSwitch", sensors->getElevatorBottom());
-	SmartDashboard::PutNumber("LeftEncoderDist", driveTrain->getEncoderVal(LeftSide));
-	SmartDashboard::PutNumber("RightEncoderDist", driveTrain->getEncoderVal(RightSide));
+
 //	SmartDashboard::PutData("PDP", driveTrain->GetPDP());
 }
 

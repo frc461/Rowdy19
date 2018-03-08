@@ -3,8 +3,6 @@
  *
  *  Created on: Jan 18, 2016
  *      Author: Garrett Davidson
- *  Copied on: Oct 16, 2017
- *      Copied by: Hank Krutulis
  */
 #ifndef SRC_XBOXJOYSTICKMAP_H_
 #define SRC_XBOXJOYSTICKMAP_H_
@@ -28,7 +26,8 @@ enum XboxJoystickAxis {
 	XboxAxisLeftTrigger,
 	XboxAxisRightTrigger,
 	XboxAxisRightStickX,
-	XboxAxisRightStickY ,
+	XboxAxisRightStickY,
+	XboxDPad,
 };
 
 enum XboxDPadDirection {

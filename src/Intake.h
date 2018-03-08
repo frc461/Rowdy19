@@ -33,6 +33,7 @@ public:
 	void resetSpitCount();
 	void spitInner();
 	void spitCube();
+	void slowOutput();
 
 	//Intake solenoid stuffs
 	void retractIntake();
@@ -47,8 +48,11 @@ public:
 	void allOff();
 
 private:
-	double intakeSpeed = 0.8, spinSpeed = 0.6;
-	int spitCount = 0;
+	double intakeSpeed = 0.8,
+	outputSpeed = 0.6,
+	spinSpeed = 0.2,
+	slowOutputSpeed = 0.4;
+	int spitCount;
 
 	DoubleSolenoid* intakeExtension;
 	Victor* intakeInLeft;

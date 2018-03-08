@@ -2,7 +2,7 @@
  * Intake.cpp
  *
  *  Created on: Jan 27, 2018
- *      Author: hank
+ *      Author: Hank Krutulis - 461
  */
 
 #include <Intake.h>
@@ -13,17 +13,23 @@ Intake::Intake() {
 	intakeInRight = new Victor(RightInIntakePWM);
 	intakeOutLeft = new Spark(LeftOutIntakePWM);
 	intakeOutRight = new Spark(RightOutIntakePWM);
+	resetSpitCount();
 	putValues();
 }
 
 void Intake::takeInOuter(){
-	intakeOutLeft->Set(-intakeSpeed);
-	intakeOutRight->Set(intakeSpeed);
+	intakeOutLeft->Set(-outputSpeed);
+	intakeOutRight->Set(outputSpeed);
 }
 
 void Intake::takeInInner(){
-	intakeInLeft->Set(intakeSpeed);
-	intakeInRight->Set(-intakeSpeed);
+	intakeInLeft->Set(-outputSpeed);
+	intakeInRight->Set(outputSpeed);
+}
+
+void Intake::slowOutput(){
+	intakeInLeft->Set(slowOutputSpeed);
+	intakeInRight->Set(-slowOutputSpeed);
 }
 
 void Intake::takeInAll(){
@@ -37,8 +43,8 @@ void Intake::outputOuter(){
 }
 
 void Intake::outputInner(){
-	intakeInLeft->Set(-intakeSpeed);
-	intakeInRight->Set(intakeSpeed);
+	intakeInLeft->Set(intakeSpeed);
+	intakeInRight->Set(-intakeSpeed);
 }
 
 void Intake::outputAll(){
@@ -47,14 +53,14 @@ void Intake::outputAll(){
 }
 
 void Intake::spinRight(){
-	intakeInLeft->Set(-intakeSpeed);
-	intakeInRight->Set(-intakeSpeed);
+	intakeInLeft->Set(spinSpeed);
+	intakeInRight->Set(-spinSpeed);
 
 }
 
 void Intake::spinLeft(){
-	intakeInLeft->Set(intakeSpeed);
-	intakeInRight->Set(intakeSpeed);
+	intakeInLeft->Set(spinSpeed);
+	intakeInRight->Set(-spinSpeed);
 
 }
 
@@ -72,7 +78,7 @@ void Intake::spitCube(){
 }
 
 void Intake::extendIntake(){
-//	intakeExtension->Set(DoubleSolenoid::kReverse);
+	intakeExtension->Set(DoubleSolenoid::kReverse);
 }
 
 void Intake::retractIntake(){
@@ -98,11 +104,11 @@ void Intake::allOff(){
 }
 
 void Intake::putValues(){
-	SmartDashboard::PutNumber("Intake/intakeSpeed", intakeSpeed);
-	SmartDashboard::PutNumber("Intake/spinSpeed", spinSpeed);
+	SmartDashboard::PutNumber("Elevator/intakeSpeed", intakeSpeed);
+	SmartDashboard::PutNumber("Elevator/spinSpeed", spinSpeed);
 }
 
 void Intake::periodicValues(){
-	intakeSpeed = SmartDashboard::GetNumber("Intake/intakeSpeed", intakeSpeed);
-	spinSpeed = SmartDashboard::GetNumber("Intake/spinSpeed", spinSpeed);
+	intakeSpeed = SmartDashboard::GetNumber("Elevator/intakeSpeed", intakeSpeed);
+	spinSpeed = SmartDashboard::GetNumber("Elevator/spinSpeed", spinSpeed);
 }

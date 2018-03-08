@@ -18,7 +18,10 @@
 class Autonomous {
 public:
 	Autonomous(DriveTrain&, Sensors&, ShuffleboardPoster&, Elevator&, Intake&);
+
+	//Auto logics
 	void runAuto();
+	void smartRun();
 
 	//Shuffleboard interactions
 	void autonPostValues();
@@ -32,10 +35,12 @@ public:
 	void switchRightAuto();
 	void switchLeftAuto();
 	void switchFromMiddle();
+	void switchFromBack();
 
 	//Scale auton
 	void scaleFromSide();
 	void scaleFromCenter();
+	void scaleFromOpposite();
 
 	//Emergency auton
 	void defaultCross();
@@ -51,34 +56,59 @@ public:
 private:
 	bool elevatorZeroed = false;
 
-	int scaleHeight = 21000, switchHeight = 10000;
-	int encoderDist, gyroAngle,
-	initDist = 5000,
-	lTurn1 = -35,
-	lTurn2 = 23,
-	lDrive2 = 6000,
-	lDrive3 = 2000,
-	rTurn1 = 25,
-	rTurn2 = -45,
-	rDrive2 = 8000,
-	rDrive3 = 2000,
-	defaultDist = 1750,
-	switchSideDist = 12000,
-	faceSwitchAngleRight = 45,
-	faceSwitchAngleLeft = -35,
-	driveToSwitchDist = 2500,
+	int scaleHeight = 26000, switchHeight = 10000;
+	int carpetConstant = 0;
 
-	scaleSideDist = 25000,
-	faceScaleLeft = 20,
-	faceScaleRight = 45,
-	scaleAdjustDist = 2500,
+	//Sensor values
+	int encoderDist, gyroAngle;
 
-	autoState = InitialStart;
+	//Auton Values
+	int target,
+	startingPosition,
+	ourSwitch,
+	ourScale,
+	secondChoice;
 
-	int drivePastDist = 7000,
-	driveAwayDist = 15000;
+	int
+		autoState = InitialStart;
 
-	int target, startingPosition, ourSwitch, ourScale;
+		int driftConstant = 45,
+
+		//Center Switch
+		initDist = 2500,
+		lTurn1 = -35,
+		lTurn2 = 23,
+		lDrive2 = 4500,
+		lDrive3 = 3000,
+		rTurn1 = 25,
+		rTurn2 = -35,
+		rDrive2 = 8000,
+		rDrive3 = 2000,
+		defaultDist = 1750,
+
+		//L/R Switch
+		switchSideDist = 12000,
+		faceSwitchAngleRight = -50,
+		faceSwitchAngleLeft = 45,
+		driveToSwitchDist = 2000,
+
+		//L/R Scale
+		scaleSideDist = 32500,
+		faceScaleLeft = 20,
+		faceScaleRight = 35,
+		scaleAdjustDist = 2500,
+
+		//Default
+		drivePastDist = 15000,
+		driveAwayDist = 15000,
+
+		//Platform zone
+		platformToDist = 20000,
+		platformTurnToRight = 35,
+		platformTurnToLeft = 45,
+		platformThruDist = 3000;
+
+
 
 	bool heightReached = false;
 
