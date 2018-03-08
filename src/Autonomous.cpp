@@ -110,6 +110,7 @@ void Autonomous::autonPostValues(){
 }
 
 void Autonomous::autonPeriodicValues(){
+#ifdef DEBUGGING
 	initDist = SmartDashboard::GetNumber("Auton/initDist", initDist);
 	lTurn1 = SmartDashboard::GetNumber("Auton/Switch/lTurn1", lTurn1);
 	lTurn2 =  SmartDashboard::GetNumber("Auton/Switch/lTurn2", lTurn2);
@@ -148,6 +149,8 @@ void Autonomous::autonPeriodicValues(){
 	gyroAngle = sensors->getGyroAngle();
 	SmartDashboard::PutNumber("Auton/gyro", gyroAngle);
 	SmartDashboard::PutBoolean("Auton/elevatorZeroed", elevatorZeroed);
+#endif
+
 
 }
 
@@ -329,7 +332,8 @@ void Autonomous::scaleFromSide(){
 				driveTrain->tankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
 				driveTrain->resetEncoders();
 			} else {
-				autoState = RaiseElevator;
+				autoState = DriveTowardsScale;
+				driveTrain->tankDrive(-0.0, -0.0, 0.0);
 				driveTrain->resetEncoders();
 			}
 			break;
@@ -440,10 +444,11 @@ void Autonomous::updateStarts(){
 }
 
 void Autonomous::defaultCross(){
+	printf("Defaulting\n");
 	switch (autoState){
 			case(InitialStart):
 				if(encoderDist > -drivePastDist){
-					driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+					driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed - (sensors->getGyroAngle() / driftConstant), 0.0);
 				} else {
 					driveTrain->tankDrive(0.0,0.0,0.0);
 				}

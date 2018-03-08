@@ -72,14 +72,14 @@ private:
 	int
 		autoState = InitialStart;
 
-		int driftConstant = 45,
+		double driftConstant = 45,
 
 		//Center Switch
 		initDist = 2500,
-		lTurn1 = -35,
-		lTurn2 = 23,
-		lDrive2 = 4500,
-		lDrive3 = 3000,
+		lTurn1 = -30,
+		lTurn2 = 55,
+		lDrive2 = 8000,
+		lDrive3 = 5000,
 		rTurn1 = 25,
 		rTurn2 = -35,
 		rDrive2 = 8000,
@@ -93,10 +93,10 @@ private:
 		driveToSwitchDist = 2000,
 
 		//L/R Scale
-		scaleSideDist = 32500,
-		faceScaleLeft = 20,
-		faceScaleRight = 35,
-		scaleAdjustDist = 2500,
+		scaleSideDist = 26000,
+		faceScaleLeft = 5,
+		faceScaleRight = 8,
+		scaleAdjustDist = 1000,
 
 		//Default
 		drivePastDist = 15000,

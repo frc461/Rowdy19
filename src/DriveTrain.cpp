@@ -45,18 +45,20 @@
 	}
 
 	void DriveTrain::putValues(){
-		SmartDashboard::PutNumber("strafeSpeed", 1.0);
-		SmartDashboard::PutNumber("driveSpeed", 1.0);
-		SmartDashboard::PutNumber("turnSpeed", 1.0);
-		SmartDashboard::PutNumber("strafeDrift", 0.3);
-		SmartDashboard::PutBoolean("isStrafing", isStrafing);
+		#ifdef DEBUGGGING
+				SmartDashboard::PutNumber("strafeSpeed", 1.0);
+				SmartDashboard::PutNumber("driveSpeed", 1.0);
+				SmartDashboard::PutNumber("turnSpeed", 1.0);
+				SmartDashboard::PutNumber("strafeDrift", 0.3);
+				SmartDashboard::PutBoolean("isStrafing", isStrafing);
+				SmartDashboard::PutData("driveTrain", driveTrain);
 
-
-		SmartDashboard::PutNumber("strafeDiff", strafeDifference);
-		SmartDashboard::PutNumber("strafeAngleTolerance", strafeAngleTolerance);
-		SmartDashboard::PutNumber("StrafeAngle", strafeAngle);
-		SmartDashboard::PutNumber("StrafeSpeedTolerance", strafeSpeedTolerance);
-		SmartDashboard::PutNumber("RotateTolerance", rotateTolerance);
+				SmartDashboard::PutNumber("strafeDiff", strafeDifference);
+				SmartDashboard::PutNumber("strafeAngleTolerance", strafeAngleTolerance);
+				SmartDashboard::PutNumber("StrafeAngle", strafeAngle);
+				SmartDashboard::PutNumber("StrafeSpeedTolerance", strafeSpeedTolerance);
+				SmartDashboard::PutNumber("RotateTolerance", rotateTolerance);
+		#endif
 	}
 
 	int DriveTrain::getEncoderVal(int sideSelect){

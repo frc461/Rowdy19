@@ -14,7 +14,6 @@
 //Include WPILib and 3rd party libraries
 #include "WPILib.h"
 #include "ctre/Phoenix.h"
-#include "AHRS.h"
 
 //Include custom headers
 #include "THRSTMSTRmap.h"
@@ -43,7 +42,7 @@ public:
 	Elevator* elevator;
 
 	//Camera
-	Camera *camera;
+//	Camera *camera;
 
 
 	Autonomous *auton;
@@ -59,7 +58,7 @@ public:
 		rightJoystick = new Joystick(1);
 		operatorController = new Joystick(2);
 
-		camera = new Camera();
+//		camera = new Camera();
 		sensors = new Sensors();
 		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
@@ -103,7 +102,7 @@ public:
 	void TeleopPeriodic() {
 		boardHandler->shufflePeriodic();
 		elevator->periodicValues();
-		camera->cameraPeriodic(operatorController->GetRawButton(XboxButtonLeftStick));
+//		camera->cameraPeriodic(operatorController->GetRawButton(XboxButtonLeftStick));
 
 		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
 		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
