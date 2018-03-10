@@ -134,23 +134,21 @@ void Autonomous::autonPeriodicValues(){
 
 	autoDriveSpeed = SmartDashboard::GetNumber("Auton/autoDriveSpeed", -0.8);
 	autoTurnSpeed = SmartDashboard::GetNumber("Auton/autoTurnSpeed", -0.6);
-	SmartDashboard::PutNumber("Auton/autoState", autoState);
 
 	scaleHeight = SmartDashboard::GetNumber("Auton/scaleHeight", scaleHeight);
 	switchHeight = SmartDashboard::GetNumber("Auton/scaleHeight", switchHeight);
 
-	carpetConstant = SmartDashboard::GetNumber("Auton/carpetConstant", carpetConstant);
-
-	ourSwitch = board->getOurSwitch();
-	ourScale = board->getOurScale();
-
-	driftConstant = SmartDashboard::GetNumber("Auton/driftConstant", driftConstant);
-	encoderDist = driveTrain->getEncoderVal(LeftSide);
 	gyroAngle = sensors->getGyroAngle();
 	SmartDashboard::PutNumber("Auton/gyro", gyroAngle);
 	SmartDashboard::PutBoolean("Auton/elevatorZeroed", elevatorZeroed);
 #endif
+	carpetConstant = SmartDashboard::GetNumber("Auton/carpetConstant", carpetConstant);
+	driftConstant = SmartDashboard::GetNumber("Auton/driftConstant", driftConstant);
 
+	SmartDashboard::PutNumber("Auton/autoState", autoState);
+	ourScale = board->getOurScale();
+	ourSwitch = board->getOurSwitch();
+	encoderDist = driveTrain->getEncoderVal(LeftSide);
 
 }
 

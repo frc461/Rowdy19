@@ -62,7 +62,8 @@ private:
 	int intakeExchangeHeight = 200;
 	int switchHeight = 1300;
 	int scaleHeight = 3500;
-	int climbHeight = 4000;
+	int climbHeight = 4000,
+		startHeight = 500;
 
 };
 

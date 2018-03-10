@@ -39,6 +39,12 @@ void Camera::cameraPeriodic(bool state){
 	}
 	cvSink->GrabFrame(source);
 	if (!source.empty()) {
+		if(currentCam){
+//			rotate(source,source, cv::ROTATE_90_COUNTERCLOCKWISE);
+		} else {
+			rotate(source, source, cv::ROTATE_180);
+
+		}
 		camOut.PutFrame(source);
 	}
 }

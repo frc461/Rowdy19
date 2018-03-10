@@ -17,19 +17,19 @@ ShuffleboardPoster::ShuffleboardPoster(DriveTrain& dt, Sensors& srs) {
 }
 
 void ShuffleboardPoster::generateSelectors(){
-		secondChoice.AddDefault("Switch", Switch);
-		secondChoice.AddDefault("Scale", Scale);
-		secondChoice.AddDefault("Default", 0);
-		SmartDashboard::PutData("Auton/secondChoice", &secondChoice);
+//		secondChoice.AddDefault("Switch", Switch);
+//		secondChoice.AddDefault("Scale", Scale);
+//		secondChoice.AddDefault("Default", 0);
+//		SmartDashboard::PutData("Comp/secondChoice", &secondChoice);
 
 		startingPosition.AddObject("Left Side", LeftPosition);
 		startingPosition.AddDefault("Center", CenterPosition);
 		startingPosition.AddObject("Right Side", RightPosition);
-		SmartDashboard::PutData("Auton/Starting Position", &startingPosition);
+		SmartDashboard::PutData("Comp/Starting Position", &startingPosition);
 
 		target.AddDefault("Switch", Switch);
 		target.AddObject("Scale", Scale);
-		SmartDashboard::PutData("Auton/Target", &target);
+		SmartDashboard::PutData("Comp/Target", &target);
 
 		SmartDashboard::Delete("Warning");
 }

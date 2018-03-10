@@ -26,6 +26,10 @@
 #include "Elevator.h"
 #include "Camera.h"
 
+#define COMP
+#define DEBUGGING
+
+
 class Robot : public frc::IterativeRobot {
 public:
 
@@ -42,7 +46,7 @@ public:
 	Elevator* elevator;
 
 	//Camera
-//	Camera *camera;
+	Camera *camera;
 
 
 	Autonomous *auton;
@@ -58,7 +62,7 @@ public:
 		rightJoystick = new Joystick(1);
 		operatorController = new Joystick(2);
 
-//		camera = new Camera();
+		camera = new Camera();
 		sensors = new Sensors();
 		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
@@ -77,16 +81,13 @@ public:
 		auton->setAutoState(InitialStart);
 		elevator->periodicValues();
 		intake->periodicValues();
-		intakeIn = false;
 		intake->resetSpitCount();
+		intake->extendIntake();
 		elevator->autonStart();
 	}
 
 
 	void AutonomousPeriodic() {
-//		if(!sensors->getElevatorBottom()){
-//			intake->retractIntake();
-//		}
 		elevator->periodicValues();
 		boardHandler->shufflePeriodic();
 		intake->periodicValues();
@@ -95,17 +96,17 @@ public:
 
 	void TeleopInit() {
 		driveTrain->resetEncoders();
-		intakeIn = false;
+		intake->extendIntake();
 		intake->resetSpitCount();
 	}
 
 	void TeleopPeriodic() {
 		boardHandler->shufflePeriodic();
 		elevator->periodicValues();
-//		camera->cameraPeriodic(operatorController->GetRawButton(XboxButtonLeftStick));
+		camera->cameraPeriodic(operatorController->GetRawButton(XboxButtonLeftStick));
 
 		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
-		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
+//		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
 		int dPad = operatorController->GetPOV();

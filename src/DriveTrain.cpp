@@ -45,7 +45,7 @@
 	}
 
 	void DriveTrain::putValues(){
-		#ifdef DEBUGGGING
+		#ifdef DEBUGGING
 				SmartDashboard::PutNumber("strafeSpeed", 1.0);
 				SmartDashboard::PutNumber("driveSpeed", 1.0);
 				SmartDashboard::PutNumber("turnSpeed", 1.0);
@@ -77,6 +77,7 @@
 	void DriveTrain::periodicValues(){
 		SmartDashboard::PutNumber("RightEncoderValue", getEncoderVal(RightSide));
 		SmartDashboard::PutNumber("LeftEncoderValue", getEncoderVal(LeftSide));
+#ifdef DEBUGGING
 		SmartDashboard::PutData("StrafePID", pid);
 		SmartDashboard::PutNumber("PIDOutput", pidoutput);
 		strafeSpeed = SmartDashboard::GetNumber("strafeSpeed", 1.0);
@@ -92,6 +93,7 @@
 		strafeSpeedTolerance = SmartDashboard::GetNumber("StrafeSpeedTolerance", 0.2);
 		strafeAngleTolerance = SmartDashboard::GetNumber("strafeAngleTolerance", strafeAngleTolerance);
 		rotateTolerance = SmartDashboard::GetNumber("RotateTolerance", rotateTolerance);
+#endif
 		pid->SetPID(p, i, d);
 	}
 

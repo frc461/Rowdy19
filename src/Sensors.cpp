@@ -12,6 +12,7 @@
 Sensors::Sensors() {
 	gyro = new ADXRS450_Gyro();
 	elevatorBottom = new DigitalInput(8);
+	SmartDashboard::PutData("gyroscope", gyro);
 }
 
 int Sensors::getGyroAngle(){
