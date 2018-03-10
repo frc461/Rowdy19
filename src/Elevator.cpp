@@ -152,9 +152,9 @@ void Elevator::periodicValues(){
 	}
 
 	encoderVal = elevator1->GetSelectedSensorPosition(0);
-	SmartDashboard::PutNumber("Elevator/elevatorEncoder", encoderVal);
-	raiseSpeed = SmartDashboard::GetNumber("Elevator/raiseSpeed", raiseSpeed);
-	lowerSpeed = SmartDashboard::GetNumber("Elevator/lowerSpeed", lowerSpeed);
+	SmartDashboard::PutNumber("Comp/elevatorEncoder", encoderVal);
+	raiseSpeed = SmartDashboard::GetNumber("Comp/raiseSpeed", raiseSpeed);
+	lowerSpeed = SmartDashboard::GetNumber("Comp/lowerSpeed", lowerSpeed);
 
 #ifdef DEBUGGING
 	heightTolerance = SmartDashboard::GetNumber("Elevator/heightTolerance", heightTolerance);

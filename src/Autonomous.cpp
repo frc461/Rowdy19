@@ -64,10 +64,12 @@ void Autonomous::runAuto(){
 			switchLeftAuto();
 			printf("Switch left from center");
 		}
-	} else if (startingPosition == ourSwitch && startingPosition == ourSwitch){
+	} else if (target == Switch && startingPosition == ourSwitch){
 		switchFromSide();
 		printf("Switch from side");
-	} else {
+	} else if (startingPosition == ourScale){
+		scaleFromSide();
+	} else{
 		defaultCross();
 		printf("Defaulting");
 	}
@@ -138,16 +140,18 @@ void Autonomous::autonPeriodicValues(){
 	scaleHeight = SmartDashboard::GetNumber("Auton/scaleHeight", scaleHeight);
 	switchHeight = SmartDashboard::GetNumber("Auton/scaleHeight", switchHeight);
 
-	gyroAngle = sensors->getGyroAngle();
 	SmartDashboard::PutNumber("Auton/gyro", gyroAngle);
 	SmartDashboard::PutBoolean("Auton/elevatorZeroed", elevatorZeroed);
 #endif
+
 	carpetConstant = SmartDashboard::GetNumber("Auton/carpetConstant", carpetConstant);
 	driftConstant = SmartDashboard::GetNumber("Auton/driftConstant", driftConstant);
 
 	SmartDashboard::PutNumber("Auton/autoState", autoState);
 	ourScale = board->getOurScale();
 	ourSwitch = board->getOurSwitch();
+
+	gyroAngle = sensors->getGyroAngle();
 	encoderDist = driveTrain->getEncoderVal(LeftSide);
 
 }
@@ -330,7 +334,7 @@ void Autonomous::scaleFromSide(){
 				driveTrain->tankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
 				driveTrain->resetEncoders();
 			} else {
-				autoState = DriveTowardsScale;
+				autoState = RaiseElevator;
 				driveTrain->tankDrive(-0.0, -0.0, 0.0);
 				driveTrain->resetEncoders();
 			}

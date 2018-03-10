@@ -157,17 +157,16 @@ public:
 			elevator->haltMotion();
 		}
 
-		if (operatorController->GetRawButton(XboxButtonRightBumper)){
+		if (operatorController->GetRawButton(XboxButtonStart) && operatorController->GetRawButton(XboxButtonBack)){
 			if (!previouslyToggled){
-				intakeIn = !intakeIn;
+				intake->retractIntake();
+				previouslyToggled = true;
 			}
 		}
-		previouslyToggled = operatorController->GetRawButton(XboxButtonRightBumper);
 
 		if (operatorController->GetRawButton(XboxButtonLeftBumper)){
 			driveTrain->resetEncoders();
 			sensors->resetGyro();
-			elevator->resetEncoder();
 		}
 
 	}
