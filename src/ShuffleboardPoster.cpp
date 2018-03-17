@@ -27,8 +27,9 @@ void ShuffleboardPoster::generateSelectors(){
 		startingPosition.AddObject("Right Side", RightPosition);
 		SmartDashboard::PutData("Comp/Starting Position", &startingPosition);
 
-		target.AddDefault("Switch", Switch);
-		target.AddObject("Scale", Scale);
+		target.AddObject("Switch", Switch);
+		target.AddDefault("Scale", Scale);
+		target.AddObject("Default", 5);
 		SmartDashboard::PutData("Comp/Target", &target);
 
 		SmartDashboard::Delete("Warning");

@@ -30,7 +30,6 @@ public:
 	int getEncoderVal(int);
 	void resetEncoders();
 
-//	PowerDistributionPanel GetPDP();
 private:
 	double driveSpeed,
 	strafeDrift,

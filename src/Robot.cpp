@@ -39,14 +39,14 @@ public:
 	Joystick *operatorController;
 
 	//Robot parts
-	PowerDistributionPanel *pdp;
+//	PowerDistributionPanel *pdp;
 	DriveTrain *driveTrain;
 	ShuffleboardPoster *boardHandler;
 	Intake* intake;
 	Elevator* elevator;
 
 	//Camera
-	Camera *camera;
+//	Camera *camera;
 
 
 	Autonomous *auton;
@@ -61,14 +61,17 @@ public:
 		leftJoystick = new Joystick(0);
 		rightJoystick = new Joystick(1);
 		operatorController = new Joystick(2);
-
-		camera = new Camera();
+//		pdp = new PowerDistributionPanel(0);
+//		camera = new Camera();
 		sensors = new Sensors();
 		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
 		elevator = new Elevator(*sensors);
 		intake = new Intake();
 		auton = new Autonomous(*driveTrain, *sensors, *boardHandler, *elevator, *intake);
+		previouslyToggled = false;
+		intakeIn = true;
+		CameraServer::GetInstance()->StartAutomaticCapture(1);
 	}
 
 
@@ -103,7 +106,7 @@ public:
 	void TeleopPeriodic() {
 		boardHandler->shufflePeriodic();
 		elevator->periodicValues();
-		camera->cameraPeriodic(operatorController->GetRawButton(XboxButtonLeftStick));
+//		camera->cameraPeriodic(operatorController->GetRawButton(XboxButtonLeftStick));
 
 		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
 //		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
@@ -140,7 +143,9 @@ public:
 
 		SmartDashboard::PutNumber("XboxDPad", operatorController->GetPOV(0));
 
-		if(operatorController->GetPOV(0) > XboxDPadDownLeft && operatorController->GetRawAxis(XboxDPad) < XboxDPadDownRight){
+		if (operatorController->GetRawButton(XboxButtonRightBumper) /*|| pdp->GetVoltage() < 7*/){
+			elevator->haltMotion();
+		} else if	(operatorController->GetPOV(0) > XboxDPadDownLeft && operatorController->GetRawAxis(XboxDPad) < XboxDPadDownRight){
 			elevator->move(1.0);
 		} else if(operatorController->GetRawAxis(XboxAxisLeftStickY) < -0.5){
 			elevator->goUp();
@@ -150,8 +155,8 @@ public:
 			elevator->goToScaleHeight();
 		} else if (dPad == XboxDPadLeft){
 			elevator->goToSwitchHeight();
-		} else if (operatorController->GetRawAxis(XboxAxisLeftTrigger) < -0.5
-				&& operatorController->GetRawAxis(XboxAxisRightTrigger) < -0.5){
+		} else if (operatorController->GetRawAxis(XboxAxisLeftTrigger) > 0.5
+				&& operatorController->GetRawAxis(XboxAxisRightTrigger) > 0.5){
 			elevator->move(1.0);
 		} else {
 			elevator->haltMotion();
@@ -159,9 +164,11 @@ public:
 
 		if (operatorController->GetRawButton(XboxButtonStart) && operatorController->GetRawButton(XboxButtonBack)){
 			if (!previouslyToggled){
-				intake->retractIntake();
+				intakeIn = !intakeIn;
 				previouslyToggled = true;
 			}
+		} else {
+				previouslyToggled = false;
 		}
 
 		if (operatorController->GetRawButton(XboxButtonLeftBumper)){

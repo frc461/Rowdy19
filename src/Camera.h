@@ -26,7 +26,7 @@ class Camera {
 		};
 		cv::Mat source;
 		cs::UsbCamera *cam0;
-		cs::UsbCamera *cam1;
+//		222222222ssssssssssssssssssssssssscs::UsbCamera *cam1;
 		Cameras currentCam;
 		cs::CvSink *cvSink;
 		cs::CvSource camOut;

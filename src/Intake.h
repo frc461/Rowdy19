@@ -50,7 +50,7 @@ public:
 private:
 	double intakeSpeed = 0.8,
 	outputSpeed = 0.6,
-	spinSpeed = 0.2,
+	spinSpeed = 0.4,
 	slowOutputSpeed = 0.4;
 	int spitCount;
 

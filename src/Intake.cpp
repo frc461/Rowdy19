@@ -82,7 +82,7 @@ void Intake::extendIntake(){
 }
 
 void Intake::retractIntake(){
-//	intakeExtension->Set(DoubleSolenoid::kForward);
+	intakeExtension->Set(DoubleSolenoid::kForward);
 }
 
 

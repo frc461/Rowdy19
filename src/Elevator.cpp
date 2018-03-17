@@ -123,8 +123,8 @@ void Elevator::resetEncoder(){
 }
 
 void Elevator::postValues(){
-	SmartDashboard::PutNumber("Elevator/raiseSpeed", raiseSpeed);
-	SmartDashboard::PutNumber("Elevator/lowerSpeed", lowerSpeed);
+	SmartDashboard::PutNumber("Comp/raiseSpeed", raiseSpeed);
+	SmartDashboard::PutNumber("Comp/lowerSpeed", lowerSpeed);
 
 #ifdef DEBUGGING
 	SmartDashboard::PutNumber("Elevator/heightTolerance", heightTolerance);

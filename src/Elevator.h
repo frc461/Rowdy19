@@ -54,10 +54,10 @@ private:
 	double encoderVal,
 	slowTopThreshold = 3000,
 	slowBottomThreshold = 3000,
-	slowDownMultiplierTop = 0.3,
-	slowDownMultiplierBottom = 0.2,
+	slowDownMultiplierTop = 0.7,
+	slowDownMultiplierBottom = 0.5,
 	elevatorTop = 26000;
-	double raiseSpeed = 1.0, lowerSpeed = 0.8;
+	double raiseSpeed = 1.0, lowerSpeed = 0.5;
 	int heightTolerance = 1000;
 	int intakeExchangeHeight = 200;
 	int switchHeight = 1300;
