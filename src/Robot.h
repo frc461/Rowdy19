@@ -1,5 +1,4 @@
 /*
-[]\
  * Robot.h
  *
  *  Created on: Jan 20, 2018
@@ -26,7 +25,8 @@ enum AutonomousStates {
 	TurnDownPlatformZone,
 	DriveThruPlatformZone,
 	BackOffScale,
-	ScaleAdjust
+	ScaleAdjust,
+	BackOff
 
 };
 

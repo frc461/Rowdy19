@@ -20,6 +20,11 @@ public:
 	void takeInInner();
 	void takeInAll();
 
+	//Wrist
+	void goToIntake();
+	void goToVertical();
+	void goToFourtyFive();
+
 	//Output
 	void outputOuter();
 	void outputInner();
@@ -32,7 +37,7 @@ public:
 	//Spits
 	void resetSpitCount();
 	void spitInner();
-	void spitCube();
+	bool spitCube();
 	void slowOutput();
 
 	//Intake solenoid stuffs

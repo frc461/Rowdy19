@@ -68,12 +68,14 @@ void Intake::resetSpitCount(){
 	spitCount = 0;
 }
 
-void Intake::spitCube(){
+bool Intake::spitCube(){
 	if (spitCount < 10){
 		outputAll();
 		spitCount++;
+		return false;
 	} else {
 		allOff();
+		return true;
 	}
 }
 

@@ -126,13 +126,17 @@ public:
 			driveTrain->arcadeDrive(forwardR, rotate, strafe);
 //		}
 
-		if(operatorController->GetRawAxis(XboxAxisRightStickY) < -0.5 || operatorController->GetRawButton(XboxButtonY)){
+		if(operatorController->GetRawAxis(XboxAxisRightStickY) < -0.5
+				|| operatorController->GetRawButton(XboxButtonY)){
 			intake->outputAll();
-		} else if (operatorController->GetRawAxis(XboxAxisRightStickY) > 0.5 || operatorController->GetRawButton(XboxButtonA)){
+		} else if (operatorController->GetRawAxis(XboxAxisRightStickY) > 0.5
+				|| operatorController->GetRawButton(XboxButtonA)){
 			intake->takeInAll();
-		} else if (operatorController->GetRawAxis(XboxAxisRightStickX) < -0.5 || operatorController->GetRawButton(XboxButtonX)){
+		} else if (operatorController->GetRawAxis(XboxAxisRightStickX) < -0.5
+				|| operatorController->GetRawButton(XboxButtonX)){
 			intake->spinLeft();
-		} else if (operatorController->GetRawAxis(XboxAxisRightStickX) > 0.5 || operatorController->GetRawButton(XboxButtonB)){
+		} else if (operatorController->GetRawAxis(XboxAxisRightStickX) > 0.5
+				|| operatorController->GetRawButton(XboxButtonB)){
 			intake->spinRight();
 		} else if (operatorController->GetRawButton(XboxButtonRightStick)){
 			intake->slowOutput();
@@ -145,16 +149,10 @@ public:
 
 		if (operatorController->GetRawButton(XboxButtonRightBumper) /*|| pdp->GetVoltage() < 7*/){
 			elevator->haltMotion();
-		} else if	(operatorController->GetPOV(0) > XboxDPadDownLeft && operatorController->GetRawAxis(XboxDPad) < XboxDPadDownRight){
-			elevator->move(1.0);
 		} else if(operatorController->GetRawAxis(XboxAxisLeftStickY) < -0.5){
 			elevator->goUp();
-		} else if (operatorController->GetRawAxis(XboxAxisLeftStickY) > 0.5 || dPad == XboxDPadDown){
+		} else if (operatorController->GetRawAxis(XboxAxisLeftStickY) > 0.5){
 			elevator->goDown();
-		} else if (dPad == XboxDPadRight){
-			elevator->goToScaleHeight();
-		} else if (dPad == XboxDPadLeft){
-			elevator->goToSwitchHeight();
 		} else if (operatorController->GetRawAxis(XboxAxisLeftTrigger) > 0.5
 				&& operatorController->GetRawAxis(XboxAxisRightTrigger) > 0.5){
 			elevator->move(1.0);

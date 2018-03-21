@@ -35,7 +35,7 @@ public:
 	void switchRightAuto();
 	void switchLeftAuto();
 	void switchFromMiddle();
-	void switchFromBack();
+	void switchFromOpposite();
 
 	//Scale auton
 	void scaleFromSide();
@@ -108,10 +108,19 @@ private:
 		platformToDist = 13000,
 		platformTurnToRight = 35,
 		platformTurnToLeft = 45,
+
+		//Scale
 		platformThruDist = 7000,
 		faceScaleOppRight = 30,
 		faceScaleOppLeft = 45,
-		scaleAdjustOpp = 2000;
+		scaleAdjustOppLeft = 2000,
+		scaleAdjustOppRight = 2000,
+
+		//Switch
+		platformToOtherAlley = 12000,
+		turnDownAlleyRight = 30,
+		turnDownAlleyLeft = 45;
+
 
 
 

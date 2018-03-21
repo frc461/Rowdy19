@@ -79,6 +79,7 @@
 	void DriveTrain::periodicValues(){
 		SmartDashboard::PutNumber("RightEncoderValue", getEncoderVal(RightSide));
 		SmartDashboard::PutNumber("LeftEncoderValue", getEncoderVal(LeftSide));
+
 #ifdef DEBUGGING
 		SmartDashboard::PutData("StrafePID", pid);
 		SmartDashboard::PutNumber("PIDOutput", pidoutput);
