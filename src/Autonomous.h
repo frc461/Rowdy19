@@ -106,8 +106,6 @@ private:
 
 		//Platform zone
 		platformToDist = 13000,
-		platformTurnToRight = 35,
-		platformTurnToLeft = 45,
 
 		//Scale
 		platformThruDist = 7000,

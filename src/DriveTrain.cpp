@@ -53,6 +53,7 @@
 				SmartDashboard::PutNumber("driveSpeed", 1.0);
 				SmartDashboard::PutNumber("turnSpeed", 1.0);
 				SmartDashboard::PutNumber("strafeDrift", 0.3);
+				SmartDashboard::PutNumber("driftConstant", driftConstant);
 				SmartDashboard::PutBoolean("isStrafing", isStrafing);
 
 				SmartDashboard::PutNumber("strafeDiff", strafeDifference);
@@ -87,6 +88,7 @@
 		driveSpeed = SmartDashboard::GetNumber("driveSpeed", 1.0);
 		turnSpeed = SmartDashboard::GetNumber("turnSpeed", 1.0);
 		strafeDrift = SmartDashboard::GetNumber("strafeDrift", strafeDrift);
+		driftConstant = SmartDashboard::GetNumber("driftConstant", driftConstant);
 
 		pidMax = SmartDashboard::GetNumber("PIDMax", 0.8);
 		p = SmartDashboard::GetNumber("StrafePID/p", 0.8);
@@ -128,6 +130,13 @@
 		pid->SetOutputRange(-pidMax, pidMax);
 		SmartDashboard::PutNumber("PIDMax", pidMax);
 	}	
+
+	void DriveTrain::autonTankDrive(double left, double right){
+		periodicValues();
+		right = right + (sensors->getGyroAngle() / driftConstant);
+		driveTrain->TankDrive(-left, -right);
+		strafe1->Set(ControlMode::PercentOutput, 0.0);
+	}
 
 	void DriveTrain::tankDrive(double left, double right, double strafe){
 		periodicValues();

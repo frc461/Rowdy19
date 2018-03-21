@@ -21,6 +21,7 @@ public:
 	//Drive methods
 	void arcadeDrive(double, double, double);
 	void tankDrive(double, double, double);
+	void autonTankDrive(double, double);
 	void haltMotion();
 
 	void putValues();
@@ -33,6 +34,7 @@ public:
 private:
 	double driveSpeed,
 	strafeDrift,
+	driftConstant = 45,
 	straightCorrection,
 	turnSpeed,
 	strafeSpeed,

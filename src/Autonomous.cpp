@@ -362,11 +362,10 @@ void Autonomous::scaleFromCenter(){
 
 void Autonomous::scaleFromSide(){
 	elevatorAutoRun();
-
 	switch (autoState) {
 		case(InitialStart):
 			if(encoderDist > -(scaleSideDist + carpetConstant)){
-				driveTrain->tankDrive(autoDriveSpeed , autoDriveSpeed - (sensors->getGyroAngle() / driftConstant), 0.0);
+				driveTrain->autonTankDrive(autoDriveSpeed , autoDriveSpeed);
 			} else {
 				autoState = TurnTowardsScale;
 				sensors->resetGyro();
@@ -398,9 +397,9 @@ void Autonomous::scaleFromSide(){
 			break;
 		case(DriveTowardsScale):
 				if(ourScale == LeftSide && encoderDist > -scaleAdjustDist){
-					driveTrain->tankDrive(-0.6, -0.6, 0.0);
+					driveTrain->autonTankDrive(-0.6, -0.6);
 				} else if (ourScale == RightSide && encoderDist > -scaleAdjustRight){
-					driveTrain->tankDrive(-0.6, -0.6, 0.0);
+					driveTrain->autonTankDrive(-0.6, -0.6);
 				}
 				else {
 					driveTrain->tankDrive(-0.0, -0.0, 0.0);
@@ -427,9 +426,9 @@ void Autonomous::switchFromOpposite(){
 			}
 			break;
 		case(TurnDownPlatformZone):
-			if (ourSwitch == LeftSide && gyroAngle < platformTurnToRight){
+			if (ourSwitch == LeftSide && gyroAngle > -turnLeftAngle){
 				driveTrain->tankDrive(-autoDriveSpeed, autoDriveSpeed, 0.0);
-			} else if (ourSwitch == RightSide && gyroAngle > -platformTurnToLeft){
+			} else if (ourSwitch == RightSide && gyroAngle < turnRightAngle){
 				driveTrain->tankDrive(autoDriveSpeed, -autoDriveSpeed, 0.0);
 			} else {
 				driveTrain->haltMotion();
@@ -498,7 +497,6 @@ void Autonomous::switchFromOpposite(){
 
 void Autonomous::scaleFromOpposite(){
 	elevatorAutoRun();
-	printf("Auto: Scale through platform\n");
 	switch (autoState){
 		case(InitialStart):
 			if (encoderDist > -platformToDist){
@@ -509,9 +507,9 @@ void Autonomous::scaleFromOpposite(){
 			}
 			break;
 		case(TurnDownPlatformZone):
-			if (ourScale == LeftSide && gyroAngle < platformTurnToRight){
+			if (ourScale == LeftSide && gyroAngle > -turnLeftAngle){
 				driveTrain->tankDrive(-autoDriveSpeed, autoDriveSpeed, 0.0);
-			} else if (ourScale == RightSide && gyroAngle > -platformTurnToLeft){
+			} else if (ourScale == RightSide && gyroAngle < turnRightAngle){
 				driveTrain->tankDrive(autoDriveSpeed, -autoDriveSpeed, 0.0);
 			} else {
 				driveTrain->haltMotion();
