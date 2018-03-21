@@ -432,7 +432,7 @@ void Autonomous::switchFromOpposite(){
 				autoState = TurnDownPlatformZone;
 			}
 			break;
-		case(FaceScale):
+		case(FaceSwitch):
 				if (ourSwitch == RightSide && gyroAngle > -faceScaleOppRight){
 					driveTrain->tankDrive(autoDriveSpeed, -autoDriveSpeed, 0.0);
 				} else if (ourScale == LeftSide && gyroAngle < faceScaleOppLeft){
