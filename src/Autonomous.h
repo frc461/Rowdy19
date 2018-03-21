@@ -111,15 +111,15 @@ private:
 
 		//Scale
 		platformThruDist = 7000,
-		faceScaleOppRight = 30,
-		faceScaleOppLeft = 45,
+		turnRightAngle = 30,
+		turnLeftAngle = 45,
 		scaleAdjustOppLeft = 2000,
 		scaleAdjustOppRight = 2000,
 
 		//Switch
 		platformToOtherAlley = 12000,
-		turnDownAlleyRight = 30,
-		turnDownAlleyLeft = 45;
+		leftSwitchAdjust = 2000,
+		rightSwitchAdjust = 2000;
 
 
 

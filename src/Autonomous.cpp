@@ -25,7 +25,11 @@ Autonomous::Autonomous(DriveTrain& dt, Sensors& srs, ShuffleboardPoster& boardHa
 
 void Autonomous::smartRun(){
 	autonPeriodicValues();
-	if(target == Scale){
+	if (target == 5) {
+		if (startingPosition != CenterPosition){
+			defaultCross();
+		}
+	} else if(target == Scale){
 		if(startingPosition == ourScale){
 			printf("Scale from same side");
 			scaleFromSide();
@@ -33,31 +37,39 @@ void Autonomous::smartRun(){
 			printf("Scale through alley");
 			scaleFromOpposite();
 		} else if (secondChoice == Switch){
+			target = Switch;
 			if(startingPosition ==  Switch){
 				switchFromSide();
 			} else if (startingPosition != CenterPosition){
-				switchFromOpposite();
+				printf("Defaulting by default\n");
+				defaultCross();
 			}
 		}
 	} else if(target == Switch){
 		if(startingPosition == CenterPosition){
-			if(board->getOurSwitch() == RightSide){
+			if(ourSwitch == RightSide){
 				switchRightAuto();
-			} else{
+			} else {
 				switchLeftAuto();
 			}
 		} else if(ourSwitch == startingPosition){
 			switchFromSide();
 		} else {
+			target = Scale;
 			if (ourScale == startingPosition){
 				scaleFromSide();
-			} else if(secondChoice == Switch){
-				switchFromOpposite();
 			} else if(secondChoice == Scale){
 				scaleFromOpposite();
+			} else if (startingPosition != CenterPosition){
+				printf("Defaulting by default\n");
+				defaultCross();
 			}
 		}
+	} else if (startingPosition != CenterPosition){
+		printf("Defaulting by default\n");
+		defaultCross();
 	}
+
 }
 
 void Autonomous::runAuto(){
@@ -429,20 +441,20 @@ void Autonomous::switchFromOpposite(){
 				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
 			} else {
 				driveTrain->haltMotion();
-				autoState = TurnDownPlatformZone;
+				autoState = FaceAlley;
 			}
 			break;
-		case(FaceSwitch):
-				if (ourSwitch == RightSide && gyroAngle > -faceScaleOppRight){
+		case(FaceAlley):
+				if (ourSwitch == RightSide && gyroAngle < turnRightAngle){
 					driveTrain->tankDrive(autoDriveSpeed, -autoDriveSpeed, 0.0);
-				} else if (ourScale == LeftSide && gyroAngle < faceScaleOppLeft){
+				} else if (ourScale == LeftSide && gyroAngle > -turnLeftAngle){
 					driveTrain->tankDrive(-autoDriveSpeed, autoDriveSpeed, 0.0);
 				} else {
 					driveTrain->haltMotion();
-					autoState = DriveThruPlatformZone;
+					autoState = DriveDownAlley;
 				}
 				break;
-		case(ScaleAdjust):
+		case(DriveDownAlley):
 				if (ourScale == RightSide && encoderDist > -scaleAdjustOppRight){
 					driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
 				} else if (ourScale == LeftSide && encoderDist && encoderDist > -scaleAdjustOppLeft){
@@ -452,11 +464,35 @@ void Autonomous::switchFromOpposite(){
 					autoState = DeployCube;
 				}
 			break;
-		case(DeployCube):
-				if(intake->spitCube()){
-					autoState = BackOff;
+		case(FaceSwitch):
+				if (ourSwitch == RightSide && gyroAngle < turnRightAngle){
+					driveTrain->tankDrive(autoDriveSpeed, -autoDriveSpeed, 0.0);
+				} else if (ourScale == LeftSide && gyroAngle > -turnLeftAngle){
+					driveTrain->tankDrive(-autoDriveSpeed, autoDriveSpeed, 0.0);
+				} else {
+					driveTrain->haltMotion();
+					autoState = DriveThruPlatformZone;
 				}
-			break;
+				break;
+		case(DriveSideSwitch):
+				printf("Count:%d\n",dropCounter);
+				if (ourSwitch == LeftSide && encoderDist > -leftSwitchAdjust && dropCounter < 80){
+						driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
+						dropCounter++;
+					}
+				else if (ourSwitch == RightSide && encoderDist > -rightSwitchAdjust && dropCounter < 80){
+					driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
+					dropCounter++;
+				}
+				else{
+						driveTrain->tankDrive(0.0, 0.0, 0.0);
+						autoState = DeployCube;
+				}
+				break;
+			case(DeployCube):
+					driveTrain->tankDrive(0.0, 0.0, 0.0);
+					intake->spitCube();
+				break;
 	}
 }
 
@@ -491,9 +527,9 @@ void Autonomous::scaleFromOpposite(){
 			}
 			break;
 		case(FaceScale):
-				if (ourScale == RightSide && gyroAngle > -faceScaleOppRight){
+				if (ourScale == RightSide && gyroAngle > -turnLeftAngle){
 					driveTrain->tankDrive(-autoDriveSpeed, autoDriveSpeed, 0.0);
-				} else if (ourScale == LeftSide && gyroAngle < faceScaleOppLeft){
+				} else if (ourScale == LeftSide && gyroAngle < turnRightAngle){
 					driveTrain->tankDrive(autoDriveSpeed, -autoDriveSpeed, 0.0);
 				} else {
 					driveTrain->haltMotion();

@@ -26,7 +26,9 @@ enum AutonomousStates {
 	DriveThruPlatformZone,
 	BackOffScale,
 	ScaleAdjust,
-	BackOff
+	BackOff,
+	FaceAlley,
+	DriveDownAlley,
 
 };
 
