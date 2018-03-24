@@ -8,6 +8,10 @@
 #ifndef SRC_ROBOT_H_
 #define SRC_ROBOT_H_
 
+#define COMP
+#define DEBUGGING
+#define PRACBOT
+
 enum AutonomousStates {
 	InitialStart = 0,
 	TurnDownMiddle,
@@ -35,9 +39,7 @@ enum AutonomousStates {
 enum PWM{
 	LeftInIntakePWM = 0,
 	RightInIntakePWM,
-	LeftOutIntakePWM,
-	RightOutIntakePWM,
-
+	WristPWM,
 };
 
 enum CanChain {
@@ -51,7 +53,8 @@ enum CanChain {
 	Strafe2CAN,
 	Elevator1CAN,
 	Elevator2CAN,
-	Elevator3CAN
+	Elevator3CAN,
+	Elevator4CAN
 };
 
 enum PCM{
