@@ -47,6 +47,7 @@ private:
 	TalonSRX* elevator1;
 	VictorSPX* elevator2;
 	VictorSPX* elevator3;
+	VictorSPX* elevator4;
 	DoubleSolenoid* elevatorBrake;
 	Sensors* sensors;
 
@@ -54,10 +55,10 @@ private:
 	double encoderVal,
 	slowTopThreshold = 3000,
 	slowBottomThreshold = 3000,
-	slowDownMultiplierTop = 0.7,
-	slowDownMultiplierBottom = 0.5,
+	slowDownMultiplierTop = 0.6,
+	slowDownMultiplierBottom = 0.4,
 	elevatorTop = 26000;
-	double raiseSpeed = 1.0, lowerSpeed = 0.5;
+	double raiseSpeed = 0.8, lowerSpeed = 0.5;
 	int heightTolerance = 1000;
 	int intakeExchangeHeight = 200;
 	int switchHeight = 1300;

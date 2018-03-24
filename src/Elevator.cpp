@@ -11,11 +11,16 @@ Elevator::Elevator(Sensors &srs) {
 	elevator1 = new TalonSRX(Elevator1CAN);
 	elevator2 = new VictorSPX(Elevator2CAN);
 	elevator3 = new VictorSPX(Elevator3CAN);
+	elevator4 = new VictorSPX(Elevator4CAN);
 	elevatorBrake = new DoubleSolenoid(ElevatorBrake1, ElevatorBrake2);
 	sensors = &srs;
 
 	elevator2->Follow(*elevator1);
 	elevator3->Follow(*elevator1);
+	elevator4->Follow(*elevator2);
+
+	// TODO: Check on competition bot whether new motor is backwards
+	elevator4->SetInverted(true);
 	encoderVal = elevator1->GetSelectedSensorPosition(0);
 	postValues();
 }
