@@ -7,23 +7,19 @@
 #include <WPILib.h>
 #include "Elevator.h"
 #include "ctre/Phoenix.h"
+#include "Sensors.h"
 
 #ifndef SRC_INTAKE_H_
 #define SRC_INTAKE_H_
 
 class Intake {
 public:
-	Intake();
+	Intake(Sensors&);
 
 	//Intake
 	void takeInOuter();
 	void takeInInner();
 	void takeInAll();
-
-	//Wrist
-	void goToIntake();
-	void goToVertical();
-	void goToFourtyFive();
 
 	//Output
 	void outputOuter();
@@ -33,6 +29,13 @@ public:
 	//Spins
 	void spinRight();
 	void spinLeft();
+
+	//Wrist
+	void wristRotate(int);
+	void wristHalt();
+	void wristForward();
+	void wristBack();
+	void goToFourtyFive();
 
 	//Spits
 	void resetSpitCount();
@@ -56,14 +59,32 @@ private:
 	double intakeSpeed = 0.8,
 	outputSpeed = 0.6,
 	spinSpeed = 0.4,
-	slowOutputSpeed = 0.4;
-	int spitCount;
+	slowOutputSpeed = 0.4,
+	wristSpeed = 0.7,
+	slowWristSpeed = 0.4;
 
+#ifdef COMPBOT
+	int offset = 0;
+#endif
+
+#ifdef PRACBOT
+	int offset = 50;
+#endif
+
+	int
+	bandWidth = 30,
+	downLimit = 105,
+	upwardLimit = 30,
+	tiltWristAngle = 90,
+	wristTolerance = 5,
+	spitCount,
+	wristAngle;
+
+	Sensors* sensors;
 	DoubleSolenoid* intakeExtension;
+	Spark* wristMotor;
 	Victor* intakeInLeft;
 	Victor* intakeInRight;
-	Spark* intakeOutLeft;
-	Spark* intakeOutRight;
 };
 
 #endif /* SRC_INTAKE_H_ */

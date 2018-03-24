@@ -7,19 +7,17 @@
 
 #include <Intake.h>
 
-Intake::Intake() {
+Intake::Intake(Sensors& sensorsPass) {
 	intakeExtension = new DoubleSolenoid(Intake1, Intake2);
 	intakeInLeft = new Victor(LeftInIntakePWM);
 	intakeInRight = new Victor(RightInIntakePWM);
-	intakeOutLeft = new Spark(LeftOutIntakePWM);
-	intakeOutRight = new Spark(RightOutIntakePWM);
+	wristMotor = new Spark(WristPWM);
+	sensors = &sensorsPass;
 	resetSpitCount();
 	putValues();
 }
 
 void Intake::takeInOuter(){
-	intakeOutLeft->Set(-outputSpeed);
-	intakeOutRight->Set(outputSpeed);
 }
 
 void Intake::takeInInner(){
@@ -38,8 +36,6 @@ void Intake::takeInAll(){
 }
 
 void Intake::outputOuter(){
-	intakeOutLeft->Set(intakeSpeed);
-	intakeOutRight->Set(-intakeSpeed);
 }
 
 void Intake::outputInner(){
@@ -61,7 +57,6 @@ void Intake::spinRight(){
 void Intake::spinLeft(){
 	intakeInLeft->Set(spinSpeed);
 	intakeInRight->Set(-spinSpeed);
-
 }
 
 void Intake::resetSpitCount(){
@@ -76,6 +71,52 @@ bool Intake::spitCube(){
 	} else {
 		allOff();
 		return true;
+	}
+}
+
+void Intake::wristHalt(){
+	wristMotor->Set(0.0);
+}
+
+void Intake::wristRotate(int reversed){
+	wristMotor->Set(reversed * wristSpeed);
+}
+
+void Intake::wristForward(){
+	if(wristAngle < downLimit - bandWidth){
+		wristMotor->Set(wristSpeed);
+		printf("Wrist moving fast forward\n");
+
+	} else if (wristAngle < downLimit){
+		printf("Wrist moving slow forward\n");
+
+		wristMotor->Set(slowWristSpeed);
+	} else {
+		printf("Wrist not moving forward\n");
+		wristHalt();
+	}
+}
+
+void Intake::wristBack(){
+	if(wristAngle > upwardLimit + bandWidth) {
+		wristMotor->Set(-wristSpeed);
+		printf("Wrist moving fast back\n");
+	} else if (wristAngle > upwardLimit) {
+		wristMotor->Set(-slowWristSpeed);
+		printf("Wrist moving slow back\n");
+	} else {
+		wristHalt();
+		printf("wrist not moving back\n");
+	}
+}
+
+void Intake::goToFourtyFive(){
+	if (wristAngle > tiltWristAngle + wristTolerance) {
+		wristForward();
+	} else if (wristAngle < tiltWristAngle - wristTolerance) {
+		wristBack();
+	} else {
+		wristHalt();
 	}
 }
 
@@ -99,8 +140,6 @@ int Intake::getSolenoid(){
 }
 
 void Intake::allOff(){
-	intakeOutLeft->Set(0.0);
-	intakeOutRight->Set(0.0);
 	intakeInLeft->Set(0.0);
 	intakeInRight->Set(0.0);
 }
@@ -108,9 +147,24 @@ void Intake::allOff(){
 void Intake::putValues(){
 	SmartDashboard::PutNumber("Elevator/intakeSpeed", intakeSpeed);
 	SmartDashboard::PutNumber("Elevator/spinSpeed", spinSpeed);
+	SmartDashboard::PutNumber("Comp/wristSpeed", wristSpeed);
+	SmartDashboard::PutNumber("Comp/slowWristSpeed", slowWristSpeed);
+	SmartDashboard::PutNumber("Comp/bandWidth", bandWidth);
+	SmartDashboard::PutNumber("Comp/downLimit", downLimit);
+	SmartDashboard::PutNumber("Comp/upwardLimit", upwardLimit);
+	SmartDashboard::PutNumber("Comp/spitCount", spitCount);
 }
 
 void Intake::periodicValues(){
 	intakeSpeed = SmartDashboard::GetNumber("Elevator/intakeSpeed", intakeSpeed);
 	spinSpeed = SmartDashboard::GetNumber("Elevator/spinSpeed", spinSpeed);
+	wristSpeed = SmartDashboard::GetNumber("Comp/wristSpeed", wristSpeed);
+	slowWristSpeed = SmartDashboard::GetNumber("Comp/slowWristSpeed", slowWristSpeed);
+	bandWidth = SmartDashboard::GetNumber("Comp/bandWidth", bandWidth);
+	downLimit = SmartDashboard::GetNumber("Comp/downLimit", downLimit);
+	upwardLimit = SmartDashboard::GetNumber("Comp/upwardLimit", upwardLimit);
+	spitCount = SmartDashboard::GetNumber("Comp/spitCount", spitCount);
+
+	wristAngle = ((int) sensors->getWristAngle() + offset) % 360;
+	SmartDashboard::PutNumber("Comp/wristAngle", wristAngle);
 }
