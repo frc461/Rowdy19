@@ -26,8 +26,7 @@
 #include "Elevator.h"
 #include "Camera.h"
 
-#define COMP
-#define DEBUGGING
+
 
 
 class Robot : public frc::IterativeRobot {
@@ -67,7 +66,7 @@ public:
 		driveTrain = new DriveTrain(*sensors);
 		boardHandler = new ShuffleboardPoster(*driveTrain,*sensors);
 		elevator = new Elevator(*sensors);
-		intake = new Intake();
+		intake = new Intake(*sensors);
 		auton = new Autonomous(*driveTrain, *sensors, *boardHandler, *elevator, *intake);
 		previouslyToggled = false;
 		intakeIn = true;
@@ -106,6 +105,7 @@ public:
 	void TeleopPeriodic() {
 		boardHandler->shufflePeriodic();
 		elevator->periodicValues();
+		intake->periodicValues();
 //		camera->cameraPeriodic(operatorController->GetRawButton(XboxButtonLeftStick));
 
 		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
@@ -160,6 +160,18 @@ public:
 			elevator->haltMotion();
 		}
 
+		if (dPad == XboxDPadRight){
+			intake->wristRotate(1);
+		} else if (dPad == XboxDPadLeft){
+			intake->wristRotate(-1);
+		}else if (dPad == XboxDPadUp){
+			intake->wristForward();
+		} else if (dPad == XboxDPadDown){
+			intake->wristBack();
+		} else {
+			intake->wristHalt();
+		}
+
 		if (operatorController->GetRawButton(XboxButtonStart) && operatorController->GetRawButton(XboxButtonBack)){
 			if (!previouslyToggled){
 				intakeIn = !intakeIn;
@@ -187,6 +199,8 @@ public:
 	void DisabledPeriodic() {
 //		cvSink->GrabFrame(source);
 //		outputStreamStd.PutFrame(source);
+		intake->periodicValues();
+		elevator->periodicValues();
 	}
 
 private:
