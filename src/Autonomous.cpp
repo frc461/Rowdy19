@@ -48,17 +48,23 @@ void Autonomous::smartRun(){
 	} else if(target == Switch){
 		if(startingPosition == CenterPosition){
 			if(ourSwitch == RightSide){
+				printf("Switch right from center\n");
 				switchRightAuto();
 			} else {
+				printf("Switch left from center\n");
 				switchLeftAuto();
 			}
 		} else if(ourSwitch == startingPosition){
+			printf("Switch from side\n");
+
 			switchFromSide();
 		} else {
 			target = Scale;
 			if (ourScale == startingPosition){
+				printf("Scale from side\n");
 				scaleFromSide();
 			} else if(secondChoice == Scale){
+				printf("Scale from opposite\n");
 				scaleFromOpposite();
 			} else if (startingPosition != CenterPosition){
 				printf("Defaulting by default\n");
