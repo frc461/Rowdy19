@@ -421,7 +421,6 @@ void Autonomous::scaleFromSide(){
 
 void Autonomous::switchFromOpposite(){
 	elevatorAutoRun();
-	printf("Auto: Switch through platform\n");
 	switch (autoState){
 		case(InitialStart):
 			if (encoderDist > -platformToDist){
