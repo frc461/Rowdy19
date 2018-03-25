@@ -54,6 +54,9 @@ int ShuffleboardPoster::getSecondChoice(){
 void ShuffleboardPoster::shufflePeriodic(){
 	SmartDashboard::PutNumber("gyro", sensors->getGyroAngle());
 	SmartDashboard::PutBoolean("ElevatorSwitch", sensors->getElevatorBottom());
+	SmartDashboard::PutBoolean("IntakeInR", sensors->getIntakeButtonR());
+	SmartDashboard::PutBoolean("IntakeInL", sensors->getIntakeButtonL());
+
 
 //	SmartDashboard::PutData("PDP", driveTrain->GetPDP());
 }

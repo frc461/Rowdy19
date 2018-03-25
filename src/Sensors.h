@@ -15,16 +15,26 @@ class Sensors {
 public:
 	Sensors();
 
-	//Limit Switches
+	//Digital Switches
 	bool getElevatorBottom();
+	bool getIntakeButtonL();
+	bool getIntakeButtonR();
+
+	//Potentiometer
+	double getWristAngle();
 
 	//Gyro stuff
 	int getGyroAngle();
 	void resetGyro();
 
 private:
+
+
 ADXRS450_Gyro *gyro;
+Potentiometer *wrist;
 DigitalInput *elevatorBottom;
+DigitalInput *intakeButtonR;
+DigitalInput *intakeButtonL;
 
 };
 
