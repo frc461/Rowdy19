@@ -32,12 +32,12 @@ enum XboxJoystickAxis {
 
 enum XboxDPadDirection {
 	XboxDPadUp = 0,
-	XboxDPadUpLeft = 45,
-	XboxDPadLeft = 90,
-	XboxDPadDownLeft = 135,
+	XboxDPadUpLeft = 315,
+	XboxDPadLeft = 270,
+	XboxDPadDownLeft = 225,
 	XboxDPadDown = 180,
-	XboxDPadDownRight = 225,
-	XboxDPadRight = 270,
-	XboxDPadUpRight = 315
+	XboxDPadDownRight = 135,
+	XboxDPadRight = 90,
+	XboxDPadUpRight = 45
 };
 #endif /* SRC_XBOXJOYSTICKMAP_H_ */
