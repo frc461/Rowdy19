@@ -127,17 +127,13 @@ public:
 			driveTrain->arcadeDrive(forwardR, rotate, strafe);
 //		}
 
-		if(operatorController->GetRawAxis(XboxAxisRightStickY) < -0.5
-				|| operatorController->GetRawButton(XboxButtonY)){
-			intake->outputAll();
-		} else if (operatorController->GetRawAxis(XboxAxisRightStickY) > 0.5
-				|| operatorController->GetRawButton(XboxButtonA)){
-			intake->takeInAll();
-		} else if (operatorController->GetRawAxis(XboxAxisRightStickX) < -0.5
-				|| operatorController->GetRawButton(XboxButtonX)){
+		if(operatorController->GetRawAxis(XboxAxisRightStickY) < -0.5){
+			intake->output();
+		} else if (operatorController->GetRawAxis(XboxAxisRightStickY) > 0.5){
+			intake->intake();
+		} else if (operatorController->GetRawAxis(XboxAxisRightStickX) < -0.5){
 			intake->spinLeft();
-		} else if (operatorController->GetRawAxis(XboxAxisRightStickX) > 0.5
-				|| operatorController->GetRawButton(XboxButtonB)){
+		} else if (operatorController->GetRawAxis(XboxAxisRightStickX) > 0.5){
 			intake->spinRight();
 		} else if (operatorController->GetRawButton(XboxButtonRightStick)){
 			intake->slowOutput();
@@ -157,6 +153,12 @@ public:
 			elevator->goUp();
 		} else if (operatorController->GetRawAxis(XboxAxisLeftStickY) > 0.5){
 			elevator->goDown();
+		} else if (operatorController->GetRawButton(XboxButtonY)){
+			elevator->goToScaleHeight();
+		} else if (operatorController->GetRawButton(XboxButtonB)){
+			elevator->goToSwitchHeight();
+		} else if (operatorController->GetRawButton(XboxButtonX)){
+			elevator->goToIntakeExchangeHeight();
 		} else if (operatorController->GetRawAxis(XboxAxisLeftTrigger) > 0.5
 				&& operatorController->GetRawAxis(XboxAxisRightTrigger) > 0.5){
 			elevator->move(1.0);
