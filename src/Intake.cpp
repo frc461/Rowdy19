@@ -17,12 +17,17 @@ Intake::Intake(Sensors& sensorsPass) {
 	putValues();
 }
 
-void Intake::takeInOuter(){
-}
-
-void Intake::takeInInner(){
+void Intake::intake(){
 	intakeInLeft->Set(-outputSpeed);
 	intakeInRight->Set(outputSpeed);
+}
+
+void Intake::intakeWithRaise(){
+	if(!sensors->getIntakeButtonL() || !sensors->getIntakeButtonR){
+		intake();
+	} else {
+		wristBack();
+	}
 }
 
 void Intake::slowOutput(){
@@ -30,22 +35,9 @@ void Intake::slowOutput(){
 	intakeInRight->Set(-slowOutputSpeed);
 }
 
-void Intake::takeInAll(){
-	takeInOuter();
-	takeInInner();
-}
-
-void Intake::outputOuter(){
-}
-
-void Intake::outputInner(){
+void Intake::output(){
 	intakeInLeft->Set(intakeSpeed);
 	intakeInRight->Set(-intakeSpeed);
-}
-
-void Intake::outputAll(){
-	outputOuter();
-	outputInner();
 }
 
 void Intake::spinRight(){
@@ -65,7 +57,7 @@ void Intake::resetSpitCount(){
 
 bool Intake::spitCube(){
 	if (spitCount < 10){
-		outputAll();
+		output();
 		spitCount++;
 		return false;
 	} else {
@@ -127,13 +119,6 @@ void Intake::extendIntake(){
 void Intake::retractIntake(){
 	intakeExtension->Set(DoubleSolenoid::kForward);
 }
-
-
-void Intake::spitInner(){
-	outputInner();
-	takeInOuter();
-}
-
 
 int Intake::getSolenoid(){
 	return intakeExtension->Get();

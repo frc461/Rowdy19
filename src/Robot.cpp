@@ -53,7 +53,7 @@ public:
 
 	//Custom variables
 	int startPos, target, ourSwitch, ourScale;
-	bool intakeIn, previouslyToggled;
+	bool intakeIn, previouslyToggled, intakeWristOverride;
 
 
 	void RobotInit() {
@@ -113,6 +113,7 @@ public:
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
 		int dPad = operatorController->GetPOV();
+		intakeWristOverride = false;
 
 		if(intakeIn){
 			intake->extendIntake();
@@ -140,6 +141,9 @@ public:
 			intake->spinRight();
 		} else if (operatorController->GetRawButton(XboxButtonRightStick)){
 			intake->slowOutput();
+		} else if (operatorController->GetRawButton(XboxButtonA)){
+			intakeWristOverride = true;
+			intake->intakeWithRaise();
 		} else {
 			intake->allOff();
 		}
@@ -160,17 +164,20 @@ public:
 			elevator->haltMotion();
 		}
 
-		if (dPad == XboxDPadRight){
-			intake->wristRotate(1);
-		} else if (dPad == XboxDPadLeft){
-			intake->wristRotate(-1);
-		}else if (dPad == XboxDPadUp){
-			intake->wristForward();
-		} else if (dPad == XboxDPadDown){
-			intake->wristBack();
-		} else {
-			intake->wristHalt();
+		if(!intakeWristOverride){
+			if (dPad == XboxDPadRight){
+				intake->wristRotate(1);
+			} else if (dPad == XboxDPadLeft){
+				intake->wristRotate(-1);
+			}else if (dPad == XboxDPadUp){
+				intake->wristForward();
+			} else if (dPad == XboxDPadDown){
+				intake->wristBack();
+			} else {
+				intake->wristHalt();
+			}
 		}
+
 
 		if (operatorController->GetRawButton(XboxButtonStart) && operatorController->GetRawButton(XboxButtonBack)){
 			if (!previouslyToggled){

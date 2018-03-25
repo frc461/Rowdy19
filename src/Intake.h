@@ -17,14 +17,12 @@ public:
 	Intake(Sensors&);
 
 	//Intake
-	void takeInOuter();
-	void takeInInner();
-	void takeInAll();
+	void intake();
+	void intakeWithRaise();
 
 	//Output
-	void outputOuter();
-	void outputInner();
-	void outputAll();
+	void output();
+	void outputWithLower();
 
 	//Spins
 	void spinRight();
