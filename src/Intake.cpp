@@ -23,7 +23,7 @@ void Intake::intake(){
 }
 
 void Intake::intakeWithRaise(){
-	if(!sensors->getIntakeButtonL() || !sensors->getIntakeButtonR){
+	if(!sensors->getIntakeButtonL() || !sensors->getIntakeButtonR()){
 		intake();
 	} else {
 		wristBack();

@@ -101,21 +101,21 @@ private:
 		scaleAdjustRight = 1500,
 
 		//Default
-		drivePastDist = 15000,
+		drivePastDist = 13000,
 		driveAwayDist = 15000,
 
 		//Platform zone
 		platformToDist = 13000,
+		platformToOtherAlley = 12000,
 
 		//Scale
-		platformThruDist = 7000,
 		turnRightAngle = 30,
 		turnLeftAngle = 45,
 		scaleAdjustOppLeft = 2000,
 		scaleAdjustOppRight = 2000,
+		scaleBackOff = 1000,
 
 		//Switch
-		platformToOtherAlley = 12000,
 		leftSwitchAdjust = 2000,
 		rightSwitchAdjust = 2000;
 

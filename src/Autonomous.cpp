@@ -56,7 +56,6 @@ void Autonomous::smartRun(){
 			}
 		} else if(ourSwitch == startingPosition){
 			printf("Switch from side\n");
-
 			switchFromSide();
 		} else {
 			target = Scale;
@@ -391,31 +390,37 @@ void Autonomous::scaleFromSide(){
 			}
 			break;
 		case(RaiseElevator):
-			if (!heightReached && elevator->encoderValue() < targetHeight()) {
-				elevator->goUp();
-				printf("Going up!\n");
+			if (!heightReached){
+				elevatorAutoRun();
+				driveTrain->resetEncoders();
 			} else {
-				elevator->haltMotion();
-				heightReached = true;
-				autoState = DriveTowardsScale;
-				printf("Height reached!\n");
+				autoState = ScaleAdjust;
 			}
 			break;
 		case(DriveTowardsScale):
-				if(ourScale == LeftSide && encoderDist > -scaleAdjustDist){
-					driveTrain->autonTankDrive(-0.6, -0.6);
-				} else if (ourScale == RightSide && encoderDist > -scaleAdjustRight){
-					driveTrain->autonTankDrive(-0.6, -0.6);
-				}
-				else {
-					driveTrain->tankDrive(-0.0, -0.0, 0.0);
-					autoState = DeployCube;
-					sensors->resetGyro();
-				}
+			if(ourScale == LeftSide && encoderDist > -scaleAdjustDist){
+				driveTrain->autonTankDrive(-0.6, -0.6);
+			} else if (ourScale == RightSide && encoderDist > -scaleAdjustRight){
+				driveTrain->autonTankDrive(-0.6, -0.6);
+			}
+			else {
+				driveTrain->tankDrive(-0.0, -0.0, 0.0);
+				autoState = DeployCube;
+				sensors->resetGyro();
+			}
 			break;
 		case(DeployCube):
-			intake->spitCube();
+			driveTrain->resetEncoders();
+			if(intake->spitCube()){
+				autoState = BackOff;
+			}
 			break;
+		case(BackOff):
+			if(encoderDist < scaleBackOff){
+				driveTrain->tankDrive(-autoTurnSpeed, -autoTurnSpeed, 0.0);
+			} else {
+				driveTrain->haltMotion();
+			}
 	}
 }
 
@@ -501,7 +506,6 @@ void Autonomous::switchFromOpposite(){
 }
 
 void Autonomous::scaleFromOpposite(){
-	elevatorAutoRun();
 	switch (autoState){
 		case(InitialStart):
 			if (encoderDist > -platformToDist){
@@ -522,7 +526,7 @@ void Autonomous::scaleFromOpposite(){
 			}
 			break;
 		case(DriveThruPlatformZone):
-			if (encoderDist > -platformToDist){
+			if (encoderDist > -platformToOtherAlley){
 				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
 			} else {
 				driveTrain->haltMotion();
@@ -539,7 +543,16 @@ void Autonomous::scaleFromOpposite(){
 					autoState = DriveThruPlatformZone;
 				}
 				break;
+		case(RaiseElevator):
+				if (!heightReached){
+					elevatorAutoRun();
+					driveTrain->resetEncoders();
+				} else {
+					autoState = ScaleAdjust;
+				}
+				break;
 		case(ScaleAdjust):
+				dropCounter++;
 				if (ourScale == RightSide && encoderDist > -scaleAdjustOppRight){
 					driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
 				} else if (ourScale == LeftSide && encoderDist && encoderDist > -scaleAdjustOppLeft){
@@ -550,10 +563,17 @@ void Autonomous::scaleFromOpposite(){
 				}
 			break;
 		case(DeployCube):
+				driveTrain->resetEncoders();
 				if(intake->spitCube()){
 					autoState = BackOff;
 				}
 			break;
+		case(BackOff):
+				if(encoderDist < scaleBackOff){
+					driveTrain->tankDrive(-autoTurnSpeed, -autoTurnSpeed, 0.0);
+				} else {
+					driveTrain->haltMotion();
+				}
 	}
 
 }
