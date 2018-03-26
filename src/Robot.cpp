@@ -180,17 +180,7 @@ public:
 			}
 		}
 
-
-		if (operatorController->GetRawButton(XboxButtonStart) && operatorController->GetRawButton(XboxButtonBack)){
-			if (!previouslyToggled){
-				intakeIn = !intakeIn;
-				previouslyToggled = true;
-			}
-		} else {
-				previouslyToggled = false;
-		}
-
-		if (operatorController->GetRawButton(XboxButtonLeftBumper)){
+		if (operatorController->GetRawButton(XboxButtonBack)){
 			driveTrain->resetEncoders();
 			sensors->resetGyro();
 		}
