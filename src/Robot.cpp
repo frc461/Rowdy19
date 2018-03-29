@@ -53,7 +53,7 @@ public:
 
 	//Custom variables
 	int startPos, target, ourSwitch, ourScale;
-	bool intakeIn, previouslyToggled, intakeWristOverride;
+	bool intakeIn, previouslyToggled, intakeWristUp;
 
 
 	void RobotInit() {
@@ -70,7 +70,7 @@ public:
 		auton = new Autonomous(*driveTrain, *sensors, *boardHandler, *elevator, *intake);
 		previouslyToggled = false;
 		intakeIn = true;
-		CameraServer::GetInstance()->StartAutomaticCapture(1);
+		CameraServer::GetInstance()->StartAutomaticCapture(0);
 	}
 
 
@@ -93,7 +93,7 @@ public:
 		elevator->periodicValues();
 		boardHandler->shufflePeriodic();
 		intake->periodicValues();
-		auton->runAuto();
+		auton->smartRun();
 	}
 
 	void TeleopInit() {
@@ -113,7 +113,6 @@ public:
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
 		int dPad = operatorController->GetPOV();
-		intakeWristOverride = false;
 
 		if(intakeIn){
 			intake->extendIntake();
@@ -138,12 +137,15 @@ public:
 		} else if (operatorController->GetRawButton(XboxButtonRightStick)){
 			intake->slowOutput();
 		} else if (operatorController->GetRawButton(XboxButtonA)){
-			intakeWristOverride = true;
-			intake->intakeWithRaise();
+			intakeWristUp = true;
 		} else {
 			intake->allOff();
 		}
 
+
+		if(intakeWristUp){
+			intake->intakeWithRaise();
+		}
 
 		SmartDashboard::PutNumber("XboxDPad", operatorController->GetPOV(0));
 
@@ -166,7 +168,11 @@ public:
 			elevator->haltMotion();
 		}
 
-		if(!intakeWristOverride){
+		if(dPad != -1 && !operatorController->GetRawButton(XboxButtonA)){
+			intakeWristUp = false;
+		}
+
+		if(!intakeWristUp){
 			if (dPad == XboxDPadRight){
 				intake->wristRotate(1);
 			} else if (dPad == XboxDPadLeft){
@@ -198,8 +204,14 @@ public:
 	void DisabledPeriodic() {
 //		cvSink->GrabFrame(source);
 //		outputStreamStd.PutFrame(source);
+		driveTrain->resetEncoders();
+		sensors->resetGyro();
+		auton->updateStarts();
+		auton->resetZeroed();
+		auton->shuffleCheck();
 		intake->periodicValues();
 		elevator->periodicValues();
+		driveTrain->periodicValues();
 	}
 
 private:

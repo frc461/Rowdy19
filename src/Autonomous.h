@@ -26,6 +26,7 @@ public:
 	//Shuffleboard interactions
 	void autonPostValues();
 	void autonPeriodicValues();
+	void shuffleCheck();
 
 	//Elevator operator
 	void elevatorAutoRun();
@@ -45,6 +46,11 @@ public:
 	//Emergency auton
 	void defaultCross();
 
+	//Test autos
+	void driveStraight();
+	void turnRight();
+	void turnLeft();
+
 	//Data
 	void resetZeroed();
 	void updateStarts();
@@ -56,7 +62,7 @@ public:
 private:
 	bool elevatorZeroed = false;
 
-	int scaleHeight = 26000, switchHeight = 12000;
+	int scaleHeight = 26000, switchHeight = 12000, postCount = 0;
 	int carpetConstant = 0;
 
 	//Sensor values
@@ -72,29 +78,29 @@ private:
 	int
 		autoState = InitialStart;
 
-		double driftConstant = 45,
+		double driftConstant = 45, encoderAdjust = 15.0/11.0,
 
 		//Center Switch
-		initDist = 1250,
+		initDist = 1250 * encoderAdjust,
 		lTurn1 = -35,
 		lTurn2 = 45,
-		lDrive2 = 8000,
-		lDrive3 = 2500,
+		lDrive2 = 8000 * encoderAdjust,
+		lDrive3 = 2500 * encoderAdjust,
 		rTurn1 = 25,
 		rTurn2 = -35,
-		rDrive2 = 1000,
-		rDrive3 = 4000,
-		defaultDist = 1750,
+		rDrive2 = 1000 * encoderAdjust,
+		rDrive3 = 4000 * encoderAdjust,
+		defaultDist = 1750 * encoderAdjust,
 
 		//L/R Switch
-		switchSideDist = 11000,
+		switchSideDist = 11000 * encoderAdjust,
 		faceSwitchAngleRight = -50,
 		faceSwitchAngleLeft = 45,
-		driveToSwitchDist = 1000,
-		driveToSwitchRight = 2000,
+		driveToSwitchDist = 1000 * encoderAdjust,
+		driveToSwitchRight = 2000 * encoderAdjust,
 
 		//L/R Scale
-		scaleSideDist = 21500,
+		scaleSideDist = 29240,
 		faceScaleLeft = 30,
 		faceScaleRight = 45,
 		scaleAdjustDist = 750,

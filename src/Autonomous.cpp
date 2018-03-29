@@ -24,9 +24,11 @@ Autonomous::Autonomous(DriveTrain& dt, Sensors& srs, ShuffleboardPoster& boardHa
 }
 
 void Autonomous::smartRun(){
+	printf("Running auto \n");
 	autonPeriodicValues();
 	if (target == 5) {
 		if (startingPosition != CenterPosition){
+			printf("Defaulting by choice \n");
 			defaultCross();
 		}
 	} else if(target == Scale){
@@ -39,6 +41,7 @@ void Autonomous::smartRun(){
 		} else if (secondChoice == Switch){
 			target = Switch;
 			if(startingPosition ==  Switch){
+				printf("Switch from side \n");
 				switchFromSide();
 			} else if (startingPosition != CenterPosition){
 				printf("Defaulting by default\n");
@@ -70,7 +73,7 @@ void Autonomous::smartRun(){
 				defaultCross();
 			}
 		}
-	} else if (startingPosition != CenterPosition){
+	} else {
 		printf("Defaulting by default\n");
 		defaultCross();
 	}
@@ -143,7 +146,20 @@ void Autonomous::autonPostValues(){
 
 	SmartDashboard::PutNumber("Auton/Scale/drivePastDist", drivePastDist);
 	SmartDashboard::PutNumber("Auton/Scale/driveAwayDist", driveAwayDist);
+
+	SmartDashboard::PutNumber("Auton/turnRightAngle", turnRightAngle);
+	SmartDashboard::PutNumber("Auton/turnLeftAngle", turnLeftAngle);
+	SmartDashboard::PutNumber("Auton/Opp/platformToDist", platformToDist);
+	SmartDashboard::PutNumber("Auton/Opp/platformToOTherAlley", platformToOtherAlley);
+	SmartDashboard::PutNumber("Auton/Opp/scaleAdjustOppLeft", scaleAdjustOppLeft);
+	SmartDashboard::PutNumber("Auton/Opp/scaleAdjustOppRight", scaleAdjustOppRight);
+	SmartDashboard::PutNumber("Auton/Opp/scaleBackOff", scaleBackOff);
+
+
+
 #endif
+
+
 }
 
 void Autonomous::autonPeriodicValues(){
@@ -175,6 +191,14 @@ void Autonomous::autonPeriodicValues(){
 	scaleHeight = SmartDashboard::GetNumber("Auton/scaleHeight", scaleHeight);
 	switchHeight = SmartDashboard::GetNumber("Auton/scaleHeight", switchHeight);
 
+	turnRightAngle = SmartDashboard::GetNumber("Auton/turnRightAngle", turnRightAngle);
+	turnLeftAngle = SmartDashboard::GetNumber("Auton/turnLeftAngle", turnLeftAngle);
+	platformToDist = SmartDashboard::GetNumber("Auton/Opp/platformToDist", platformToDist);
+	platformToOtherAlley = SmartDashboard::GetNumber("Auton/Opp/platformToOTherAlley", platformToOtherAlley);
+	scaleAdjustOppLeft = SmartDashboard::GetNumber("Auton/Opp/scaleAdjustOppLeft", scaleAdjustOppLeft);
+	scaleAdjustOppRight = SmartDashboard::GetNumber("Auton/Opp/scaleAdjustOppRight", scaleAdjustOppRight);
+	scaleBackOff = SmartDashboard::GetNumber("Auton/Opp/scaleBackOff", scaleBackOff);
+
 	SmartDashboard::PutNumber("Auton/gyro", gyroAngle);
 	SmartDashboard::PutBoolean("Auton/elevatorZeroed", elevatorZeroed);
 #endif
@@ -185,14 +209,16 @@ void Autonomous::autonPeriodicValues(){
 	SmartDashboard::PutNumber("Auton/autoState", autoState);
 	ourScale = board->getOurScale();
 	ourSwitch = board->getOurSwitch();
+	secondChoice = board->getSecondChoice();
 
 	gyroAngle = sensors->getGyroAngle();
 	encoderDist = driveTrain->getEncoderVal(RightSide);
+	SmartDashboard::PutNumber("RightEncoderValue", encoderDist);
 
 }
 
 void Autonomous::switchFromSide(){
-	elevatorAutoRun();
+elevatorAutoRun();
 	if(ourSwitch == startingPosition){
 		printf("State: %d\n", autoState);
 		switch (autoState) {
@@ -366,7 +392,7 @@ void Autonomous::scaleFromCenter(){
 }
 
 void Autonomous::scaleFromSide(){
-	elevatorAutoRun();
+elevatorAutoRun();
 	switch (autoState) {
 		case(InitialStart):
 			if(encoderDist > -(scaleSideDist + carpetConstant)){
@@ -398,9 +424,10 @@ void Autonomous::scaleFromSide(){
 			}
 			break;
 		case(DriveTowardsScale):
-			if(ourScale == LeftSide && encoderDist > -scaleAdjustDist){
+			dropCounter++;
+			if(ourScale == LeftSide && dropCounter < 50 && encoderDist > -scaleAdjustDist){
 				driveTrain->autonTankDrive(-0.6, -0.6);
-			} else if (ourScale == RightSide && encoderDist > -scaleAdjustRight){
+			} else if (ourScale == RightSide && dropCounter < 50 && encoderDist > -scaleAdjustRight){
 				driveTrain->autonTankDrive(-0.6, -0.6);
 			}
 			else {
@@ -509,13 +536,14 @@ void Autonomous::scaleFromOpposite(){
 	switch (autoState){
 		case(InitialStart):
 			if (encoderDist > -platformToDist){
-				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+				driveTrain->autonTankDrive(autoDriveSpeed, autoDriveSpeed);
 			} else {
 				driveTrain->haltMotion();
 				autoState = TurnDownPlatformZone;
 			}
 			break;
 		case(TurnDownPlatformZone):
+				driveTrain->resetEncoders();
 			if (ourScale == LeftSide && gyroAngle > -turnLeftAngle){
 				driveTrain->tankDrive(-autoDriveSpeed, autoDriveSpeed, 0.0);
 			} else if (ourScale == RightSide && gyroAngle < turnRightAngle){
@@ -527,7 +555,7 @@ void Autonomous::scaleFromOpposite(){
 			break;
 		case(DriveThruPlatformZone):
 			if (encoderDist > -platformToOtherAlley){
-				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+				driveTrain->autonTankDrive(autoDriveSpeed, autoDriveSpeed);
 			} else {
 				driveTrain->haltMotion();
 				autoState = TurnDownPlatformZone;
@@ -553,9 +581,9 @@ void Autonomous::scaleFromOpposite(){
 				break;
 		case(ScaleAdjust):
 				dropCounter++;
-				if (ourScale == RightSide && encoderDist > -scaleAdjustOppRight){
+				if (dropCounter < 80 && ourScale == RightSide && encoderDist > -scaleAdjustOppRight){
 					driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
-				} else if (ourScale == LeftSide && encoderDist && encoderDist > -scaleAdjustOppLeft){
+				} else if (dropCounter < 80 && ourScale == LeftSide && encoderDist && encoderDist > -scaleAdjustOppLeft){
 					driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
 				} else {
 					driveTrain->haltMotion();
@@ -608,9 +636,33 @@ void Autonomous::resetZeroed(){
 	dropCounter = 0;
 }
 
+void Autonomous::shuffleCheck(){
+	if(postCount > 200){
+	printf("Target: %d\n", target);
+	printf("Starting Position: %d\n", startingPosition);
+	printf("ourScale: %d\n", ourScale);
+	printf("Second Choice: %d\n", secondChoice);
+	postCount = 0;
+	} else {
+		postCount++;
+	}
+}
+
 void Autonomous::updateStarts(){
 	target = board->getTarget();
 	startingPosition = board->getStartingPosition();
+}
+
+void Autonomous::driveStraight(){
+
+}
+
+void Autonomous::turnRight(){
+
+}
+
+void Autonomous::turnLeft(){
+
 }
 
 void Autonomous::defaultCross(){
@@ -618,7 +670,7 @@ void Autonomous::defaultCross(){
 	switch (autoState){
 			case(InitialStart):
 				if(encoderDist > -drivePastDist){
-					driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed - (sensors->getGyroAngle() / driftConstant), 0.0);
+					driveTrain->autonTankDrive(autoDriveSpeed, autoDriveSpeed);
 				} else {
 					driveTrain->tankDrive(0.0,0.0,0.0);
 				}

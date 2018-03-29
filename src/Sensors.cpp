@@ -13,8 +13,8 @@ Sensors::Sensors() {
 	gyro = new ADXRS450_Gyro();
 	elevatorBottom = new DigitalInput(8);
 	SmartDashboard::PutData("gyroscope", gyro);
-	intakeButtonR = new DigitalInput(6);
-	intakeButtonL = new DigitalInput(7);
+	intakeButtonR = new DigitalInput(7);
+	intakeButtonL = new DigitalInput(6);
 	wrist = new AnalogPotentiometer(3, 360, 0);
 }
 

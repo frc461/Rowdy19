@@ -58,8 +58,8 @@ private:
 	outputSpeed = 0.6,
 	spinSpeed = 0.4,
 	slowOutputSpeed = 0.4,
-	wristSpeed = 0.7,
-	slowWristSpeed = 0.4;
+	wristSpeed = 0.75,
+	slowWristSpeed = 0.6;
 
 #ifdef COMPBOT
 	int offset = 0;
@@ -70,9 +70,9 @@ private:
 #endif
 
 	int
-	bandWidth = 30,
-	downLimit = 105,
-	upwardLimit = 30,
+	bandWidth = 60,
+	downLimit = 150,
+	upwardLimit = 110,
 	tiltWristAngle = 90,
 	wristTolerance = 5,
 	spitCount,

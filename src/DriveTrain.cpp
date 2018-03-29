@@ -133,7 +133,7 @@
 
 	void DriveTrain::autonTankDrive(double left, double right){
 		periodicValues();
-		right = right + (sensors->getGyroAngle() / driftConstant);
+		right = right - (sensors->getGyroAngle() / driftConstant);
 		driveTrain->TankDrive(-left, -right);
 		strafe1->Set(ControlMode::PercentOutput, 0.0);
 	}

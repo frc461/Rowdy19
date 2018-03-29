@@ -11,7 +11,7 @@
 Camera::Camera() {
 
 	currentCam = Cameras::kcam0;
-	cam0 = new cs::UsbCamera("cam0", Cameras::kcam0);
+	cam0 = new cs::UsbCamera("cam0", Cameras::kcam1);
 	//cam1 = new cs::UsbCamera("cam1", Cameras::kcam1);
 
 	cam0->SetFPS(30);

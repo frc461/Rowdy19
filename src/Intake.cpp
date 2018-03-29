@@ -23,9 +23,10 @@ void Intake::intake(){
 }
 
 void Intake::intakeWithRaise(){
-	if(!sensors->getIntakeButtonL() || !sensors->getIntakeButtonR()){
+	if(sensors->getIntakeButtonL() || sensors->getIntakeButtonR()){
 		intake();
 	} else {
+		allOff();
 		wristBack();
 	}
 }
@@ -152,4 +153,7 @@ void Intake::periodicValues(){
 
 	wristAngle = ((int) sensors->getWristAngle() + offset) % 360;
 	SmartDashboard::PutNumber("Comp/wristAngle", wristAngle);
+	SmartDashboard::PutBoolean("Comp/intakeButtonL", sensors->getIntakeButtonL());
+	SmartDashboard::PutBoolean("Comp/intakeButtonR", sensors->getIntakeButtonR());
+
 }
