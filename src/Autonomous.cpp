@@ -581,9 +581,9 @@ void Autonomous::scaleFromOpposite(){
 				break;
 		case(ScaleAdjust):
 				dropCounter++;
-				if (dropCounter < 80 && ourScale == RightSide && encoderDist > -scaleAdjustOppRight){
+				if (dropCounter < 150 && ourScale == RightSide && encoderDist > -scaleAdjustOppRight){
 					driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
-				} else if (dropCounter < 80 && ourScale == LeftSide && encoderDist && encoderDist > -scaleAdjustOppLeft){
+				} else if (dropCounter < 150 && ourScale == LeftSide && encoderDist && encoderDist > -scaleAdjustOppLeft){
 					driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
 				} else {
 					driveTrain->haltMotion();
