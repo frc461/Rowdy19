@@ -20,6 +20,7 @@ public:
 	void goUp();
 	void goDown();
 	void move(double);
+	void moveIgnore(double);
 	void haltMotion();
 
 	//Brake bois
@@ -57,12 +58,12 @@ private:
 	slowBottomThreshold = 3000,
 	slowDownMultiplierTop = 0.6,
 	slowDownMultiplierBottom = 0.4,
-	elevatorTop = 26000;
+	elevatorTop = 24000;
 	double raiseSpeed = 0.8, lowerSpeed = 0.5;
 	int heightTolerance = 1000;
 	int intakeExchangeHeight = 200;
 	int switchHeight = 1300;
-	int scaleHeight = 3500;
+	int scaleHeight = 3300;
 	int climbHeight = 4000,
 		startHeight = 500;
 

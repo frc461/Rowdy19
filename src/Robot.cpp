@@ -52,7 +52,7 @@ public:
 	Sensors *sensors;	
 
 	//Custom variables
-	int startPos, target, ourSwitch, ourScale;
+	int startPos, target, ourSwitch, ourScale, pushCounter = 0;
 	bool intakeIn, previouslyToggled, intakeWristUp;
 
 
@@ -163,8 +163,11 @@ public:
 			elevator->goToIntakeExchangeHeight();
 		} else if (operatorController->GetRawAxis(XboxAxisLeftTrigger) > 0.5
 				&& operatorController->GetRawAxis(XboxAxisRightTrigger) > 0.5){
-			elevator->move(1.0);
-		} else {
+			elevator->move(0.8);
+		} else if (operatorController->GetRawButton(XboxButtonStart)){
+			elevator->moveIgnore(0.8);
+		}
+		else{
 			elevator->haltMotion();
 		}
 
@@ -185,6 +188,16 @@ public:
 				intake->wristHalt();
 			}
 		}
+
+		if(pushCounter++ > 12){
+			if(!sensors->getIntakeButtonL() && !sensors->getIntakeButtonR()){
+				sensors->lightUp();
+			} else {
+				sensors->lightDown();
+			}
+			pushCounter = 0;
+		}
+
 
 		if (operatorController->GetRawButton(XboxButtonBack)){
 			driveTrain->resetEncoders();

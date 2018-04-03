@@ -17,7 +17,7 @@ Elevator::Elevator(Sensors &srs) {
 
 	elevator2->Follow(*elevator1);
 	elevator3->Follow(*elevator1);
-	elevator4->Follow(*elevator2);
+	elevator4->Follow(*elevator1);
 
 	// TODO: Check on competition bot whether new motor is backwards
 	elevator4->SetInverted(true);
@@ -39,6 +39,11 @@ void Elevator::goUp(){
 	} else {
 		haltMotion();
 	}
+}
+
+void Elevator::moveIgnore(double speed){
+	brakeRelease();
+	elevator1->Set(ControlMode::PercentOutput, speed);
 }
 
 void Elevator::move(double speed){

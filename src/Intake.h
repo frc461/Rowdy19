@@ -72,7 +72,7 @@ private:
 	int
 	bandWidth = 60,
 	downLimit = 150,
-	upwardLimit = 110,
+	upwardLimit = 70,
 	tiltWristAngle = 90,
 	wristTolerance = 5,
 	spitCount,

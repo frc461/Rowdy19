@@ -62,7 +62,7 @@ public:
 private:
 	bool elevatorZeroed = false;
 
-	int scaleHeight = 26000, switchHeight = 12000, postCount = 0;
+	int scaleHeight = 24000, switchHeight = 12000, postCount = 0;
 	int carpetConstant = 0;
 
 	//Sensor values
@@ -76,7 +76,7 @@ private:
 	secondChoice;
 
 	int
-		autoState = InitialStart;
+		autoState = InitialStart, wristCount = 0, waitCount = 0;
 
 		double driftConstant = 45, encoderAdjust = 15.0/11.0,
 
@@ -87,13 +87,13 @@ private:
 		lDrive2 = 8000 * encoderAdjust,
 		lDrive3 = 2500 * encoderAdjust,
 		rTurn1 = 25,
-		rTurn2 = -35,
-		rDrive2 = 1000 * encoderAdjust,
-		rDrive3 = 4000 * encoderAdjust,
+		rTurn2 = -30,
+		rDrive2 = 2000 * encoderAdjust,
+		rDrive3 = 6000 * encoderAdjust,
 		defaultDist = 1750 * encoderAdjust,
 
 		//L/R Switch
-		switchSideDist = 11000 * encoderAdjust,
+		switchSideDist = 10000 * encoderAdjust,
 		faceSwitchAngleRight = -50,
 		faceSwitchAngleLeft = 45,
 		driveToSwitchDist = 1000 * encoderAdjust,
@@ -101,7 +101,7 @@ private:
 
 		//L/R Scale
 		scaleSideDist = 29240,
-		faceScaleLeft = 30,
+		faceScaleLeft = 20,
 		faceScaleRight = 45,
 		scaleAdjustDist = 750,
 		scaleAdjustRight = 1500,
@@ -111,11 +111,11 @@ private:
 		driveAwayDist = 15000,
 
 		//Platform zone
-		platformToDist = 13000,
-		platformToOtherAlley = 12000,
+		platformToDist = 21000,
+		platformToOtherAlley = 20000,
 
 		//Scale
-		turnRightAngle = 30,
+		turnRightAngle = 35,
 		turnLeftAngle = 45,
 		scaleAdjustOppLeft = 2000,
 		scaleAdjustOppRight = 2000,

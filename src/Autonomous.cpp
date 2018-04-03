@@ -44,7 +44,7 @@ void Autonomous::smartRun(){
 				printf("Switch from side \n");
 				switchFromSide();
 			} else if (startingPosition != CenterPosition){
-				printf("Defaulting by default\n");
+				printf("Defaulting by default \n");
 				defaultCross();
 			}
 		}
@@ -270,7 +270,7 @@ void Autonomous::switchRightAuto(){
     	switch (autoState) {
     		case (InitialStart):
     			if (encoderDist > -(initDist + carpetConstant)) {
-    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+    				driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
     			} else {
     				sensors->resetGyro();
     				autoState = TurnDownMiddle;
@@ -288,7 +288,7 @@ void Autonomous::switchRightAuto(){
 
     		case (DriveDiagonal):
     			if (encoderDist > -rDrive2) {
-    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+    				driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
     			} else {
     				sensors->resetGyro();
     				driveTrain->resetEncoders();
@@ -308,7 +308,7 @@ void Autonomous::switchRightAuto(){
 
     		case (DriveSideSwitch):
     			if (encoderDist > -rDrive3 && dropCounter < 100){
-    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+    				driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
     				dropCounter++;
     				printf("Count:%d\n",dropCounter);
     			}
@@ -393,6 +393,7 @@ void Autonomous::scaleFromCenter(){
 
 void Autonomous::scaleFromSide(){
 elevatorAutoRun();
+intake->wristForward();
 	switch (autoState) {
 		case(InitialStart):
 			if(encoderDist > -(scaleSideDist + carpetConstant)){
@@ -409,13 +410,17 @@ elevatorAutoRun();
 			} else if (ourScale == RightSide && gyroAngle > -faceScaleRight){
 				driveTrain->tankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
 				driveTrain->resetEncoders();
-			} else {
+			} else if (waitCount++ < 50){
+
+			}
+			else{
 				autoState = DriveTowardsScale;
 				driveTrain->tankDrive(-0.0, -0.0, 0.0);
 				driveTrain->resetEncoders();
 			}
 			break;
 		case(RaiseElevator):
+
 			if (!heightReached){
 				elevatorAutoRun();
 				driveTrain->resetEncoders();
@@ -425,9 +430,9 @@ elevatorAutoRun();
 			break;
 		case(DriveTowardsScale):
 			dropCounter++;
-			if(ourScale == LeftSide && dropCounter < 50 && encoderDist > -scaleAdjustDist){
+			if(ourScale == LeftSide && dropCounter < 150 && encoderDist > -scaleAdjustDist){
 				driveTrain->autonTankDrive(-0.6, -0.6);
-			} else if (ourScale == RightSide && dropCounter < 50 && encoderDist > -scaleAdjustRight){
+			} else if (ourScale == RightSide && dropCounter < 150 && encoderDist > -scaleAdjustRight){
 				driveTrain->autonTankDrive(-0.6, -0.6);
 			}
 			else {
@@ -550,7 +555,7 @@ void Autonomous::scaleFromOpposite(){
 				driveTrain->tankDrive(autoDriveSpeed, -autoDriveSpeed, 0.0);
 			} else {
 				driveTrain->haltMotion();
-				autoState = DriveThruPlatformZone;
+				//autoState = DriveThruPlatformZone;
 			}
 			break;
 		case(DriveThruPlatformZone):
@@ -607,10 +612,7 @@ void Autonomous::scaleFromOpposite(){
 }
 
 void Autonomous::elevatorAutoRun(){
-	if (!elevatorZeroed && !sensors->getElevatorBottom()){
-		elevator->goDown();
-		printf("Zeroing\n");
-	} else if(!heightReached && elevator->encoderValue() < targetHeight()) {
+if(!heightReached && elevator->encoderValue() < targetHeight()) {
 		elevatorZeroed = true;
 		elevator->goUp();
 		printf("Going up!\n");
@@ -634,6 +636,8 @@ void Autonomous::resetZeroed(){
 	elevatorZeroed = false;
 	heightReached = false;
 	dropCounter = 0;
+	wristCount = 0;
+	waitCount = 0;
 }
 
 void Autonomous::shuffleCheck(){

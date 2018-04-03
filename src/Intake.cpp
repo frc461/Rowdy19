@@ -23,11 +23,13 @@ void Intake::intake(){
 }
 
 void Intake::intakeWithRaise(){
-	if(sensors->getIntakeButtonL() || sensors->getIntakeButtonR()){
-		intake();
-	} else {
-		allOff();
-		wristBack();
+	if(wristAngle > 120){
+		if(sensors->getIntakeButtonL() || sensors->getIntakeButtonR()){
+			intake();
+		} else {
+			allOff();
+			wristBack();
+		}
 	}
 }
 
@@ -57,6 +59,7 @@ void Intake::resetSpitCount(){
 }
 
 bool Intake::spitCube(){
+	printf("SpitCount: %d\n", spitCount);
 	if (spitCount < 10){
 		output();
 		spitCount++;
@@ -77,13 +80,13 @@ void Intake::wristRotate(int reversed){
 
 void Intake::wristForward(){
 	if(wristAngle < downLimit - bandWidth){
-		wristMotor->Set(wristSpeed);
+		wristMotor->Set(0.5);
 		printf("Wrist moving fast forward\n");
 
 	} else if (wristAngle < downLimit){
 		printf("Wrist moving slow forward\n");
 
-		wristMotor->Set(slowWristSpeed);
+		wristMotor->Set(0.5);
 	} else {
 		printf("Wrist not moving forward\n");
 		wristHalt();
@@ -149,7 +152,6 @@ void Intake::periodicValues(){
 	bandWidth = SmartDashboard::GetNumber("Comp/bandWidth", bandWidth);
 	downLimit = SmartDashboard::GetNumber("Comp/downLimit", downLimit);
 	upwardLimit = SmartDashboard::GetNumber("Comp/upwardLimit", upwardLimit);
-	spitCount = SmartDashboard::GetNumber("Comp/spitCount", spitCount);
 
 	wristAngle = ((int) sensors->getWristAngle() + offset) % 360;
 	SmartDashboard::PutNumber("Comp/wristAngle", wristAngle);

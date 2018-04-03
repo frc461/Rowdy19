@@ -15,6 +15,9 @@ class Sensors {
 public:
 	Sensors();
 
+	void lightUp();
+	void lightDown();
+
 	//Digital Switches
 	bool getElevatorBottom();
 	bool getIntakeButtonL();
@@ -32,6 +35,7 @@ private:
 
 ADXRS450_Gyro *gyro;
 Potentiometer *wrist;
+DigitalOutput *led;
 DigitalInput *elevatorBottom;
 DigitalInput *intakeButtonR;
 DigitalInput *intakeButtonL;

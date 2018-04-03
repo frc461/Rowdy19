@@ -15,15 +15,24 @@ Sensors::Sensors() {
 	SmartDashboard::PutData("gyroscope", gyro);
 	intakeButtonR = new DigitalInput(7);
 	intakeButtonL = new DigitalInput(6);
+	led = new DigitalOutput(4);
 	wrist = new AnalogPotentiometer(3, 360, 0);
 }
 
 double Sensors::getWristAngle(){
-	return wrist->Get();
+	return ((int) wrist->Get()  + 180) % 360;
 }
 
 int Sensors::getGyroAngle(){
 	return gyro->GetAngle();
+}
+
+void Sensors::lightUp(){
+	led->Set(true);
+}
+
+void Sensors::lightDown(){
+	led->Set(false);
 }
 
 bool Sensors::getElevatorBottom(){
