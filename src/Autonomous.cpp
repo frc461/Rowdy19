@@ -52,10 +52,10 @@ void Autonomous::smartRun(){
 		if(startingPosition == CenterPosition){
 			if(ourSwitch == RightSide){
 				printf("Switch right from center\n");
-				switchRightAuto();
+				newSwitchRightAuto();
 			} else {
 				printf("Switch left from center\n");
-				switchLeftAuto();
+				newSwitchLeftAuto();
 			}
 		} else if(ourSwitch == startingPosition){
 			printf("Switch from side\n");
@@ -222,45 +222,42 @@ elevatorAutoRun();
 	if(ourSwitch == startingPosition){
 		printf("State: %d\n", autoState);
 		switch (autoState) {
-		case(InitialStart):
-				if(encoderDist > -(switchSideDist + carpetConstant)){
-					driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed - (sensors->getGyroAngle() / driftConstant), 0.0);
-				} else {
-					driveTrain->tankDrive(0.0,0.0,0.0);
-					autoState = FaceSwitch;
-					sensors->resetGyro();
-				}
+			case(InitialStart):
+					if(encoderDist > -(switchSideDist + carpetConstant)){
+						driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed - (sensors->getGyroAngle() / driftConstant), 0.0);
+					} else {
+						driveTrain->tankDrive(0.0,0.0,0.0);
+						autoState = FaceSwitch;
+						sensors->resetGyro();
+					}
+					break;
+			case(FaceSwitch):
+					driveTrain->resetEncoders();
+					if(ourSwitch == RightSide && gyroAngle > faceSwitchAngleRight){
+						driveTrain->tankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
+					} else if (ourSwitch == LeftSide && gyroAngle < faceSwitchAngleLeft){
+						driveTrain->tankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
+					} else {
+						autoState = DriveSideSwitch;
+					}
 				break;
-		case(FaceSwitch):
-				driveTrain->resetEncoders();
-				if(ourSwitch == RightSide && gyroAngle > faceSwitchAngleRight){
-					driveTrain->tankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
-				} else if (ourSwitch == LeftSide && gyroAngle < faceSwitchAngleLeft){
-					driveTrain->tankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
+			case(DriveSideSwitch):
+					printf("Count:%d\n",dropCounter);
+				if (ourSwitch == LeftSide && encoderDist > -driveToSwitchDist && dropCounter < 50){
+						driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
+						dropCounter++;
+				} else if (ourSwitch == RightSide && encoderDist > -driveToSwitchRight && dropCounter < 50){
+					driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
+					dropCounter++;
 				} else {
-					autoState = DriveSideSwitch;
-				}
-			break;
-		case(DriveSideSwitch):
-		printf("Count:%d\n",dropCounter);
-		if (ourSwitch == LeftSide && encoderDist > -driveToSwitchDist && dropCounter < 80){
-				driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
-				dropCounter++;
-			}
-		else if (ourSwitch == RightSide && encoderDist > -driveToSwitchRight && dropCounter < 80){
-			driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
-			dropCounter++;
-		}
-			else{
 					driveTrain->tankDrive(0.0, 0.0, 0.0);
 					autoState = DeployCube;
-			}
-			break;
-		case(DeployCube):
-				driveTrain->tankDrive(0.0, 0.0, 0.0);
-				intake->spitCube();
-
-			break;
+				}
+				break;
+			case(DeployCube):
+					driveTrain->tankDrive(0.0, 0.0, 0.0);
+					intake->spitCube();
+				break;
 		}
 	}
 }
@@ -270,7 +267,7 @@ void Autonomous::switchRightAuto(){
     	switch (autoState) {
     		case (InitialStart):
     			if (encoderDist > -(initDist + carpetConstant)) {
-    				driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
+    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     			} else {
     				sensors->resetGyro();
     				autoState = TurnDownMiddle;
@@ -288,7 +285,7 @@ void Autonomous::switchRightAuto(){
 
     		case (DriveDiagonal):
     			if (encoderDist > -rDrive2) {
-    				driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
+    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     			} else {
     				sensors->resetGyro();
     				driveTrain->resetEncoders();
@@ -308,7 +305,7 @@ void Autonomous::switchRightAuto(){
 
     		case (DriveSideSwitch):
     			if (encoderDist > -rDrive3 && dropCounter < 100){
-    				driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
+    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
     				dropCounter++;
     				printf("Count:%d\n",dropCounter);
     			}
@@ -320,10 +317,12 @@ void Autonomous::switchRightAuto(){
 
     		case (DeployCube):
 				driveTrain->tankDrive(0.0, 0.0, 0.0);
-    				intake->spitCube();
+    			driveTrain->resetEncoders();
+    			if(intake->spitCube()){
+    				autoState = BackOffSwitch;
+    			}
     			break;
     	}
-	
 }
 
 void Autonomous::switchLeftAuto(){
@@ -392,7 +391,7 @@ void Autonomous::scaleFromCenter(){
 }
 
 void Autonomous::scaleFromSide(){
-elevatorAutoRun();
+//elevatorAutoRun();
 intake->wristForward();
 	switch (autoState) {
 		case(InitialStart):
@@ -410,17 +409,15 @@ intake->wristForward();
 			} else if (ourScale == RightSide && gyroAngle > -faceScaleRight){
 				driveTrain->tankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
 				driveTrain->resetEncoders();
-			} else if (waitCount++ < 50){
-
-			}
-			else{
-				autoState = DriveTowardsScale;
+			} else if (waitCount++ < 30){
+				driveTrain->tankDrive(-0.0, -0.0, 0.0);
+			} else {
+				autoState = ScaleAdjust;
 				driveTrain->tankDrive(-0.0, -0.0, 0.0);
 				driveTrain->resetEncoders();
 			}
 			break;
 		case(RaiseElevator):
-
 			if (!heightReached){
 				elevatorAutoRun();
 				driveTrain->resetEncoders();
@@ -428,17 +425,17 @@ intake->wristForward();
 				autoState = ScaleAdjust;
 			}
 			break;
-		case(DriveTowardsScale):
+		case(ScaleAdjust):
+			printf("Adjusting towards scale \n");
 			dropCounter++;
-			if(ourScale == LeftSide && dropCounter < 150 && encoderDist > -scaleAdjustDist){
-				driveTrain->autonTankDrive(-0.6, -0.6);
-			} else if (ourScale == RightSide && dropCounter < 150 && encoderDist > -scaleAdjustRight){
-				driveTrain->autonTankDrive(-0.6, -0.6);
+			if(ourScale == LeftSide && encoderDist > -scaleAdjustDist){
+				driveTrain->tankDrive(-0.6, -0.6, 0.0);
+			} else if (ourScale == RightSide && encoderDist > -scaleAdjustRight){
+				driveTrain->tankDrive(-0.6, -0.6, 0.0);
 			}
 			else {
 				driveTrain->tankDrive(-0.0, -0.0, 0.0);
 				autoState = DeployCube;
-				sensors->resetGyro();
 			}
 			break;
 		case(DeployCube):
@@ -448,6 +445,7 @@ intake->wristForward();
 			}
 			break;
 		case(BackOff):
+			printf("Backing off \n");
 			if(encoderDist < scaleBackOff){
 				driveTrain->tankDrive(-autoTurnSpeed, -autoTurnSpeed, 0.0);
 			} else {
@@ -623,6 +621,18 @@ if(!heightReached && elevator->encoderValue() < targetHeight()) {
 	}
 }
 
+bool Autonomous::elevatorRunDirection(bool direction){
+	if(direction && !heightReached && elevator->encoderValue() < targetHeight()){
+		elevator->goUp();
+	} else if (!direction && !heightReached && !sensors->getElevatorBottom()){
+		elevator->goDown();
+	} else {
+		heightReached = true;
+		elevator->haltMotion();
+	}
+	return false;
+}
+
 int Autonomous::targetHeight(){
 	if (target == Switch){
 		return switchHeight;
@@ -681,3 +691,283 @@ void Autonomous::defaultCross(){
 				break;
 	}
 };
+
+void Autonomous::newSwitchRightAuto(){
+	switch (autoState) {
+    		case (InitialStart):
+    			elevatorAutoRun();
+    			if (encoderDist > -(initDist + carpetConstant)) {
+    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+    			} else {
+    				sensors->resetGyro();
+    				autoState = TurnDownMiddle;
+    			}
+    			break;
+
+    		case (TurnDownMiddle):
+    			elevatorAutoRun();
+    			if (gyroAngle < rTurn1) {
+    				driveTrain->tankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
+    			} else {
+    				driveTrain->resetEncoders();
+    				autoState = DriveDiagonal;
+    			}
+    			break;
+
+    		case (DriveDiagonal):
+    			elevatorAutoRun();
+    			if (encoderDist > -rDrive2) {
+    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+    			} else {
+    				sensors->resetGyro();
+    				driveTrain->resetEncoders();
+    				autoState = FaceSwitch;
+    			}
+			break;
+
+    		case (FaceSwitch):
+				elevatorAutoRun();
+    			if (gyroAngle > rTurn2) {
+    				driveTrain->tankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
+    				driveTrain->resetEncoders();
+    			} else {
+    				driveTrain->resetEncoders();
+    				autoState = DriveSideSwitch;
+    			}
+			break;
+
+    		case (DriveSideSwitch):
+				elevatorAutoRun();
+    			if (encoderDist > -rDrive3 && dropCounter < 100){
+    				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+    				dropCounter++;
+    				printf("Count:%d\n",dropCounter);
+    			}
+    			else{
+    	    			driveTrain->tankDrive(0.0, 0.0, 0.0);
+    	    			autoState = DeployCube;
+    			}
+    			break;
+
+    		case (DeployCube):
+				driveTrain->tankDrive(0.0, 0.0, 0.0);
+    			driveTrain->resetEncoders();
+    			sensors->resetGyro();
+    			if(intake->spitCube()){
+    				autoState = BackOffSwitch;
+    			}
+    			break;
+    		case (BackOffSwitch):
+    			if(encoderDist < backOffSwitch){
+    				driveTrain->tankDrive(-autoDriveSpeed, -autoDriveSpeed, 0.0);
+    				counter = 0;
+    			} else if (counter++ < 50){
+    				driveTrain->haltMotion();
+    			} else {
+    				autoState = FaceCube;
+    			}
+    			break;
+    		case (FaceCube):
+				elevator->goDown();
+    			intake->extendIntake();
+    			if(gyroAngle > -turnToCubeRight){
+    				driveTrain->tankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
+    				counter = 0;
+    			} else if (counter++ < 30){
+    				driveTrain->resetEncoders();
+    				driveTrain->haltMotion();
+    			} else {
+    				autoState = PickUpCube;
+    				driveTrain->resetEncoders();
+    				counter = 0;
+    			}
+				break;
+    		case (PickUpCube):
+				if(intake->intakeWithRaise() && counter++ < 150){
+					driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
+				} else if (counter++ > 6){
+					autoState = BackOffWithCube;
+				}
+				break;
+    		case (BackOffWithCube):
+    			heightReached = false;
+    			intake->intakeWithRaise();
+				if(encoderDist < 0 - 2000){
+					driveTrain->tankDrive(-autoTurnSpeed, -autoTurnSpeed, 0.0);
+					counter = 0;
+				} else if (counter++ > 6){
+					autoState = FaceSwitchWithCube;
+				}
+    			break;
+    		case (FaceSwitchWithCube):
+				if(gyroAngle < turnSwitchRight){
+					driveTrain->tankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
+					counter = 0;
+				} else if (!heightReached){
+	    			elevatorAutoRun();
+					intake->retractIntake();
+					driveTrain->haltMotion();
+				} else {
+					autoState = SwitchAdjust;
+				}
+				break;
+    		case (SwitchAdjust):
+				if(encoderDist > -switchAdjustRight){
+					driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+					counter = 0;
+				} else if (counter++ < 6){
+					driveTrain->haltMotion();
+					intake->resetSpitCount();
+				} else {
+					autoState = DeploySecondCube;
+				}
+    			break;
+    		case (DeploySecondCube):
+    			if(intake->spitCube()){
+    				driveTrain->haltMotion();
+    			}
+			break;
+    	}
+
+}
+
+void Autonomous::newSwitchLeftAuto(){
+	switch(autoState){
+		case (InitialStart):
+			elevatorAutoRun();
+			if (encoderDist > -(initDist + carpetConstant)) {
+				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+			} else {
+				sensors->resetGyro();
+				autoState = TurnDownMiddle;
+			}
+		break;
+
+		case (TurnDownMiddle):
+			elevatorAutoRun();
+			if (gyroAngle > lTurn1) {
+				driveTrain->tankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
+			} else {
+				driveTrain->resetEncoders();
+				autoState = DriveDiagonal;
+			}
+		break;
+
+		case (DriveDiagonal):
+			elevatorAutoRun();
+			if (encoderDist > -lDrive2) {
+				driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
+			}
+			else {
+				driveTrain->resetEncoders();
+				sensors->resetGyro();
+				autoState = FaceSwitch;
+			}
+			break;
+
+		case (FaceSwitch):
+			elevatorAutoRun();
+			if (gyroAngle < lTurn2) {
+				driveTrain->tankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
+			} else {
+				driveTrain->resetEncoders();
+				autoState = DriveSideSwitch;
+			}
+		break;
+
+		case (DriveSideSwitch):
+			if (encoderDist > -lDrive3 && dropCounter < 100){
+				driveTrain->tankDrive(-0.7, -0.7, 0.0);
+				dropCounter++;
+				printf("Count:%d\n",dropCounter);
+			}
+			else{
+					driveTrain->tankDrive(0.0, 0.0, 0.0);
+					autoState = DeployCube;
+			}
+		break;
+
+		case (DeployCube):
+			driveTrain->tankDrive(0.0, 0.0, 0.0);
+			driveTrain->resetEncoders();
+			sensors->resetGyro();
+			if(intake->spitCube()){
+				autoState = BackOffSwitch;
+			}
+			break;
+
+		case (BackOffSwitch):
+			if(encoderDist < backOffSwitch){
+				driveTrain->tankDrive(0.8, 0.8, 0.0);
+				counter = 0;
+			} else if (counter++ < 50){
+				driveTrain->haltMotion();
+			} else {
+				autoState = FaceCube;
+			}
+			break;
+		case (FaceCube):
+			elevator->goDown();
+			intake->extendIntake();
+			if(gyroAngle < turnToCubeLeft){
+				driveTrain->tankDrive(autoTurnSpeed, -autoTurnSpeed, 0.0);
+				counter = 0;
+			} else if (counter++ < 30){
+				driveTrain->resetEncoders();
+				driveTrain->haltMotion();
+			} else {
+				autoState = PickUpCube;
+				driveTrain->resetEncoders();
+				counter = 0;
+			}
+			break;
+		case (PickUpCube):
+			if(intake->intakeWithRaise() && counter++ < 150){
+				driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
+			} else if (counter++ < 200){
+				driveTrain->haltMotion();
+				intake->intakeWithRaise();
+			} else {
+				autoState = BackOffWithCube;
+			}
+			break;
+		case (BackOffWithCube):
+			heightReached = false;
+			intake->allOff();
+			if(encoderDist < 0 - 3000){
+				driveTrain->tankDrive(-autoTurnSpeed, -autoTurnSpeed, 0.0);
+				counter = 0;
+			} else if (counter++ > 50){
+				elevatorAutoRun();
+				intake->retractIntake();
+				autoState = FaceSwitchWithCube;
+			}
+			break;
+		case (FaceSwitchWithCube):
+			if(gyroAngle < -turnSwitchLeft){
+				driveTrain->tankDrive(-autoTurnSpeed, autoTurnSpeed, 0.0);
+				counter = 0;
+			} else if (counter++ < 20){
+				driveTrain->haltMotion();
+			} else {
+				autoState = SwitchAdjust;
+			}
+			break;
+		case (SwitchAdjust):
+			if(encoderDist > -switchAdjustLeft){
+				driveTrain->tankDrive(-0.7, -0.7, 0.0);
+				counter = 0;
+			} else if (counter++ < 6){
+				driveTrain->haltMotion();
+				intake->resetSpitCount();
+			} else {
+				autoState = DeploySecondCube;
+			}
+			break;
+		case (DeploySecondCube):
+			if(intake->spitCube()){
+				driveTrain->haltMotion();
+			}
+		break;
+	}
+}

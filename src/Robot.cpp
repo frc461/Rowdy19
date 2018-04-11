@@ -53,7 +53,7 @@ public:
 
 	//Custom variables
 	int startPos, target, ourSwitch, ourScale, pushCounter = 0;
-	bool intakeIn, previouslyToggled, intakeWristUp;
+	bool previouslyToggled, intakeWristOverride = false, intakeDown = false;
 
 
 	void RobotInit() {
@@ -69,7 +69,6 @@ public:
 		intake = new Intake(*sensors);
 		auton = new Autonomous(*driveTrain, *sensors, *boardHandler, *elevator, *intake);
 		previouslyToggled = false;
-		intakeIn = true;
 		CameraServer::GetInstance()->StartAutomaticCapture(0);
 	}
 
@@ -84,7 +83,7 @@ public:
 		elevator->periodicValues();
 		intake->periodicValues();
 		intake->resetSpitCount();
-		intake->extendIntake();
+		//intake->extendIntake();
 		elevator->autonStart();
 	}
 
@@ -114,12 +113,6 @@ public:
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
 		int dPad = operatorController->GetPOV();
 
-		if(intakeIn){
-			intake->extendIntake();
-		} else {
-			intake->retractIntake();
-		}
-
 //		if(rightJoystick->GetRawButton(trigger)){
 //			driveTrain->tankDrive(forwardL, forwardR, strafe);
 //		} else {
@@ -134,18 +127,27 @@ public:
 			intake->spinLeft();
 		} else if (operatorController->GetRawAxis(XboxAxisRightStickX) > 0.5){
 			intake->spinRight();
-		} else if (operatorController->GetRawButton(XboxButtonRightStick)){
+		} else if (operatorController->GetRawButton(XboxButtonB)){
 			intake->slowOutput();
 		} else if (operatorController->GetRawButton(XboxButtonA)){
-			intakeWristUp = true;
+			intakeWristOverride = true;
+			intakeDown = intake->intakeWithRaise();
 		} else {
+			intakeWristOverride = false;
 			intake->allOff();
 		}
 
-
-		if(intakeWristUp){
-			intake->intakeWithRaise();
+		if(!intakeWristOverride && operatorController->GetRawButton(XboxButtonY) && previouslyToggled == false){
+			intakeDown = !intakeDown;
 		}
+		previouslyToggled = operatorController->GetRawButton(XboxButtonY);
+
+		if (intakeDown){
+			intake->extendIntake();
+		} else {
+			intake->retractIntake();
+		}
+
 
 		SmartDashboard::PutNumber("XboxDPad", operatorController->GetPOV(0));
 
@@ -155,38 +157,19 @@ public:
 			elevator->goUp();
 		} else if (operatorController->GetRawAxis(XboxAxisLeftStickY) > 0.5){
 			elevator->goDown();
-		} else if (operatorController->GetRawButton(XboxButtonY)){
+		} else if (dPad == XboxDPadUp){
 			elevator->goToScaleHeight();
-		} else if (operatorController->GetRawButton(XboxButtonB)){
+		} else if (dPad == XboxDPadRight){
 			elevator->goToSwitchHeight();
-		} else if (operatorController->GetRawButton(XboxButtonX)){
+		} else if (dPad == XboxDPadDown){
 			elevator->goToIntakeExchangeHeight();
 		} else if (operatorController->GetRawAxis(XboxAxisLeftTrigger) > 0.5
 				&& operatorController->GetRawAxis(XboxAxisRightTrigger) > 0.5){
 			elevator->move(0.8);
 		} else if (operatorController->GetRawButton(XboxButtonStart)){
 			elevator->moveIgnore(0.8);
-		}
-		else{
+		} else {
 			elevator->haltMotion();
-		}
-
-		if(dPad != -1 && !operatorController->GetRawButton(XboxButtonA)){
-			intakeWristUp = false;
-		}
-
-		if(!intakeWristUp){
-			if (dPad == XboxDPadRight){
-				intake->wristRotate(1);
-			} else if (dPad == XboxDPadLeft){
-				intake->wristRotate(-1);
-			}else if (dPad == XboxDPadUp){
-				intake->wristForward();
-			} else if (dPad == XboxDPadDown){
-				intake->wristBack();
-			} else {
-				intake->wristHalt();
-			}
 		}
 
 		if(pushCounter++ > 12){

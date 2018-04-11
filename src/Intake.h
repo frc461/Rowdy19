@@ -18,7 +18,7 @@ public:
 
 	//Intake
 	void intake();
-	void intakeWithRaise();
+	bool intakeWithRaise();
 
 	//Output
 	void output();

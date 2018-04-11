@@ -47,6 +47,10 @@ bool Sensors::getIntakeButtonR() {
 	return intakeButtonR->Get();
 }
 
+bool Sensors::cubePickedUp(){
+	return !getIntakeButtonL() && !getIntakeButtonR();
+}
+
 void Sensors::resetGyro(){
 	gyro->Reset();
 }

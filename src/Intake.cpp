@@ -22,16 +22,21 @@ void Intake::intake(){
 	intakeInRight->Set(outputSpeed);
 }
 
-void Intake::intakeWithRaise(){
-	if(wristAngle > 120){
-		if(sensors->getIntakeButtonL() || sensors->getIntakeButtonR()){
-			intake();
-		} else {
-			allOff();
-			wristBack();
-		}
+
+bool Intake::intakeWithRaise(){
+	if(sensors->getIntakeButtonL() || sensors->getIntakeButtonR()){
+		printf("Grabbing cube \n");
+		intake();
+		return true;
+	} else {
+		printf("Cube received \n");
+		retractIntake();
+		allOff();
+		return false;
 	}
 }
+
+
 
 void Intake::slowOutput(){
 	intakeInLeft->Set(slowOutputSpeed);

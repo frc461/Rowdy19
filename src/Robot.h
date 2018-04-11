@@ -33,7 +33,14 @@ enum AutonomousStates {
 	BackOff,
 	FaceAlley,
 	DriveDownAlley,
-
+	BackOffSwitch,
+	FaceCube,
+	PickUpCube,
+	DriveToCube,
+	BackOffWithCube,
+	FaceSwitchWithCube,
+	SwitchAdjust,
+	DeploySecondCube,
 };
 
 enum PWM{
@@ -87,6 +94,11 @@ enum StructureData {
 	DataError = 0,
 	LeftSide,
 	RightSide
+};
+
+enum Direction {
+	up = true,
+	down = false
 };
 
 #define DEBUGGING

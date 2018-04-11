@@ -22,6 +22,7 @@ public:
 	bool getElevatorBottom();
 	bool getIntakeButtonL();
 	bool getIntakeButtonR();
+	bool cubePickedUp();
 
 	//Potentiometer
 	double getWristAngle();

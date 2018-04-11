@@ -17,8 +17,9 @@ public:
 	Elevator(Sensors&);
 
 	//Basic motions
-	void goUp();
-	void goDown();
+	bool goUp();
+	bool goDown();
+	bool cubeIn();
 	void move(double);
 	void moveIgnore(double);
 	void haltMotion();
@@ -62,9 +63,9 @@ private:
 	double raiseSpeed = 0.8, lowerSpeed = 0.5;
 	int heightTolerance = 1000;
 	int intakeExchangeHeight = 200;
-	int switchHeight = 1300;
-	int scaleHeight = 3300;
-	int climbHeight = 4000,
+	int switchHeight = 5000,
+		scaleHeight = 24000,
+		climbHeight = 24000,
 		startHeight = 500;
 
 };

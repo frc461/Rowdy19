@@ -25,7 +25,7 @@ Elevator::Elevator(Sensors &srs) {
 	postValues();
 }
 
-void Elevator::goUp(){
+bool Elevator::goUp(){
 
 	double distFromTop = elevatorTop - encoderVal, actualSpeed = raiseSpeed;
 	if(distFromTop < slowTopThreshold){
@@ -36,8 +36,26 @@ void Elevator::goUp(){
 	if(encoderVal < elevatorTop){
 		brakeRelease();
 		elevator1->Set(ControlMode::PercentOutput, -actualSpeed);
+		return false;
 	} else {
 		haltMotion();
+		return true;
+	}
+}
+
+bool Elevator::goDown(){
+	double  actualSpeed = lowerSpeed;
+	if(encoderVal < slowBottomThreshold){
+		actualSpeed = slowDownMultiplierBottom;
+	}
+
+	if(!sensors->getElevatorBottom()){
+		brakeRelease();
+		elevator1->Set(ControlMode::PercentOutput, actualSpeed);
+		return false;
+	} else {
+		haltMotion();
+		return true;
 	}
 }
 
@@ -53,20 +71,6 @@ void Elevator::move(double speed){
 		elevator1->Set(ControlMode::PercentOutput, speed);
 	}
 	else {
-		haltMotion();
-	}
-}
-
-void Elevator::goDown(){
-	double  actualSpeed = lowerSpeed;
-	if(encoderVal < slowBottomThreshold){
-		actualSpeed = slowDownMultiplierBottom;
-	}
-
-	if(!sensors->getElevatorBottom()){
-		brakeRelease();
-		elevator1->Set(ControlMode::PercentOutput, actualSpeed);
-	} else {
 		haltMotion();
 	}
 }

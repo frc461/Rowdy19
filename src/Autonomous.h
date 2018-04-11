@@ -30,10 +30,13 @@ public:
 
 	//Elevator operator
 	void elevatorAutoRun();
+	bool elevatorRunDirection(bool);
 
 	//Switch autons
 	void switchFromSide();
 	void switchRightAuto();
+	void newSwitchLeftAuto();
+	void newSwitchRightAuto();
 	void switchLeftAuto();
 	void switchFromMiddle();
 	void switchFromOpposite();
@@ -62,7 +65,7 @@ public:
 private:
 	bool elevatorZeroed = false;
 
-	int scaleHeight = 24000, switchHeight = 12000, postCount = 0;
+	int scaleHeight = 15000, switchHeight = 5000, postCount = 0;
 	int carpetConstant = 0;
 
 	//Sensor values
@@ -76,20 +79,31 @@ private:
 	secondChoice;
 
 	int
-		autoState = InitialStart, wristCount = 0, waitCount = 0;
+		autoState = InitialStart, wristCount = 0, waitCount = 0, counter;
 
 		double driftConstant = 45, encoderAdjust = 15.0/11.0,
 
 		//Center Switch
 		initDist = 1250 * encoderAdjust,
 		lTurn1 = -35,
-		lTurn2 = 45,
-		lDrive2 = 8000 * encoderAdjust,
+		lTurn2 = 42,
+		lDrive2 = 7000 * encoderAdjust,
 		lDrive3 = 2500 * encoderAdjust,
 		rTurn1 = 25,
 		rTurn2 = -30,
-		rDrive2 = 2000 * encoderAdjust,
-		rDrive3 = 6000 * encoderAdjust,
+		rDrive2 = 1750 * encoderAdjust,
+		rDrive3 = 5000 * encoderAdjust,
+		backOffSwitch = 3500,
+		turnToCubeRight = 35,
+		turnToCubeLeft  = 25,
+		driveToCubeRight = 2500,
+		driveToCubeLeft,
+		backOffCube = 2500,
+		turnSwitchRight = -25,
+		turnSwitchLeft = 15,
+		switchAdjustRight = 3500,
+		switchAdjustLeft,
+
 		defaultDist = 1750 * encoderAdjust,
 
 		//L/R Switch
@@ -99,12 +113,15 @@ private:
 		driveToSwitchDist = 1000 * encoderAdjust,
 		driveToSwitchRight = 2000 * encoderAdjust,
 
+
+
+
 		//L/R Scale
-		scaleSideDist = 29240,
+		scaleSideDist = 30000,
 		faceScaleLeft = 20,
-		faceScaleRight = 45,
+		faceScaleRight = 25,
 		scaleAdjustDist = 750,
-		scaleAdjustRight = 1500,
+		scaleAdjustRight = 750,
 
 		//Default
 		drivePastDist = 13000,
