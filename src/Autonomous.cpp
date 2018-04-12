@@ -750,10 +750,12 @@ void Autonomous::newSwitchRightAuto(){
     			break;
 
     		case (DeployCube):
-				driveTrain->tankDrive(0.0, 0.0, 0.0);
+				driveTrain->haltMotion();
     			driveTrain->resetEncoders();
     			sensors->resetGyro();
     			if(intake->spitCube()){
+    				counter = 0;
+    			} else if (counter++ > 30){
     				autoState = BackOffSwitch;
     			}
     			break;
@@ -783,9 +785,12 @@ void Autonomous::newSwitchRightAuto(){
     			}
 				break;
     		case (PickUpCube):
-				if(intake->intakeWithRaise() && counter++ < 150){
+				if(intake->intakeWithRaise() && counter++ < 200){
 					driveTrain->tankDrive(autoTurnSpeed, autoTurnSpeed, 0.0);
-				} else if (counter++ > 6){
+				} else if (counter++ < 20){
+					intake->intakeWithRaise();
+					driveTrain->haltMotion();
+				} else {
 					autoState = BackOffWithCube;
 				}
 				break;
@@ -795,7 +800,9 @@ void Autonomous::newSwitchRightAuto(){
 				if(encoderDist < 0 - 2000){
 					driveTrain->tankDrive(-autoTurnSpeed, -autoTurnSpeed, 0.0);
 					counter = 0;
-				} else if (counter++ > 6){
+				} else if (counter++ < 50){
+					driveTrain->haltMotion();
+				} else {
 					autoState = FaceSwitchWithCube;
 				}
     			break;
@@ -815,7 +822,7 @@ void Autonomous::newSwitchRightAuto(){
 				if(encoderDist > -switchAdjustRight){
 					driveTrain->tankDrive(autoDriveSpeed, autoDriveSpeed, 0.0);
 					counter = 0;
-				} else if (counter++ < 6){
+				} else if (counter++ < 10){
 					driveTrain->haltMotion();
 					intake->resetSpitCount();
 				} else {

@@ -65,7 +65,7 @@ void Intake::resetSpitCount(){
 
 bool Intake::spitCube(){
 	printf("SpitCount: %d\n", spitCount);
-	if (spitCount < 10){
+	if (spitCount < 20){
 		output();
 		spitCount++;
 		return false;
