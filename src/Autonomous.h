@@ -65,7 +65,7 @@ public:
 private:
 	bool elevatorZeroed = false;
 
-	int scaleHeight = 15000, switchHeight = 5000, postCount = 0;
+	int scaleHeight = 24000, switchHeight = 7000, postCount = 0;
 	int carpetConstant = 0;
 
 	//Sensor values
@@ -86,20 +86,20 @@ private:
 		//Center Switch
 		initDist = 1250 * encoderAdjust,
 		lTurn1 = -35,
-		lTurn2 = 42,
-		lDrive2 = 7000 * encoderAdjust,
-		lDrive3 = 2500 * encoderAdjust,
+		lTurn2 = 47,
+		lDrive2 = 8500 * encoderAdjust,
+		lDrive3 = 3000 * encoderAdjust,
 		rTurn1 = 25,
-		rTurn2 = -30,
-		rDrive2 = 1750 * encoderAdjust,
-		rDrive3 = 5000 * encoderAdjust,
-		backOffSwitch = 3500,
-		turnToCubeRight = 35,
+		rTurn2 = -20,
+		rDrive2 = 500 * encoderAdjust,
+		rDrive3 = 6250 * encoderAdjust,
+		backOffSwitch = 3250,
+		turnToCubeRight = 30,
 		turnToCubeLeft  = 25,
 		driveToCubeRight = 2500,
 		driveToCubeLeft,
 		backOffCube = 2500,
-		turnSwitchRight = -25,
+		turnSwitchRight = -15,
 		turnSwitchLeft = 15,
 		switchAdjustRight = 3500,
 		switchAdjustLeft,

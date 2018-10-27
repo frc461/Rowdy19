@@ -109,14 +109,19 @@ public:
 
 		double forwardR = rightJoystick->GetRawAxis(yAxisJS);
 //		double forwardL = leftJoystick->GetRawAxis(yAxisJS);
+
 		double rotate  = leftJoystick->GetRawAxis(xAxisJS);
 		double strafe  = rightJoystick->GetRawAxis(xAxisJS);
 		int dPad = operatorController->GetPOV();
 
-//		if(rightJoystick->GetRawButton(trigger)){
-//			driveTrain->tankDrive(forwardL, forwardR, strafe);
-//		} else {
-			driveTrain->arcadeDrive(forwardR, rotate, strafe);
+		if(leftJoystick->GetRawButton(trigger)){
+			rotate = rotate / 2;
+		}
+		if(rightJoystick->GetRawButton(trigger)){
+			forwardR = forwardR * 2 / 3;
+		}
+
+		driveTrain->arcadeDrive(forwardR, rotate, strafe);
 //		}
 
 		if(operatorController->GetRawAxis(XboxAxisRightStickY) < -0.5){

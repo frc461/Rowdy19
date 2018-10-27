@@ -19,7 +19,7 @@ ShuffleboardPoster::ShuffleboardPoster(DriveTrain& dt, Sensors& srs) {
 void ShuffleboardPoster::generateSelectors(){
 		secondChoice.AddObject("Switch", Switch);
 		secondChoice.AddObject("Scale", Scale);
-		secondChoice.AddObject("Default", 0);
+		secondChoice.AddObject("Default", Default);
 		SmartDashboard::PutData("Comp/secondChoice", &secondChoice);
 
 		startingPosition.AddObject("Left Side", LeftPosition);

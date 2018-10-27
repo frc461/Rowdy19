@@ -87,7 +87,8 @@ enum startingPositions {
 
 enum autoTarget{
 	Switch = 0,
-	Scale
+	Scale,
+	Default = 5
 };
 
 enum StructureData {
